@@ -74,13 +74,22 @@ dependencies {
     //Firebase
     implementation(libs.firebase.database)
     implementation(libs.firebase.auth)
-    implementation(libs.play.services.auth)
+    implementation(libs.firebase.firestore)
 
+    //Auth with Credential
+    implementation(libs.play.services.auth)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.google.googleid)
 
     //Hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
+
+    //Coroutines
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.coroutines.core)
 }
 
 kapt {
