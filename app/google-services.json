@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "272856965117",
+    "firebase_url": "https://onewallet-b7457-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "onewallet-b7457",
+    "storage_bucket": "onewallet-b7457.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:272856965117:android:ad7d63602ae302d9d30394",
+        "android_client_info": {
+          "package_name": "com.mightysana.onewallet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "272856965117-uef0qbkapocn6tq6pvsnvuobcpl16kid.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mightysana.onewallet",
+            "certificate_hash": "dae221283f7f27d3fe73167a85d13613564224b7"
+          }
+        },
+        {
+          "client_id": "272856965117-7ob164teo8niv086p1g2bjglibnmk36m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACSyLfI8OSSWk7Ch9VPWqbuCQZ3PZCD-Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "272856965117-7ob164teo8niv086p1g2bjglibnmk36m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
