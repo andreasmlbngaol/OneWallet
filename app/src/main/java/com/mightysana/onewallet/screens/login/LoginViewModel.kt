@@ -22,26 +22,13 @@ class LoginViewModel @Inject constructor(
 ): ViewModel() {
     private val userRef = database.getReference("users")
 
-    fun onSignInWithGoogle(credential: Credential, onUserCheck: (Boolean) -> Unit) {
+    fun onSignInWithGoogle(credential: Credential, onSuccess: () -> Unit) {
         viewModelScope.launch {
             if (credential is CustomCredential && credential.type == TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
                 val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
                 accountService.signInWithGoogle(googleIdTokenCredential.idToken)
             }
-
-            val currentUser = auth.currentUser
-            currentUser?.let { user ->
-                checkIfUserExists(user.uid, onUserCheck)
-            }
-        }
-    }
-
-    private fun checkIfUserExists(userId: String, onUserCheck: (Boolean) -> Unit) {
-        userRef.child(userId).get().addOnSuccessListener { snapshot ->
-            val isNewUser = !snapshot.exists()
-            onUserCheck(isNewUser)
-        }.addOnFailureListener { e ->
-            Log.e("LoginViewModel", "Error checking user existence: ${e.message}")
+            onSuccess()
         }
     }
 }

@@ -35,8 +35,8 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             AuthenticationButton(R.string.sign_in_with_google) { credential ->
-                viewModel.onSignInWithGoogle(credential) { isNewUser ->
-                    navController.navigateAndPopUp( if(isNewUser) "register" else "home", "login" )
+                viewModel.onSignInWithGoogle(credential) {
+                    navController.navigateAndPopUp("home", "login" )
                 }
             }
         }

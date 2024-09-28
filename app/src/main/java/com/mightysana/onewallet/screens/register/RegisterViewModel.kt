@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    private val firebaseAuth: FirebaseAuth,
+    private val auth: FirebaseAuth,
     private val database: FirebaseDatabase
 ): ViewModel() {
 
@@ -20,11 +20,11 @@ class RegisterViewModel @Inject constructor(
 
     fun addWallet(name: String, balance: Int) {
         val newWallet = Wallet(name = name, balance = balance)
-        _wallets.value = _wallets.value + newWallet
+        _wallets.value += newWallet
     }
 
     fun saveWalletsToDatabase(onComplete: () -> Unit) {
-        val currentUser = firebaseAuth.currentUser ?: return
+        val currentUser = auth.currentUser ?: return
         val userRef = database.getReference("users").child(currentUser.uid)
 
         val walletsMap = _wallets.value.associate { it.name to it.balance }
@@ -36,6 +36,14 @@ class RegisterViewModel @Inject constructor(
                 Log.e("RegisterViewModel", "Error saving wallets: ${task.exception?.message}")
             }
         }
+    }
+
+    fun signOut() {
+        auth.signOut() // Firebase Sign Out
+    }
+
+    fun deleteWallet(wallet: Wallet) {
+        _wallets.value = _wallets.value.filterNot { it.name == wallet.name }
     }
 
 }

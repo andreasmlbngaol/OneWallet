@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "272856965117-l7j8qrh3bm7q57in60nkvnlelh07qjra.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mightysana.onewallet",
+            "certificate_hash": "f7057eddab5f7a857fe423f19cc9817b18aef7e8"
+          }
+        },
+        {
           "client_id": "272856965117-uef0qbkapocn6tq6pvsnvuobcpl16kid.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
