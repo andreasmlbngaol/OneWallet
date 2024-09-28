@@ -2,6 +2,8 @@ package com.mightysana.onewallet.screens.login
 
 import android.util.Log
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -23,6 +25,10 @@ fun AuthenticationButton(
     val credentialManager = CredentialManager.create(context)
 
     Button(
+        colors = ButtonDefaults.buttonColors().copy(
+            containerColor = MaterialTheme.colorScheme.secondary,
+            contentColor = MaterialTheme.colorScheme.onSecondary
+        ),
         onClick = {
             Log.d("AuthenticationButton", "Button clicked")
             val googleIdOption = GetGoogleIdOption.Builder()

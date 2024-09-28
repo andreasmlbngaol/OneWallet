@@ -1,58 +1,47 @@
 package com.mightysana.onewallet.screens.login
 
+import android.util.Log
 import androidx.credentials.Credential
 import androidx.credentials.CustomCredential
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.database.FirebaseDatabase
 import com.mightysana.onewallet.model.service.AccountService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlinx.coroutines.launch
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
+    private val accountService: AccountService,
     private val auth: FirebaseAuth,
-    private val accountService: AccountService
+    private val database: FirebaseDatabase
 ): ViewModel() {
-    var loginState: LoginState = LoginState.Idle
-        private set
+    private val userRef = database.getReference("users")
 
-    fun loginWithGoogle(account: GoogleSignInAccount) {
-        loginState = LoginState.Loading
-        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-        viewModelScope.launch {
-            auth.signInWithCredential(credential)
-                .addOnCompleteListener { task ->
-                    loginState = if (task.isSuccessful) {
-                        LoginState.Success
-                    } else {
-                        LoginState.Error(task.exception?.message ?: "Login failed")
-                    }
-                }
-        }
-    }
-
-    fun onSignInWithGoogle(credential: Credential) {
+    fun onSignInWithGoogle(credential: Credential, onUserCheck: (Boolean) -> Unit) {
         viewModelScope.launch {
             if (credential is CustomCredential && credential.type == TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
                 val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
                 accountService.signInWithGoogle(googleIdTokenCredential.idToken)
-            } else {
             }
 
+            val currentUser = auth.currentUser
+            currentUser?.let { user ->
+                checkIfUserExists(user.uid, onUserCheck)
+            }
         }
     }
-}
 
-sealed class LoginState {
-    object Idle : LoginState()
-    object Loading : LoginState()
-    object Success : LoginState()
-    data class Error(val message: String) : LoginState()
+    private fun checkIfUserExists(userId: String, onUserCheck: (Boolean) -> Unit) {
+        userRef.child(userId).get().addOnSuccessListener { snapshot ->
+            val isNewUser = !snapshot.exists()
+            onUserCheck(isNewUser)
+        }.addOnFailureListener { e ->
+            Log.e("LoginViewModel", "Error checking user existence: ${e.message}")
+        }
+    }
 }
