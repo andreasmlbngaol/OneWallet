@@ -12,7 +12,7 @@ import com.mightysana.onewallet.R
 @Composable
 fun FormImage(modifier: Modifier = Modifier) {
     Image(
-        painter = painterResource(id = R.drawable.bayern_logo_foreground),
+        painter = painterResource(id = R.drawable.one_wallet_logo_round),
         contentDescription = "Icon Launcher",
         modifier = modifier
     )
