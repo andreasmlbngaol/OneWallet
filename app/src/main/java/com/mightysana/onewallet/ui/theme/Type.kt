@@ -1,12 +1,10 @@
-package com.superbgoal.onewallet.ui.theme
+package com.mightysana.onewallet.ui.theme
 
 import androidx.compose.material3.Typography
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
-import com.superbgoal.onewallet.R
+import com.mightysana.onewallet.R
 
 val one_sans = FontFamily(
     Font(R.font.one_font_regular, FontWeight.Normal),

@@ -1,4 +1,4 @@
-package com.superbgoal.onewallet.components
+package com.mightysana.onewallet.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

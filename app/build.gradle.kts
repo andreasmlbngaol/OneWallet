@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.superbgoal.onewallet"
+    namespace = "com.mightysana.onewallet"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.superbgoal.onewallet"
+        applicationId = "com.mightysana.onewallet"
         minSdk = 30
         targetSdk = 34
         versionCode = 1
@@ -73,6 +73,8 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.ui.text)
     implementation(libs.play.services.auth)
+
+    // Extended Material Icon
     implementation(libs.material3)
     implementation(libs.androidx.material.icons.core)
     implementation(libs.androidx.material.icons.extended)

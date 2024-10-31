@@ -1,4 +1,4 @@
-package com.superbgoal.onewallet.ui.theme
+package com.mightysana.onewallet.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -1,4 +1,4 @@
-package com.superbgoal.onewallet
+package com.mightysana.onewallet
 
 import org.junit.Test
 

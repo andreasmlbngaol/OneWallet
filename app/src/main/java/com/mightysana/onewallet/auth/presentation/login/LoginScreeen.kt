@@ -1,4 +1,4 @@
-package com.superbgoal.onewallet.auth.presentation.login
+package com.mightysana.onewallet.auth.presentation.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -33,11 +33,11 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.superbgoal.onewallet.R
-import com.superbgoal.onewallet.auth.presentation.components.OneTextField
-import com.superbgoal.onewallet.components.OneButton
-import com.superbgoal.onewallet.components.OneImageButton
-import com.superbgoal.onewallet.components.OneTextHorizontalDivider
+import com.mightysana.onewallet.R
+import com.mightysana.onewallet.auth.presentation.components.OneTextField
+import com.mightysana.onewallet.components.OneButton
+import com.mightysana.onewallet.components.OneImageButton
+import com.mightysana.onewallet.components.OneTextHorizontalDivider
 
 @Composable
 fun LoginScreen(
