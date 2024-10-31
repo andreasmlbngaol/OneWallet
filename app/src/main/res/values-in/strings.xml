@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="register_title">Daftar</string>
+    <string name="login_title">Masuk</string>
+    <string name="password_label">Kata Sandi</string>
+    <string name="confirm_password_label">Konfirmasi Kata Sandi</string>
+    <string name="or_continue_with">atau lanjut dengan</string>
+    <string name="already_have_account">Sudah punya akun? Masuk sekarang</string>
+    <string name="dont_have_an_account">Belum punya akun? Daftar sekarang</string>
+</resources>

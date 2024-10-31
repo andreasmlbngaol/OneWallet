@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 
 @Composable
@@ -42,6 +43,7 @@ fun OneTextField(
     interactionSource: MutableInteractionSource? = null,
     colors: TextFieldColors = OutlinedTextFieldDefaults.colors(),
     onTrailingIconClick: (() -> Unit)? = null,
+    autoCorrectEnabled: Boolean = true
 ) {
     OutlinedTextField(
         value = value,
@@ -74,7 +76,9 @@ fun OneTextField(
         supportingText = if(isError) supportingText?.let { { Text(text = supportingText, color = supportingTextColor) } } else { null },
         isError = isError,
         visualTransformation = visualTransformation,
-        keyboardOptions,
+        keyboardOptions = if(autoCorrectEnabled) keyboardOptions else KeyboardOptions.Default.copy(
+            keyboardType = KeyboardType.Password
+        ),
         keyboardActions,
         singleLine,
         maxLines,

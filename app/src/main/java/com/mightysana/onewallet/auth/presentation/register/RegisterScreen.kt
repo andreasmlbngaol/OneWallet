@@ -1,4 +1,4 @@
-package com.mightysana.onewallet.auth.presentation.login
+package com.mightysana.onewallet.auth.presentation.register
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,11 +11,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.mightysana.onewallet.Login
 import com.mightysana.onewallet.Register
 import com.mightysana.onewallet.components.Preview
+import com.mightysana.onewallet.navigateAndPopUp
 
 @Composable
-fun LoginScreen(
+fun RegisterScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController
 ) {
@@ -28,9 +30,9 @@ fun LoginScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            LoginForm(
+            RegisterForm(
                 modifier = Modifier.fillMaxWidth(0.85f),
-                onNavigateToRegister = { navController.navigate(Register) }
+                onNavigateToLogin = { navController.navigateAndPopUp(Login, Register) }
             )
         }
     }
@@ -38,9 +40,9 @@ fun LoginScreen(
 
 @PreviewLightDark
 @Composable
-private fun LoginScreenPreview() {
+fun RegisterScreenPreview() {
     Preview {
-        LoginScreen(
+        RegisterScreen(
             modifier = Modifier.fillMaxSize(),
             navController = rememberNavController()
         )
