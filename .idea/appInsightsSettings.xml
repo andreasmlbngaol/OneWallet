@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.mightysana.onewallet" />
+                  <option name="mobileSdkAppId" value="1:272856965117:android:1e58b373ca17c53fd30394" />
+                  <option name="projectId" value="onewallet-b7457" />
+                  <option name="projectNumber" value="272856965117" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

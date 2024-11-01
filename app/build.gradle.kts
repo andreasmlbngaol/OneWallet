@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    alias(libs.plugins.google.gms.google.services)
 
 }
 
@@ -85,7 +86,12 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
+
+    // Firebase
+    implementation(libs.firebase.database)
+    implementation(libs.firebase.auth)
 }
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
