@@ -2,11 +2,11 @@ package com.mightysana.onewallet.auth.presentation.sign_in
 
 import androidx.credentials.Credential
 import androidx.credentials.CustomCredential
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
 import com.mightysana.onewallet.auth.model.AuthService
+import com.mightysana.onewallet.auth.model.OneViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SignInViewModel @Inject constructor(
     private val authService: AuthService
-) : ViewModel() {
+) : OneViewModel() {
     private val _email =  MutableStateFlow("")
     val email: StateFlow<String> = _email
 
@@ -36,6 +36,13 @@ class SignInViewModel @Inject constructor(
 
     fun togglePasswordVisibility() {
         _passwordVisibility.value = !_passwordVisibility.value
+    }
+
+    fun onSignInWithEmailAndPassword(onSuccess: () -> Unit) {
+        launchCatching {
+            authService.signInWithEmailAndPassword(_email.value.trim(), _password.value.trim())
+            onSuccess()
+        }
     }
 
     fun onSignInWithGoogle(

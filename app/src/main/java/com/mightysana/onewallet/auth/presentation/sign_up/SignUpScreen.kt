@@ -7,10 +7,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -19,8 +19,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.mightysana.onewallet.Home
 import com.mightysana.onewallet.R
-import com.mightysana.onewallet.SignIn
-import com.mightysana.onewallet.SignUp
+import com.mightysana.onewallet.auth.SignIn
+import com.mightysana.onewallet.auth.SignUp
 import com.mightysana.onewallet.auth.presentation.components.AuthForm
 import com.mightysana.onewallet.auth.presentation.components.AuthOptions
 import com.mightysana.onewallet.auth.presentation.components.SignUpFormContent
@@ -43,23 +43,17 @@ fun SignUpScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            val email by viewModel.email.collectAsState()
-            val password by viewModel.password.collectAsState()
-            val confirmPassword by viewModel.confirmPassword.collectAsState()
-            val passwordVisibility by viewModel.passwordVisibility.collectAsState()
-            val confirmPasswordVisibility by viewModel.confirmPasswordVisibility.collectAsState()
-
-
+            val context = LocalContext.current
             AuthForm(
                 formImage = iconLauncher,
                 title = stringResource(R.string.register_title),
                 mainContent = {
                     SignUpFormContent(
-                        email = email,
-                        password = password,
-                        confirmPassword = confirmPassword,
-                        passwordVisibility = passwordVisibility,
-                        confirmPasswordVisibility = confirmPasswordVisibility,
+                        email = viewModel.email.collectAsState().value,
+                        password = viewModel.password.collectAsState().value,
+                        confirmPassword = viewModel.confirmPassword.collectAsState().value,
+                        passwordVisibility = viewModel.passwordVisibility.collectAsState().value,
+                        confirmPasswordVisibility = viewModel.confirmPasswordVisibility.collectAsState().value,
                         onEmailChange = { viewModel.setEmail(it) },
                         onPasswordChange = { viewModel.setPassword(it) } ,
                         onConfirmPasswordChange = { viewModel.setConfirmPassword(it) },
@@ -67,7 +61,14 @@ fun SignUpScreen(
                         onConfirmPasswordVisibilityChange = { viewModel.toggleConfirmPasswordVisibility() }
                     )
                 },
-                onMainButtonClick = { navController.navigateAndPopUp(Home, SignUp) },
+                onMainButtonClick = {
+                    viewModel.validateForm(
+                        context = context,
+                        onSuccess = {
+                            viewModel.onSignUpWithEmailAndPassword { navController.navigateAndPopUp(Home, SignUp) }
+                        }
+                    )
+                },
                 secondaryContent = {
                     AuthOptions(
                         horizontalDividerText = stringResource(R.string.or_continue_with),
