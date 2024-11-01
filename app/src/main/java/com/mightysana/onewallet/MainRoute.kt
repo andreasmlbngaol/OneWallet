@@ -6,6 +6,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.google.firebase.auth.FirebaseAuth
 import com.mightysana.onewallet.auth.presentation.sign_in.SignInScreen
 import com.mightysana.onewallet.auth.presentation.sign_up.SignUpScreen
 import com.mightysana.onewallet.main.presentation.home.HomeScreen
@@ -27,7 +28,7 @@ fun MyAppRoute(
 ) {
     NavHost(
         navController = navController,
-        startDestination = SignIn,
+        startDestination = if(isUserLoggedIn()) Home else SignIn,
         modifier = modifier
     ) {
         composable<SignIn> {
@@ -58,3 +59,7 @@ fun NavHostController.navigateAndPopUp(route: Any, popUp: Any) {
         popUpTo(popUp) { inclusive = true }
     }
 }
+
+fun isUserLoggedIn(): Boolean = FirebaseAuth.getInstance().currentUser.isNotNull()
+
+fun Any?.isNotNull(): Boolean = this != null

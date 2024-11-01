@@ -71,7 +71,11 @@ fun SignUpScreen(
                 secondaryContent = {
                     AuthOptions(
                         horizontalDividerText = stringResource(R.string.or_continue_with),
-                        onSignInWithGoogle = { }
+                        onGetCredentialResponse = {
+                            viewModel.onSignInWithGoogle(it) {
+                                navController.navigateAndPopUp(Home, SignUp)
+                            }
+                        }
                     )
                 },
                 navButtonText = stringResource(R.string.already_have_account),

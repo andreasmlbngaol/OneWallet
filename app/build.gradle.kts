@@ -90,6 +90,14 @@ dependencies {
     // Firebase
     implementation(libs.firebase.database)
     implementation(libs.firebase.auth)
+
+    // Auth
+    implementation(libs.google.googleid)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+
+
+
 }
 
 java {

@@ -1,13 +1,22 @@
 package com.mightysana.onewallet.auth.presentation.sign_up
 
+import androidx.credentials.Credential
+import androidx.credentials.CustomCredential
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
+import com.mightysana.onewallet.auth.model.AuthService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SignUpViewModel @Inject constructor(): ViewModel() {
+class SignUpViewModel @Inject constructor(
+    private val authService: AuthService
+): ViewModel() {
     private val _email =  MutableStateFlow("")
     val email: StateFlow<String> = _email
 
@@ -42,4 +51,18 @@ class SignUpViewModel @Inject constructor(): ViewModel() {
     fun toggleConfirmPasswordVisibility() {
         _confirmPasswordVisibility.value = !_confirmPasswordVisibility.value
     }
+
+    fun onSignInWithGoogle(
+        credential: Credential,
+        onSuccess: () -> Unit
+    ) {
+        viewModelScope.launch {
+            if (credential is CustomCredential && credential.type == TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+                val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
+                authService.signInWithGoogle(googleIdTokenCredential.idToken)
+            }
+            onSuccess()
+        }
+    }
+
 }
