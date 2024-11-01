@@ -21,8 +21,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.mightysana.onewallet.Home
 import com.mightysana.onewallet.R
-import com.mightysana.onewallet.SignIn
-import com.mightysana.onewallet.SignUp
+import com.mightysana.onewallet.auth.SignIn
+import com.mightysana.onewallet.auth.SignUp
 import com.mightysana.onewallet.auth.presentation.components.AuthForm
 import com.mightysana.onewallet.auth.presentation.components.AuthOptions
 import com.mightysana.onewallet.auth.presentation.components.SignInFormContent
@@ -63,7 +63,11 @@ fun SignInScreen(
                         onVisibilityChange = { viewModel.togglePasswordVisibility() }
                     )
                 },
-                onMainButtonClick = { navController.navigateAndPopUp(Home, SignIn) },
+                onMainButtonClick = {
+                    viewModel.onSignInWithEmailAndPassword {
+                        navController.navigateAndPopUp(Home, SignIn)
+                    }
+                },
                 secondaryContent = {
                     AuthOptions(
                         horizontalDividerText = stringResource(R.string.or_continue_with),
