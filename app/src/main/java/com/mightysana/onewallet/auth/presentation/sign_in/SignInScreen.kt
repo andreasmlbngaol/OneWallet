@@ -1,4 +1,4 @@
-package com.mightysana.onewallet.auth.presentation.login
+package com.mightysana.onewallet.auth.presentation.sign_in
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,6 +8,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
@@ -16,21 +19,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.mightysana.onewallet.Home
 import com.mightysana.onewallet.R
-import com.mightysana.onewallet.Register
+import com.mightysana.onewallet.SignUp
 import com.mightysana.onewallet.auth.presentation.components.AuthForm
 import com.mightysana.onewallet.auth.presentation.components.AuthOptions
-import com.mightysana.onewallet.auth.presentation.components.LoginFormContent
+import com.mightysana.onewallet.auth.presentation.components.SignInFormContent
 import com.mightysana.onewallet.components.Preview
 
 @Composable
-fun LoginScreen(
+fun SignInScreen(
     iconLauncher: Painter,
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    viewModel: LoginViewModel = hiltViewModel()
+    viewModel: SignInViewModel = hiltViewModel()
 ) {
     Scaffold(
         modifier = modifier
@@ -41,7 +43,6 @@ fun LoginScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            // Later in ViewModel
             val email by viewModel.email.collectAsState()
             val password by viewModel.password.collectAsState()
             val visibility by viewModel.passwordVisibility.collectAsState()
@@ -51,13 +52,13 @@ fun LoginScreen(
                 formImage = iconLauncher,
                 title = stringResource(R.string.login_title),
                 mainContent = {
-                    LoginFormContent(
+                    SignInFormContent(
                         email = email,
                         password = password,
                         visibility = visibility,
                         onEmailChange = { viewModel.setEmail(it) },
                         onPasswordChange = { viewModel.setPassword(it) } ,
-                        onVisibilityChange = { viewModel.setPasswordVisibility(it) }
+                        onVisibilityChange = { viewModel.togglePasswordVisibility() }
                     )
                 },
                 onMainButtonClick = { navController.navigate(Home) },
@@ -68,14 +69,9 @@ fun LoginScreen(
                     )
                 },
                 navButtonText = stringResource(R.string.dont_have_an_account),
-                onNavButtonClick = { navController.navigate(Register) },
+                onNavButtonClick = { navController.navigate(SignUp) },
                 modifier = Modifier.fillMaxWidth(0.85f)
             )
-//            LoginForm(
-//                formImage = iconLauncher,
-//                modifier = Modifier.fillMaxWidth(0.85f),
-//                onNavigateToRegister = { navController.navigate(Register) }
-//            )
         }
     }
 }
@@ -84,10 +80,39 @@ fun LoginScreen(
 @Composable
 private fun LoginScreenPreview() {
     Preview {
-        LoginScreen(
-            modifier = Modifier.fillMaxSize(),
-            iconLauncher = painterResource(R.drawable.one_wallet_logo_round),
-            navController = rememberNavController()
-        )
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            var email by remember { mutableStateOf("") }
+            var password by remember { mutableStateOf("") }
+            var visibility by remember { mutableStateOf(false) }
+
+            AuthForm(
+                formImage = painterResource(id = R.drawable.one_wallet_logo_round),
+                title = stringResource(R.string.login_title),
+                mainContent = {
+                    SignInFormContent(
+                        email = email,
+                        password = password,
+                        visibility = visibility,
+                        onEmailChange = { email = it },
+                        onPasswordChange = { password = it } ,
+                        onVisibilityChange = { visibility = !visibility }
+                    )
+                },
+                onMainButtonClick = {  },
+                secondaryContent = {
+                    AuthOptions(
+                        horizontalDividerText = stringResource(R.string.or_continue_with),
+                        onSignInWithGoogle = { }
+                    )
+                },
+                navButtonText = stringResource(R.string.dont_have_an_account),
+                onNavButtonClick = {  },
+                modifier = Modifier.fillMaxWidth(0.85f)
+            )
+        }
     }
 }

@@ -6,16 +6,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.mightysana.onewallet.auth.presentation.login.LoginScreen
-import com.mightysana.onewallet.auth.presentation.register.RegisterScreen
+import com.mightysana.onewallet.auth.presentation.sign_in.SignInScreen
+import com.mightysana.onewallet.auth.presentation.sign_up.SignUpScreen
 import com.mightysana.onewallet.main.presentation.home.HomeScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
-object Login
+object SignIn
 
 @Serializable
-object Register
+object SignUp
 
 @Serializable
 object Home
@@ -27,18 +27,18 @@ fun MyAppRoute(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Login,
+        startDestination = SignIn,
         modifier = modifier
     ) {
-        composable<Login> {
-            LoginScreen(
+        composable<SignIn> {
+            SignInScreen(
                 iconLauncher = painterResource(R.drawable.one_wallet_logo_round),
                 navController = navController
             )
         }
 
-        composable<Register> {
-            RegisterScreen(
+        composable<SignUp> {
+            SignUpScreen(
                 iconLauncher = painterResource(R.drawable.one_wallet_logo_round),
                 navController = navController
             )

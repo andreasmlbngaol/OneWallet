@@ -110,13 +110,13 @@ fun AuthOptions(
 }
 
 @Composable
-fun LoginFormContent(
+fun SignInFormContent(
     email: String,
     password: String,
     visibility: Boolean,
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
-    onVisibilityChange: (Boolean) -> Unit
+    onVisibilityChange: () -> Unit
 ) {
     OneTextField(
         value = email,
@@ -136,10 +136,60 @@ fun LoginFormContent(
         visualTransformation = if (visibility) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = if (visibility) Icons.Default.VisibilityOff else Icons.Default.Visibility,
         leadingIcon = Icons.Default.Key,
-        onTrailingIconClick = { onVisibilityChange(!visibility) },
+        onTrailingIconClick = { onVisibilityChange() },
         autoCorrectEnabled = false
     )
 }
+
+@Composable
+fun SignUpFormContent(
+    email: String,
+    password: String,
+    confirmPassword: String,
+    passwordVisibility: Boolean,
+    confirmPasswordVisibility: Boolean,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onConfirmPasswordChange: (String) -> Unit,
+    onPasswordVisibilityChange: () -> Unit,
+    onConfirmPasswordVisibilityChange: () -> Unit
+) {
+    OneTextField(
+        value = email,
+        onValueChange = { onEmailChange(it) },
+        labelText = stringResource(R.string.email_label),
+        leadingIcon = Icons.Default.Person3,
+        modifier = Modifier.fillMaxWidth(),
+        supportingText = "Enter your email"
+    )
+
+    OneTextField(
+        value = password,
+        onValueChange = { onPasswordChange(it) },
+        labelText = stringResource(R.string.password_label),
+        modifier = Modifier.fillMaxWidth(),
+        supportingText = "Enter your password",
+        visualTransformation = if(passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
+        trailingIcon = if(passwordVisibility) Icons.Default.VisibilityOff else Icons.Default.Visibility,
+        leadingIcon = Icons.Default.Key,
+        onTrailingIconClick = { onPasswordVisibilityChange() },
+        autoCorrectEnabled = false
+    )
+
+    OneTextField(
+        value = confirmPassword,
+        onValueChange = { onConfirmPasswordChange(it) },
+        labelText = stringResource(R.string.confirm_password_label),
+        modifier = Modifier.fillMaxWidth(),
+        supportingText = "Enter your password",
+        visualTransformation = if(confirmPasswordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
+        trailingIcon = if(confirmPasswordVisibility) Icons.Default.VisibilityOff else Icons.Default.Visibility,
+        leadingIcon = Icons.Default.Key,
+        onTrailingIconClick = { onConfirmPasswordVisibilityChange() },
+        autoCorrectEnabled = false
+    )
+}
+
 
 @Composable
 fun AuthFormImage(

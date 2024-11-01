@@ -1,4 +1,4 @@
-package com.mightysana.onewallet.auth.presentation.login
+package com.mightysana.onewallet.auth.presentation.sign_in
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor() : ViewModel() {
+class SignInViewModel @Inject constructor() : ViewModel() {
     private val _email =  MutableStateFlow("")
     val email: StateFlow<String> = _email
 
@@ -25,7 +25,7 @@ class LoginViewModel @Inject constructor() : ViewModel() {
         _password.value = newPassword
     }
 
-    fun setPasswordVisibility(isVisible: Boolean) {
-        _passwordVisibility.value = isVisible
+    fun togglePasswordVisibility() {
+        _passwordVisibility.value = !_passwordVisibility.value
     }
 }

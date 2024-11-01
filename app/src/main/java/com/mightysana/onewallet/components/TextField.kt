@@ -1,10 +1,10 @@
 package com.mightysana.onewallet.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -64,11 +64,11 @@ fun OneTextField(
         },
         trailingIcon = trailingIcon?.let {
             {
-                Icon(
-                    imageVector = trailingIcon,
+                val icon = Icon(
+                    imageVector = it,
                     contentDescription = null,
-                    modifier = if(onTrailingIconClick == null) Modifier else Modifier.clickable { onTrailingIconClick() }
                 )
+                if(onTrailingIconClick == null) icon else IconButton(onClick = onTrailingIconClick, content = { icon })
             }
         },
         prefix = prefixText?.let { { Text(text = prefixText) } },
