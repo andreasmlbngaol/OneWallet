@@ -1,4 +1,4 @@
-package com.mightysana.onewallet.auth.presentation.components
+package com.mightysana.onewallet.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource

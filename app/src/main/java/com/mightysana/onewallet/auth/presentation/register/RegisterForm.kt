@@ -23,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -31,9 +32,9 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.mightysana.onewallet.R
-import com.mightysana.onewallet.auth.presentation.components.FormImage
-import com.mightysana.onewallet.auth.presentation.components.FormTitle
-import com.mightysana.onewallet.auth.presentation.components.OneTextField
+import com.mightysana.onewallet.auth.presentation.components.AuthFormImage
+import com.mightysana.onewallet.auth.presentation.components.AuthFormTitle
+import com.mightysana.onewallet.components.OneTextField
 import com.mightysana.onewallet.components.OneButton
 import com.mightysana.onewallet.components.OneImageButton
 import com.mightysana.onewallet.components.OneTextHorizontalDivider
@@ -41,6 +42,7 @@ import com.mightysana.onewallet.components.Preview
 
 @Composable
 fun RegisterForm(
+    painter: Painter,
     modifier: Modifier = Modifier,
     onNavigateToLogin: () -> Unit = {},
     onRegister: () -> Unit = {},
@@ -59,8 +61,8 @@ fun RegisterForm(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.padding(16.dp)
         ) {
-            FormImage(modifier = Modifier.width(100.dp).height(100.dp))
-            FormTitle(stringResource(R.string.register_title))
+            AuthFormImage(painter, modifier = Modifier.width(100.dp).height(100.dp))
+            AuthFormTitle(stringResource(R.string.register_title))
             RegisterFormInput(
                 onNavigateToLogin = onNavigateToLogin,
                 onRegister = onRegister,
@@ -151,6 +153,8 @@ fun RegisterFormInput(
 @Composable
 fun RegisterFormPreview() {
     Preview {
-        RegisterForm()
+        RegisterForm(
+            painter = painterResource(id = R.drawable.one_wallet_logo_round)
+        )
     }
 }
