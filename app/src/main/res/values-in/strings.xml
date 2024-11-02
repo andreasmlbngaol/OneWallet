@@ -15,4 +15,10 @@
     <string name="password_is_not_valid">Kata sandi harus >7 karakter, mengandung huruf kecil, kapital dan angka</string>
     <string name="sign_up_success">Daftar berhasil!</string>
     <string name="email_verification_message">Email verifikasi telah terkirim.\nBuka email untuk memverifikasi akun</string>
+    <string name="email_already_used">Email telah digunakan!</string>
+    <string name="sign_out">Keluar</string>
+    <string name="back_to_sign_in">Kembali untuk masuk</string>
+    <string name="open_email_app">Buka email</string>
+    <string name="login_failed">Email atau kata sandi salah!</string>
+    <string name="form_blank">Isi formulir terlebih dahulu!</string>
 </resources>

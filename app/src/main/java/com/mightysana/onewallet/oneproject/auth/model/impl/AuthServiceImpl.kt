@@ -43,6 +43,10 @@ class AuthServiceImpl @Inject constructor() : AuthService {
         return Firebase.auth.currentUser!!.isEmailVerified
     }
 
+    override suspend fun reloadCurrentUser() {
+        Firebase.auth.currentUser!!.reload()
+    }
+
     override suspend fun signOut() {
         Firebase.auth.signOut()
     }

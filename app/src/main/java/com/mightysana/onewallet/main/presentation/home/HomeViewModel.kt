@@ -9,9 +9,10 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val authService: AuthService
 ) : OneViewModel() {
-    fun onSignOut() {
-        launchCatching {
+    fun onSignOut(onSuccess: () -> Unit) {
+        loadScope {
             authService.signOut()
+            onSuccess()
         }
     }
 

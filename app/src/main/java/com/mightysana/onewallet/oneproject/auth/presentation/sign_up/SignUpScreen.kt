@@ -27,6 +27,7 @@ import com.mightysana.onewallet.oneproject.auth.presentation.components.SignUpFo
 import com.mightysana.onewallet.oneproject.components.Preview
 import com.mightysana.onewallet.navigateAndPopUp
 import com.mightysana.onewallet.oneproject.auth.EmailVerification
+import com.mightysana.onewallet.oneproject.auth.functions.toast
 import com.mightysana.onewallet.oneproject.components.OneScreen
 
 @Composable
@@ -71,7 +72,9 @@ fun SignUpScreen(
                         viewModel.validateForm(
                             context = context,
                             onSuccess = {
-                                viewModel.onSignUpWithEmailAndPassword {
+                                viewModel.onSignUpWithEmailAndPassword({ context.toast(
+                                    context.getString(R.string.email_already_used)
+                                ) }) {
                                     navController.navigateAndPopUp(EmailVerification, SignUp)
                                 }
                             }

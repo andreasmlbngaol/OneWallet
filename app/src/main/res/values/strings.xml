@@ -15,6 +15,12 @@
     <string name="password_and_confirm_password_not_same">Password and Confirm Password don\'t match!</string>
     <string name="email_is_not_valid">Insert valid email!</string>
     <string name="password_is_not_valid">Password must be >7 character, contain uppercase, lowercase, and number</string>
-    <string name="sign_up_success">Sign in success!</string>
-    <string name="email_verification_message">Email verification has been.\nOpen your email to verify your account</string>
+    <string name="sign_up_success">Sign up success!</string>
+    <string name="email_verification_message">Email verification has been sent.\nOpen your email to verify your account</string>
+    <string name="email_already_used">Email address is already in use!</string>
+    <string name="sign_out">Sign out</string>
+    <string name="back_to_sign_in">Back to Login</string>
+    <string name="open_email_app">Open email</string>
+    <string name="login_failed">Email or password is incorrect!</string>
+    <string name="form_blank">Fill the form fist!</string>
 </resources>

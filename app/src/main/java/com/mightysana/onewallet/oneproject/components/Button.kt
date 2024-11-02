@@ -13,6 +13,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ButtonElevation
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -53,6 +54,33 @@ fun OneButton(
         content
     )
 }
+
+@Composable
+fun OneOutlinedButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    colors: ButtonColors = ButtonDefaults.buttonColors(),
+    elevation: ButtonElevation? = ButtonDefaults.buttonElevation(),
+    border: BorderStroke? = null,
+    contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
+    interactionSource: MutableInteractionSource? = null,
+    content: @Composable() (RowScope.() -> Unit)
+) {
+    OutlinedButton(
+        onClick,
+        modifier,
+        enabled,
+        MaterialTheme.shapes.medium,
+        colors,
+        elevation,
+        border,
+        contentPadding,
+        interactionSource,
+        content
+    )
+}
+
 
 @Composable
 fun OneImageButton(

@@ -1,22 +1,27 @@
 package com.mightysana.onewallet.oneproject.model
 
+import android.content.Context
+import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 open class OneViewModel : ViewModel() {
-    fun launchCatching(block: suspend CoroutineScope.() -> Unit) {
-        viewModelScope.launch(
-            CoroutineExceptionHandler { _, throwable ->
-                Log.e("SignInViewModel", throwable.message.orEmpty())
-            },
-            block = block
-        )
+    fun launchCatching(
+        exception: (Throwable) -> Unit = {},
+        block: suspend CoroutineScope.() -> Unit
+    ) {
+        viewModelScope.launch {
+            try {
+                block()
+            } catch (e: Exception) {
+                exception(e)
+            }
+        }
     }
 
     private val _appState: MutableStateFlow<OneAppState> = MutableStateFlow(OneAppState.Okay)
@@ -35,9 +40,9 @@ open class OneViewModel : ViewModel() {
         setAppState(OneAppState.Okay)
     }
 
-    fun appError(message: String) {
-        setAppState(OneAppState.Error(message))
-    }
+//    fun appError(message: String) {
+//        setAppState(OneAppState.Error(message))
+//    }
 
     fun loadScope(block: suspend CoroutineScope.() -> Unit) {
         viewModelScope.launch {
@@ -45,6 +50,28 @@ open class OneViewModel : ViewModel() {
             block()
             appOkay()
         }
+    }
+
+    fun openOtherApp(
+        category: String,
+        packageName: String,
+        context: Context,
+        flags: Int = Intent.FLAG_ACTIVITY_NEW_TASK
+    ) {
+        val intent = Intent(Intent.ACTION_MAIN).apply {
+            addCategory(category)
+            // Intent.CATEGORY_APP_EMAIL
+            setPackage(packageName)
+            // "com.google.android.gm"
+            addFlags(flags)
+        }
+        try {
+            context.startActivity(intent)
+        } catch (e: Exception) {
+            Log.e("openOtherApp", "Error launching other app")
+            e.printStackTrace()
+        }
+
     }
 
 }

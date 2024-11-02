@@ -14,6 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -29,6 +30,7 @@ import com.mightysana.onewallet.oneproject.auth.presentation.components.SignInFo
 import com.mightysana.onewallet.oneproject.components.Preview
 import com.mightysana.onewallet.navigateAndPopUp
 import com.mightysana.onewallet.oneproject.auth.EmailVerification
+import com.mightysana.onewallet.oneproject.auth.functions.toast
 import com.mightysana.onewallet.oneproject.components.OneScreen
 
 @Composable
@@ -38,6 +40,8 @@ fun SignInScreen(
     navController: NavHostController,
     viewModel: SignInViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
+
     Scaffold(
         modifier = modifier
     ) { innerPadding ->
@@ -71,6 +75,7 @@ fun SignInScreen(
                     },
                     onMainButtonClick = {
                         viewModel.onSignInWithEmailAndPassword(
+                            onFailure = { context.toast(if(it == 1) R.string.form_blank else R.string.login_failed) },
                             onEmailVerified = { navController.navigateAndPopUp(Home, SignIn) },
                             onEmailNotVerified = { navController.navigateAndPopUp(EmailVerification, SignIn) }
                         )

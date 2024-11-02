@@ -37,13 +37,17 @@ class SignInViewModel @Inject constructor(
     }
 
     fun onSignInWithEmailAndPassword(
+        onFailure: (Int) -> Unit,
         onEmailVerified: () -> Unit,
         onEmailNotVerified: () -> Unit
     ) {
-        launchCatching {
-            loadScope {
+        loadScope {
+            try {
                 authService.signInWithEmailAndPassword(_email.value.trim(), _password.value.trim())
-                if(authService.isEmailVerified()) onEmailVerified() else onEmailNotVerified()
+                if (authService.isEmailVerified()) onEmailVerified() else onEmailNotVerified()
+            } catch (e: Exception) {
+                val errorCode = if(_email.value.trim().isEmpty() || _password.value.trim().isEmpty()) 1 else 2
+                onFailure(errorCode)
             }
         }
     }
