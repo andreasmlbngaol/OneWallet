@@ -8,16 +8,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.google.firebase.Firebase
-import com.google.firebase.auth.auth
 import com.mightysana.onewallet.Home
-import com.mightysana.onewallet.auth.SignIn
+import com.mightysana.onewallet.oneproject.auth.SignIn
 import com.mightysana.onewallet.navigateAndPopUp
 
 @Composable
 fun HomeScreen(
-    navController: NavHostController
+    navController: NavHostController,
+    viewModel: HomeViewModel = hiltViewModel()
 ) {
     Scaffold { innerPadding ->
         Box(
@@ -26,7 +26,7 @@ fun HomeScreen(
         ) {
             OutlinedButton(
                 onClick = {
-                    Firebase.auth.signOut()
+                    viewModel.onSignOut()
                     navController.navigateAndPopUp(SignIn, Home)
                 }
             ) {

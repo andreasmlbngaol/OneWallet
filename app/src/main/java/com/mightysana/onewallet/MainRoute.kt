@@ -7,11 +7,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.google.firebase.auth.FirebaseAuth
-import com.mightysana.onewallet.auth.SignIn
-import com.mightysana.onewallet.auth.SignUp
-import com.mightysana.onewallet.auth.presentation.sign_in.SignInScreen
-import com.mightysana.onewallet.auth.presentation.sign_up.SignUpScreen
+import com.mightysana.onewallet.oneproject.auth.SignIn
+import com.mightysana.onewallet.oneproject.auth.SignUp
+import com.mightysana.onewallet.oneproject.auth.presentation.sign_in.SignInScreen
+import com.mightysana.onewallet.oneproject.auth.presentation.sign_up.SignUpScreen
 import com.mightysana.onewallet.main.presentation.home.HomeScreen
+import com.mightysana.onewallet.oneproject.auth.EmailVerification
+import com.mightysana.onewallet.oneproject.auth.presentation.email_verification.EmailVerification
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -23,7 +25,13 @@ fun MyAppRoute(
     modifier: Modifier = Modifier,
     navController: NavHostController
 ) {
-    val startDestination: Any = if(isUserLoggedIn()) Home else SignIn
+    // Tambah untuk registered
+    val startDestination: Any =
+        if(isUserLoggedIn() && isUserVerified())
+            Home
+        else if(isUserLoggedIn())
+            EmailVerification
+        else SignIn
     NavHost(
         navController = navController,
         startDestination = startDestination,
@@ -48,6 +56,12 @@ fun MyAppRoute(
                 navController = navController
             )
         }
+
+        composable<EmailVerification> {
+            EmailVerification(
+                navController = navController
+            )
+        }
     }
 }
 
@@ -59,5 +73,7 @@ fun NavHostController.navigateAndPopUp(route: Any, popUp: Any) {
 }
 
 fun isUserLoggedIn(): Boolean = FirebaseAuth.getInstance().currentUser.isNotNull()
+
+fun isUserVerified(): Boolean = FirebaseAuth.getInstance().currentUser!!.isEmailVerified
 
 fun Any?.isNotNull(): Boolean = this != null

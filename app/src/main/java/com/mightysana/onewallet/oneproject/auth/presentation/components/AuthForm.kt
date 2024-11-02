@@ -1,4 +1,4 @@
-package com.mightysana.onewallet.auth.presentation.components
+package com.mightysana.onewallet.oneproject.auth.presentation.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -30,10 +30,10 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.credentials.Credential
 import com.mightysana.onewallet.R
-import com.mightysana.onewallet.components.GoogleAuthButton
-import com.mightysana.onewallet.components.OneButton
-import com.mightysana.onewallet.components.OneTextField
-import com.mightysana.onewallet.components.OneTextHorizontalDivider
+import com.mightysana.onewallet.oneproject.components.GoogleAuthButton
+import com.mightysana.onewallet.oneproject.components.OneButton
+import com.mightysana.onewallet.oneproject.components.OneTextField
+import com.mightysana.onewallet.oneproject.components.OneTextHorizontalDivider
 
 @Composable
 fun AuthForm(
@@ -95,6 +95,8 @@ fun AuthForm(
 fun AuthOptions(
     horizontalDividerText: String,
     horizontalLineColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+    onLoad: () -> Unit,
+    onOkay: () -> Unit,
     onGetCredentialResponse: (Credential) -> Unit
 ) {
     OneTextHorizontalDivider(
@@ -102,7 +104,10 @@ fun AuthOptions(
         lineColor = horizontalLineColor,
     )
 
-    GoogleAuthButton { onGetCredentialResponse(it) }
+    GoogleAuthButton(
+        onLoad = onLoad,
+        onOkay = onOkay,
+    ) { onGetCredentialResponse(it) }
 
 }
 

@@ -1,4 +1,4 @@
-package com.mightysana.onewallet.auth.functions
+package com.mightysana.onewallet.oneproject.auth.functions
 
 import android.content.Context
 import android.widget.Toast
