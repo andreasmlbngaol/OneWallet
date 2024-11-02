@@ -1,4 +1,4 @@
-package com.mightysana.onewallet.components
+package com.mightysana.onewallet.oneproject.components
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.text.KeyboardActions

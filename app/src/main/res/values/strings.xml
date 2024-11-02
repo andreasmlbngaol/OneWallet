@@ -16,4 +16,5 @@
     <string name="email_is_not_valid">Insert valid email!</string>
     <string name="password_is_not_valid">Password must be >7 character, contain uppercase, lowercase, and number</string>
     <string name="sign_up_success">Sign in success!</string>
+    <string name="email_verification_message">Email verification has been.\nOpen your email to verify your account</string>
 </resources>

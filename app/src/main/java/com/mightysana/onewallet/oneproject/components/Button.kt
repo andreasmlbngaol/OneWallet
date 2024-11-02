@@ -1,4 +1,4 @@
-package com.mightysana.onewallet.components
+package com.mightysana.onewallet.oneproject.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -79,6 +79,8 @@ fun OneImageButton(
 
 @Composable
 fun GoogleAuthButton(
+    onLoad: () -> Unit,
+    onOkay: () -> Unit,
     onGetCredentialResponse: (Credential) -> Unit
 ) {
     val context = LocalContext.current
@@ -88,6 +90,7 @@ fun GoogleAuthButton(
     OneImageButton(
         painter = painterResource(id = R.drawable.google_logo),
         onClick = {
+            onLoad()
             val googleIdOption = GetGoogleIdOption.Builder()
                 .setFilterByAuthorizedAccounts(false)
                 .setServerClientId(context.getString(R.string.default_web_client_id))
@@ -106,6 +109,8 @@ fun GoogleAuthButton(
                     onGetCredentialResponse(result.credential)
                 } catch (e: Exception) {
                     e.printStackTrace()
+                } finally {
+                    onOkay()
                 }
             }
         },

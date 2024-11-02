@@ -1,16 +1,14 @@
-package com.mightysana.onewallet.auth.presentation.sign_in
+package com.mightysana.onewallet.oneproject.auth.presentation.sign_in
 
 import androidx.credentials.Credential
 import androidx.credentials.CustomCredential
-import androidx.lifecycle.viewModelScope
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
-import com.mightysana.onewallet.auth.model.AuthService
-import com.mightysana.onewallet.auth.model.OneViewModel
+import com.mightysana.onewallet.oneproject.auth.model.AuthService
+import com.mightysana.onewallet.oneproject.model.OneViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,10 +36,15 @@ class SignInViewModel @Inject constructor(
         _passwordVisibility.value = !_passwordVisibility.value
     }
 
-    fun onSignInWithEmailAndPassword(onSuccess: () -> Unit) {
+    fun onSignInWithEmailAndPassword(
+        onEmailVerified: () -> Unit,
+        onEmailNotVerified: () -> Unit
+    ) {
         launchCatching {
-            authService.signInWithEmailAndPassword(_email.value.trim(), _password.value.trim())
-            onSuccess()
+            loadScope {
+                authService.signInWithEmailAndPassword(_email.value.trim(), _password.value.trim())
+                if(authService.isEmailVerified()) onEmailVerified() else onEmailNotVerified()
+            }
         }
     }
 
@@ -49,7 +52,7 @@ class SignInViewModel @Inject constructor(
         credential: Credential,
         onSuccess: () -> Unit
     ) {
-        viewModelScope.launch {
+        launchCatching {
             if (credential is CustomCredential && credential.type == TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
                 val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
                 authService.signInWithGoogle(googleIdTokenCredential.idToken)

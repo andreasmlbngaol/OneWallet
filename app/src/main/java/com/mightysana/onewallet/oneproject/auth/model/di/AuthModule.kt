@@ -1,7 +1,7 @@
-package com.mightysana.onewallet.auth.model.di
+package com.mightysana.onewallet.oneproject.auth.model.di
 
-import com.mightysana.onewallet.auth.model.AuthService
-import com.mightysana.onewallet.auth.model.impl.AuthServiceImpl
+import com.mightysana.onewallet.oneproject.auth.model.AuthService
+import com.mightysana.onewallet.oneproject.auth.model.impl.AuthServiceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

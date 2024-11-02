@@ -1,6 +1,7 @@
-package com.mightysana.onewallet.auth.presentation.sign_up
+package com.mightysana.onewallet.oneproject.auth.presentation.sign_up
 
 import android.content.Context
+import android.util.Log
 import androidx.core.content.ContextCompat.getString
 import androidx.credentials.Credential
 import androidx.credentials.CustomCredential
@@ -8,9 +9,9 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
 import com.mightysana.onewallet.R
-import com.mightysana.onewallet.auth.functions.toast
-import com.mightysana.onewallet.auth.model.AuthService
-import com.mightysana.onewallet.auth.model.OneViewModel
+import com.mightysana.onewallet.oneproject.auth.functions.toast
+import com.mightysana.onewallet.oneproject.auth.model.AuthService
+import com.mightysana.onewallet.oneproject.model.OneViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -85,12 +86,42 @@ class SignUpViewModel @Inject constructor(
         onSuccess: () -> Unit,
     ) {
         val validationState = when {
-            isEmailBlank() -> FormValidationState.Invalid(getString(context, R.string.email_is_blank))
-            !isEmailValid() -> FormValidationState.Invalid(getString(context, R.string.email_is_not_valid))
-            isPasswordBlank() -> FormValidationState.Invalid(getString(context, R.string.password_is_blank))
-            !isPasswordValid() -> FormValidationState.Invalid(getString(context, R.string.password_is_not_valid))
-            isConfirmPasswordBlank() -> FormValidationState.Invalid(getString(context, R.string.confirm_password_is_blank))
-            !isPasswordAndConfirmPasswordSame() -> FormValidationState.Invalid(getString(context, R.string.password_and_confirm_password_not_same))
+            isEmailBlank() -> FormValidationState.Invalid(
+                getString(
+                    context,
+                    R.string.email_is_blank
+                )
+            )
+            !isEmailValid() -> FormValidationState.Invalid(
+                getString(
+                    context,
+                    R.string.email_is_not_valid
+                )
+            )
+            isPasswordBlank() -> FormValidationState.Invalid(
+                getString(
+                    context,
+                    R.string.password_is_blank
+                )
+            )
+            !isPasswordValid() -> FormValidationState.Invalid(
+                getString(
+                    context,
+                    R.string.password_is_not_valid
+                )
+            )
+            isConfirmPasswordBlank() -> FormValidationState.Invalid(
+                getString(
+                    context,
+                    R.string.confirm_password_is_blank
+                )
+            )
+            !isPasswordAndConfirmPasswordSame() -> FormValidationState.Invalid(
+                getString(
+                    context,
+                    R.string.password_and_confirm_password_not_same
+                )
+            )
             else -> FormValidationState.Valid
         }
 
@@ -104,8 +135,12 @@ class SignUpViewModel @Inject constructor(
 
     fun onSignUpWithEmailAndPassword(onSuccess: () -> Unit ) {
         launchCatching {
-            authService.signUpWithEmailAndPassword(_email.value.trim(), _password.value.trim())
-            onSuccess()
+            loadScope {
+                authService.signUpWithEmailAndPassword(_email.value.trim(), _password.value.trim())
+                authService.sendEmailVerification()
+                Log.d("SignUpViewModel", "isEmailVerified: ${authService.isEmailVerified()}")
+                onSuccess()
+            }
         }
     }
 
