@@ -1,7 +1,6 @@
 package com.mightysana.onewallet.oneproject.auth.presentation.sign_up
 
 import android.content.Context
-import android.util.Log
 import androidx.core.content.ContextCompat.getString
 import androidx.credentials.Credential
 import androidx.credentials.CustomCredential
@@ -58,27 +57,27 @@ class SignUpViewModel @Inject constructor(
     }
 
     private fun isEmailBlank(): Boolean {
-        return _email.value.isBlank()
+        return _email.value.trim().isBlank()
     }
 
     private fun isPasswordBlank(): Boolean {
-        return _password.value.isBlank()
+        return _password.value.trim().isBlank()
     }
 
     private fun isConfirmPasswordBlank(): Boolean {
-        return _confirmPassword.value.isBlank()
+        return _confirmPassword.value.trim().isBlank()
     }
 
     private fun isPasswordAndConfirmPasswordSame(): Boolean {
-        return _password.value == _confirmPassword.value
+        return _password.value.trim() == _confirmPassword.value.trim()
     }
 
     private fun isEmailValid(): Boolean {
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(_email.value).matches()
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(_email.value.trim()).matches()
     }
 
     private fun isPasswordValid(): Boolean {
-        return Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$").matches(_password.value)
+        return Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$").matches(_password.value.trim())
     }
 
     fun validateForm(
@@ -125,21 +124,27 @@ class SignUpViewModel @Inject constructor(
             else -> FormValidationState.Valid
         }
 
-        val message = if(validationState is FormValidationState.Valid) getString(context, R.string.sign_up_success)
-        else (validationState as FormValidationState.Invalid).message
-
-        context.toast(message)
-
-        if(validationState is FormValidationState.Valid) onSuccess()
+        if(validationState is FormValidationState.Invalid) {
+            context.toast(validationState.message)
+        } else {
+            onSuccess()
+        }
     }
 
-    fun onSignUpWithEmailAndPassword(onSuccess: () -> Unit ) {
-        launchCatching {
-            loadScope {
-                authService.signUpWithEmailAndPassword(_email.value.trim(), _password.value.trim())
+    fun onSignUpWithEmailAndPassword(
+        onFailure: () -> Unit,
+        onSuccess: () -> Unit
+    ) {
+        loadScope {
+            try {
+                authService.signUpWithEmailAndPassword(
+                    _email.value.trim(),
+                    _password.value.trim()
+                )
                 authService.sendEmailVerification()
-                Log.d("SignUpViewModel", "isEmailVerified: ${authService.isEmailVerified()}")
                 onSuccess()
+            } catch (e: Exception) {
+                onFailure()
             }
         }
     }

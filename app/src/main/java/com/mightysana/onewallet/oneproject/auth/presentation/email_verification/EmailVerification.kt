@@ -13,12 +13,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -28,6 +28,8 @@ import com.mightysana.onewallet.Home
 import com.mightysana.onewallet.R
 import com.mightysana.onewallet.navigateAndPopUp
 import com.mightysana.onewallet.oneproject.auth.EmailVerification
+import com.mightysana.onewallet.oneproject.auth.SignIn
+import com.mightysana.onewallet.oneproject.components.OneOutlinedButton
 import com.mightysana.onewallet.oneproject.components.OneScreen
 
 @Composable
@@ -35,11 +37,11 @@ fun EmailVerification(
     navController: NavHostController,
     viewModel: EmailVerificationViewModel = hiltViewModel()
 ) {
-    val emailState by viewModel.emailState.collectAsState()
-    LaunchedEffect(emailState) {
-        viewModel.checkEmail()
-        if(emailState) { navController.navigateAndPopUp(Home, EmailVerification) }
+    viewModel.checkEmailVerification {
+        navController.navigateAndPopUp(Home, EmailVerification)
     }
+
+    val context = LocalContext.current
 
     Scaffold { innerPadding ->
         OneScreen(viewModel.appState.collectAsState().value) {
@@ -63,6 +65,26 @@ fun EmailVerification(
                         style = MaterialTheme.typography.titleMedium,
                         textAlign = TextAlign.Center
                     )
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        OneOutlinedButton(
+                            onClick = { viewModel.openEmailApp(context)}
+                        ) {
+                            Text(text = stringResource(R.string.open_email_app))
+                        }
+
+                        TextButton(
+                            onClick = {
+                                viewModel.signOut {
+                                    navController.navigateAndPopUp(SignIn, EmailVerification)
+                                }
+                            }
+                        ) {
+                            Text(text = stringResource(R.string.back_to_sign_in))
+                        }
+
+                    }
                 }
             }
         }
