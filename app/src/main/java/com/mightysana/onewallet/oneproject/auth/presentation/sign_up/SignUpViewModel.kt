@@ -10,6 +10,8 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Co
 import com.mightysana.onewallet.R
 import com.mightysana.onewallet.oneproject.auth.functions.toast
 import com.mightysana.onewallet.oneproject.auth.model.AuthService
+import com.mightysana.onewallet.oneproject.model.OneRepository
+import com.mightysana.onewallet.oneproject.model.OneUser
 import com.mightysana.onewallet.oneproject.model.OneViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +21,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val authService: AuthService
+    private val authService: AuthService,
+    private val repository: OneRepository
 ): OneViewModel() {
     private val _email =  MutableStateFlow("")
     val email: StateFlow<String> = _email
@@ -142,6 +145,25 @@ class SignUpViewModel @Inject constructor(
                     _password.value.trim()
                 )
                 authService.sendEmailVerification()
+                val user = authService.currentUser
+                repository.updateUser(
+                    userId = user!!.uid,
+                    userData = OneUser(
+                        uid = user.uid,
+                        name = user.displayName,
+                        email = user.email!!,
+                        profilePhotoUrl = user.photoUrl?.toString(),
+                        username = null,
+                        phoneNumber = null,
+                        bio = null,
+                        birthDate = null,
+                        gender = null,
+                        address = null,
+                        createdAt = user.metadata?.creationTimestamp.toString(),
+                        lastLoginAt = user.metadata?.lastSignInTimestamp.toString(),
+                        verifiedAt = null
+                    )
+                )
                 onSuccess()
             } catch (e: Exception) {
                 onFailure()
