@@ -10,3 +10,6 @@ object SignUp
 
 @Serializable
 object EmailVerification
+
+@Serializable
+object Register

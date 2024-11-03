@@ -7,15 +7,20 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class OneRepository @Inject constructor() {
-    private val database: DatabaseReference = Firebase.database.reference
-    private val usersRef: DatabaseReference = database.child(USERS_REF)
-    private val oneWalletRef: DatabaseReference = database.child(ONE_WALLET_REF)
+    val database: DatabaseReference = Firebase.database.reference
+    val usersRef: DatabaseReference = database.child(USERS_REF)
+    val oneWalletRef: DatabaseReference = database.child(ONE_WALLET_REF)
 
-    fun updateUser(userId: String, userData: OneUser) {
-        usersRef.child(userId).setValue(userData)
+    fun updateUser(userData: OneUser) {
+        usersRef.child(userData.uid).setValue(userData)
+    }
+
+    suspend fun isUserRegistered(userId: String): Boolean {
+        return usersRef.child(userId).get().await().exists()
     }
 
     fun observeUser(

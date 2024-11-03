@@ -1,13 +1,12 @@
-package com.mightysana.onewallet.main.presentation.home
+package com.mightysana.onewallet.oneproject.auth.presentation.register
 
-import com.google.firebase.auth.FirebaseUser
 import com.mightysana.onewallet.oneproject.auth.model.AuthService
 import com.mightysana.onewallet.oneproject.model.OneViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
+class RegisterViewModel @Inject constructor(
     private val authService: AuthService
 ) : OneViewModel() {
     fun onSignOut(onSuccess: () -> Unit) {
@@ -16,4 +15,5 @@ class HomeViewModel @Inject constructor(
             onSuccess()
         }
     }
+
 }

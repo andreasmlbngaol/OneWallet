@@ -17,7 +17,6 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.mightysana.onewallet.Home
 import com.mightysana.onewallet.R
 import com.mightysana.onewallet.oneproject.auth.SignIn
 import com.mightysana.onewallet.oneproject.auth.SignUp
@@ -72,9 +71,11 @@ fun SignUpScreen(
                         viewModel.validateForm(
                             context = context,
                             onSuccess = {
-                                viewModel.onSignUpWithEmailAndPassword({ context.toast(
-                                    context.getString(R.string.email_already_used)
-                                ) }) {
+                                viewModel.onSignUpWithEmailAndPassword(
+                                    {
+                                        context.toast(context.getString(R.string.email_already_used))
+                                    }
+                                ) {
                                     navController.navigateAndPopUp(EmailVerification, SignUp)
                                 }
                             }
@@ -85,9 +86,14 @@ fun SignUpScreen(
                             horizontalDividerText = stringResource(R.string.or_continue_with),
                             onLoad = { viewModel.appLoading() },
                             onOkay = { viewModel.appOkay() },
-                            onGetCredentialResponse = {
-                                viewModel.onSignInWithGoogle(it) {
-                                    navController.navigateAndPopUp(Home, SignUp)
+                            onGetCredentialResponse = { credential ->
+                                viewModel.onSignInWithGoogle(
+                                    credential = credential,
+                                    onFailure = {
+                                        context.toast(R.string.email_already_used)
+                                    }
+                                ) { destination ->
+                                    navController.navigateAndPopUp(destination, SignUp)
                                 }
                             }
                         )

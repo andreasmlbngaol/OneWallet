@@ -5,12 +5,17 @@ import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-open class OneViewModel : ViewModel() {
+@HiltViewModel
+open class OneViewModel @Inject constructor() : ViewModel() {
+    val oneRepository = OneRepository()
+
     fun launchCatching(
         exception: (Throwable) -> Unit = {},
         block: suspend CoroutineScope.() -> Unit
@@ -39,10 +44,6 @@ open class OneViewModel : ViewModel() {
     fun appOkay() {
         setAppState(OneAppState.Okay)
     }
-
-//    fun appError(message: String) {
-//        setAppState(OneAppState.Error(message))
-//    }
 
     fun loadScope(block: suspend CoroutineScope.() -> Unit) {
         viewModelScope.launch {

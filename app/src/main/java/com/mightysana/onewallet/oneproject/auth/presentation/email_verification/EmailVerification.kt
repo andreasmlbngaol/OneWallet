@@ -24,7 +24,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.mightysana.onewallet.Home
 import com.mightysana.onewallet.R
 import com.mightysana.onewallet.navigateAndPopUp
 import com.mightysana.onewallet.oneproject.auth.EmailVerification
@@ -38,7 +37,9 @@ fun EmailVerification(
     viewModel: EmailVerificationViewModel = hiltViewModel()
 ) {
     viewModel.checkEmailVerification {
-        navController.navigateAndPopUp(Home, EmailVerification)
+        viewModel.checkUserRegistrationStatus { destination ->
+            navController.navigateAndPopUp(destination, EmailVerification)
+        }
     }
 
     val context = LocalContext.current
