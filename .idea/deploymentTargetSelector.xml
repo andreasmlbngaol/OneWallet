@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-11-02T10:55:43.344305500Z">
+        <DropdownSelection timestamp="2024-11-02T20:13:02.896694400Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\ricat\.android\avd\OPPO_A57_API_TiramisuPrivacySandbox.avd" />
+              <DeviceId pluginId="PhysicalDevice" identifier="serial=P77H4SEU49QW8PWS" />
             </handle>
           </Target>
         </DropdownSelection>

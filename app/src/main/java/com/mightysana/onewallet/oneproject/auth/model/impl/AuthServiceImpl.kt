@@ -1,6 +1,7 @@
 package com.mightysana.onewallet.oneproject.auth.model.impl
 
 import android.util.Log
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -11,8 +12,8 @@ import javax.inject.Inject
 
 class AuthServiceImpl @Inject constructor() : AuthService {
 
-    override val currentUserId: String
-        get() = Firebase.auth.currentUser?.uid.orEmpty()
+    override val currentUser: FirebaseUser?
+        get() = Firebase.auth.currentUser
 
     override fun hasUser(): Boolean = false
 
