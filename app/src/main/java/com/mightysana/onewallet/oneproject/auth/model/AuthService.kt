@@ -5,6 +5,7 @@ import com.google.firebase.auth.FirebaseUser
 interface AuthService {
     val currentUser: FirebaseUser?
     fun hasUser(): Boolean
+    suspend fun reloadUser()
     suspend fun signInWithGoogle(idToken: String)
     suspend fun signInWithEmailAndPassword(email: String, password: String)
     suspend fun signUpWithEmailAndPassword(email: String, password: String)

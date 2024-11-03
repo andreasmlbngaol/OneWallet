@@ -17,6 +17,9 @@ class AuthServiceImpl @Inject constructor() : AuthService {
 
     override fun hasUser(): Boolean = false
 
+    override suspend fun reloadUser() {
+        Firebase.auth.currentUser?.reload()
+    }
     override suspend fun signInWithGoogle(idToken: String) {
         val firebaseCredential = GoogleAuthProvider.getCredential(idToken, null)
         Firebase.auth.signInWithCredential(firebaseCredential)

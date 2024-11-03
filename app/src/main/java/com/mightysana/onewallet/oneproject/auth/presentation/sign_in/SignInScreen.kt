@@ -20,7 +20,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.mightysana.onewallet.Home
 import com.mightysana.onewallet.R
 import com.mightysana.onewallet.oneproject.auth.SignIn
 import com.mightysana.onewallet.oneproject.auth.SignUp
@@ -76,7 +75,9 @@ fun SignInScreen(
                     onMainButtonClick = {
                         viewModel.onSignInWithEmailAndPassword(
                             onFailure = { context.toast(if(it == 1) R.string.form_blank else R.string.login_failed) },
-                            onEmailVerified = { navController.navigateAndPopUp(Home, SignIn) },
+                            onEmailVerified = { destination ->
+                                navController.navigateAndPopUp(destination, SignIn)
+                            },
                             onEmailNotVerified = { navController.navigateAndPopUp(EmailVerification, SignIn) }
                         )
 
@@ -86,10 +87,14 @@ fun SignInScreen(
                             horizontalDividerText = stringResource(R.string.or_continue_with),
                             onLoad = { viewModel.appLoading() },
                             onOkay = { viewModel.appOkay() },
-                            onGetCredentialResponse = {
-                                viewModel.onSignInWithGoogle(it) {
-                                    navController.navigateAndPopUp(Home, SignIn)
-                                }
+                            onGetCredentialResponse = { credential ->
+                                viewModel.onSignInWithGoogle(
+                                    credential = credential,
+                                    onFailure = { context.toast(R.string.email_already_used) },
+                                    onSuccess = { destination ->
+                                        navController.navigateAndPopUp(destination, SignIn)
+                                    }
+                                )
                             }
                         )
                     },

@@ -2,28 +2,16 @@ package com.mightysana.onewallet.oneproject.auth.presentation.sign_up
 
 import android.content.Context
 import androidx.core.content.ContextCompat.getString
-import androidx.credentials.Credential
-import androidx.credentials.CustomCredential
-import androidx.lifecycle.viewModelScope
-import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
-import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
 import com.mightysana.onewallet.R
 import com.mightysana.onewallet.oneproject.auth.functions.toast
-import com.mightysana.onewallet.oneproject.auth.model.AuthService
-import com.mightysana.onewallet.oneproject.model.OneRepository
-import com.mightysana.onewallet.oneproject.model.OneUser
-import com.mightysana.onewallet.oneproject.model.OneViewModel
+import com.mightysana.onewallet.oneproject.auth.model.AuthViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SignUpViewModel @Inject constructor(
-    private val authService: AuthService,
-    private val repository: OneRepository
-): OneViewModel() {
+class SignUpViewModel @Inject constructor(): AuthViewModel() {
     private val _email =  MutableStateFlow("")
     val email: StateFlow<String> = _email
 
@@ -145,42 +133,28 @@ class SignUpViewModel @Inject constructor(
                     _password.value.trim()
                 )
                 authService.sendEmailVerification()
-                val user = authService.currentUser
-                repository.updateUser(
-                    userId = user!!.uid,
-                    userData = OneUser(
-                        uid = user.uid,
-                        name = user.displayName,
-                        email = user.email!!,
-                        profilePhotoUrl = user.photoUrl?.toString(),
-                        username = null,
-                        phoneNumber = null,
-                        bio = null,
-                        birthDate = null,
-                        gender = null,
-                        address = null,
-                        createdAt = user.metadata?.creationTimestamp.toString(),
-                        lastLoginAt = user.metadata?.lastSignInTimestamp.toString(),
-                        verifiedAt = null
-                    )
-                )
+//                val user = authService.currentUser
+//                repository.updateUser(
+//                    OneUser(
+//                        uid = user!!.uid,
+//                        email = user.email!!,
+//                        createdAt = user.metadata?.creationTimestamp.toString(),
+//                        lastLoginAt = user.metadata?.lastSignInTimestamp.toString()
+//                        name = user.displayName,
+//                        profilePhotoUrl = user.photoUrl?.toString(),
+//                        username = null,
+//                        phoneNumber = null,
+//                        bio = null,
+//                        birthDate = null,
+//                        gender = null,
+//                        address = null,
+//                        verified = false
+//                    )
+//                )
                 onSuccess()
             } catch (e: Exception) {
                 onFailure()
             }
-        }
-    }
-
-    fun onSignInWithGoogle(
-        credential: Credential,
-        onSuccess: () -> Unit
-    ) {
-        viewModelScope.launch {
-            if (credential is CustomCredential && credential.type == TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
-                val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
-                authService.signInWithGoogle(googleIdTokenCredential.idToken)
-            }
-            onSuccess()
         }
     }
 }

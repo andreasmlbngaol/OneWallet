@@ -1,4 +1,4 @@
-package com.mightysana.onewallet.main.presentation.home
+package com.mightysana.onewallet.oneproject.auth.presentation.register
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -11,15 +11,15 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.mightysana.onewallet.Home
-import com.mightysana.onewallet.oneproject.auth.SignIn
 import com.mightysana.onewallet.navigateAndPopUp
+import com.mightysana.onewallet.oneproject.auth.SignIn
 import com.mightysana.onewallet.oneproject.components.OneOutlinedButton
 import com.mightysana.onewallet.oneproject.components.OneScreen
 
 @Composable
-fun HomeScreen(
+fun RegisterScreen(
     navController: NavHostController,
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: RegisterViewModel = hiltViewModel()
 ) {
     OneScreen(viewModel.appState.collectAsState().value) {
         Scaffold { innerPadding ->
@@ -34,7 +34,7 @@ fun HomeScreen(
                         }
                     }
                 ) {
-                    Text(text = "Sign Out From Home")
+                    Text(text = "Sign Out From Register")
                 }
             }
         }
