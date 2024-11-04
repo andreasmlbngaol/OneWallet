@@ -17,20 +17,17 @@ import androidx.navigation.NavHostController
 import com.mightysana.onewallet.Home
 import com.mightysana.onewallet.R
 import com.mightysana.onewallet.navigateAndPopUp
-import com.mightysana.onewallet.oneproject.auth.EmailVerification
 import com.mightysana.onewallet.oneproject.auth.SignIn
-import com.mightysana.onewallet.oneproject.auth.functions.toast
 import com.mightysana.onewallet.oneproject.auth.presentation.components.AuthForm
 import com.mightysana.onewallet.oneproject.auth.presentation.components.RegisterFormContent
-import com.mightysana.onewallet.oneproject.auth.presentation.components.SignInFormContent
 import com.mightysana.onewallet.oneproject.components.OneOutlinedButton
 import com.mightysana.onewallet.oneproject.components.OneScreen
 
 @Composable
 fun RegisterScreen(
+    modifier: Modifier = Modifier,
     navController: NavHostController,
     viewModel: RegisterViewModel = hiltViewModel(),
-    modifier: Modifier = Modifier
 ) {
     Scaffold(
         modifier = modifier
@@ -66,18 +63,6 @@ fun RegisterScreen(
                     },
                     onMainButtonClick = {
                         viewModel.validateForm(context) {
-//                            viewModel.onSignInWithEmailAndPassword(
-//                                onFailure = { context.toast(if (it == 1) R.string.form_blank else R.string.login_failed) },
-//                                onEmailVerified = { destination ->
-//                                    navController.navigateAndPopUp(destination, SignIn)
-//                                },
-//                                onEmailNotVerified = {
-//                                    navController.navigateAndPopUp(
-//                                        EmailVerification,
-//                                        SignIn
-//                                    )
-//                                }
-//                            )
                         }
                     },
                     secondaryContent ={
