@@ -26,4 +26,12 @@
     <string name="username_label">Nama Pengguna</string>
     <string name="gender_label">Gender</string>
     <string name="birth_date_label">Tanggal Lahir</string>
+    <string name="name_is_blank">Nama kosong!</string>
+    <string name="name_is_not_valid">Nama hanya bisa berisi alfabet!</string>
+    <string name="gender_is_blank">Pilih gender!</string>
+    <string name="birth_date_is_blank">Pilih tanggal lahir!</string>
+    <string name="male">Laki-laki</string>
+    <string name="female">Perempuan</string>
+    <string name="prefer_not_to_say">Memilih tidak memberi tahu</string>
+    <string name="select_gender">Pilih gender</string>
 </resources>

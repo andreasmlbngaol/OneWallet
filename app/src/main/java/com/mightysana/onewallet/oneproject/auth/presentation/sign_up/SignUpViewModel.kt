@@ -107,24 +107,6 @@ class SignUpViewModel @Inject constructor(): AuthViewModel() {
                     _password.value.trim()
                 )
                 authService.sendEmailVerification()
-//                val user = authService.currentUser
-//                repository.updateUser(
-//                    OneUser(
-//                        uid = user!!.uid,
-//                        email = user.email!!,
-//                        createdAt = user.metadata?.creationTimestamp.toString(),
-//                        lastLoginAt = user.metadata?.lastSignInTimestamp.toString()
-//                        name = user.displayName,
-//                        profilePhotoUrl = user.photoUrl?.toString(),
-//                        username = null,
-//                        phoneNumber = null,
-//                        bio = null,
-//                        birthDate = null,
-//                        gender = null,
-//                        address = null,
-//                        verified = false
-//                    )
-//                )
                 onSuccess()
             } catch (e: Exception) {
                 e.printStackTrace()

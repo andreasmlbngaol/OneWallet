@@ -5,6 +5,7 @@ import com.mightysana.onewallet.oneproject.auth.EmailVerification
 import com.mightysana.onewallet.oneproject.auth.Register
 import com.mightysana.onewallet.oneproject.auth.SignIn
 import com.mightysana.onewallet.oneproject.auth.model.AuthService
+import com.mightysana.onewallet.oneproject.model.OneAppState
 import com.mightysana.onewallet.oneproject.model.OneViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,6 +18,8 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val authServices: AuthService
 ): OneViewModel() {
+    override val _appState = MutableStateFlow(OneAppState.LOADING)
+    override val appState = _appState.asStateFlow()
 
     private val _startDestination = MutableStateFlow<Any?>(null)
     val startDestination = _startDestination.asStateFlow()
@@ -34,6 +37,7 @@ class MainViewModel @Inject constructor(
             } else {
                 _startDestination.value = Home
             }
+            _appState.value = OneAppState.OKAY
         }
     }
 

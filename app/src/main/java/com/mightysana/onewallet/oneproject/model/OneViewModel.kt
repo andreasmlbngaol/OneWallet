@@ -29,8 +29,8 @@ open class OneViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    protected val _appState: MutableStateFlow<OneAppState> = MutableStateFlow(OneAppState.Okay)
-    val appState: StateFlow<OneAppState> = _appState
+    protected open val _appState = MutableStateFlow(OneAppState.OKAY)
+    open val appState: StateFlow<OneAppState> = _appState
 
     private fun setAppState(state: OneAppState) {
         _appState.value = state
@@ -38,11 +38,11 @@ open class OneViewModel @Inject constructor() : ViewModel() {
     }
 
     fun appLoading() {
-        setAppState(OneAppState.Loading)
+        setAppState(OneAppState.LOADING)
     }
 
     fun appOkay() {
-        setAppState(OneAppState.Okay)
+        setAppState(OneAppState.OKAY)
     }
 
     fun loadScope(block: suspend CoroutineScope.() -> Unit) {

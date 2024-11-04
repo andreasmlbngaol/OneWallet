@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -12,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.mightysana.onewallet.R
@@ -22,6 +24,7 @@ import com.mightysana.onewallet.oneproject.auth.SignUp
 import com.mightysana.onewallet.oneproject.auth.functions.toast
 import com.mightysana.onewallet.oneproject.auth.presentation.components.AuthForm
 import com.mightysana.onewallet.oneproject.auth.presentation.components.AuthOptions
+import com.mightysana.onewallet.oneproject.auth.presentation.components.MAX_FORM_WIDTH
 import com.mightysana.onewallet.oneproject.auth.presentation.components.SignInFormContent
 import com.mightysana.onewallet.oneproject.components.OneScreen
 import com.mightysana.onewallet.oneproject.components.OneTextFieldDefault
@@ -57,13 +60,13 @@ fun SignInScreen(
                             email = OneTextFieldDefault(
                                 value = viewModel.email.collectAsState().value,
                                 onValueChange = { viewModel.setEmail(it) },
-                                label = context.getString(R.string.email_label),
+                                labelText = context.getString(R.string.email_label),
                                 errorMessage = viewModel.emailError.collectAsState().value
                             ),
                             password = OneTextFieldDefault(
                                 value = viewModel.password.collectAsState().value,
                                 onValueChange = { viewModel.setPassword(it) },
-                                label = context.getString(R.string.password_label),
+                                labelText = context.getString(R.string.password_label),
                                 errorMessage = viewModel.passwordError.collectAsState().value
                             ),
                             visibility = viewModel.passwordVisibility.collectAsState().value,
@@ -104,7 +107,7 @@ fun SignInScreen(
                     },
                     navButtonText = stringResource(R.string.dont_have_an_account),
                     onNavButtonClick = { navController.navigate(SignUp) },
-                    modifier = Modifier.fillMaxWidth(0.85f)
+                    modifier = Modifier.widthIn(max = MAX_FORM_WIDTH.dp).fillMaxWidth(0.85f)
                 )
             }
         }

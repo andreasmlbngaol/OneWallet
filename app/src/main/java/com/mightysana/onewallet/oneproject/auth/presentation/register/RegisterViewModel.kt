@@ -2,7 +2,10 @@ package com.mightysana.onewallet.oneproject.auth.presentation.register
 
 import android.content.Context
 import com.mightysana.onewallet.R
+import com.mightysana.onewallet.isNotNull
 import com.mightysana.onewallet.oneproject.auth.model.AuthViewModel
+import com.mightysana.onewallet.oneproject.model.Gender
+import com.mightysana.onewallet.oneproject.model.OneUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,8 +23,21 @@ class RegisterViewModel @Inject constructor() : AuthViewModel() {
     private val _name = MutableStateFlow("")
     val name = _name.asStateFlow()
 
-    private val _gender = MutableStateFlow("")
+    private val _gender: MutableStateFlow<Gender?> = MutableStateFlow(null)
     val gender = _gender.asStateFlow()
+
+    private val _genderExpanded = MutableStateFlow(false)
+    val genderExpanded = _genderExpanded.asStateFlow()
+
+    private val _datePickerVisible = MutableStateFlow(false)
+
+    fun setDatePickerVisible(visible: Boolean) {
+        _datePickerVisible.value = visible
+    }
+
+    fun setGenderExpanded(expanded: Boolean) {
+        _genderExpanded.value = expanded
+    }
 
     private val _birthDate = MutableStateFlow("")
     val birthDate = _birthDate.asStateFlow()
@@ -40,7 +56,7 @@ class RegisterViewModel @Inject constructor() : AuthViewModel() {
     }
 
 
-    fun setGender(newGender: String) {
+    fun setGender(newGender: Gender?) {
         _gender.value = newGender
     }
 
@@ -60,7 +76,7 @@ class RegisterViewModel @Inject constructor() : AuthViewModel() {
     }
 
     private fun isGenderBlank(): Boolean {
-        return _gender.value.trim().isBlank()
+        return !_gender.value.isNotNull()
     }
 
     private fun isBirthDateBlank(): Boolean {
@@ -108,7 +124,27 @@ class RegisterViewModel @Inject constructor() : AuthViewModel() {
     }
 
     fun register(onSuccess: () -> Unit) {
-
+        loadScope {
+            try {
+                val user = authService.currentUser
+                oneRepository.updateUser(
+                    OneUser(
+                        uid = user!!.uid,
+                        name = _name.value,
+                        email = user.email!!,
+                        profilePhotoUrl = user.photoUrl.toString(),
+                        birthDate = _birthDate.value,
+                        gender = _gender.value?.name,
+                        createdAt = user.metadata!!.creationTimestamp,
+                        lastLoginAt = user.metadata!!.lastSignInTimestamp,
+                        verified = true
+                    )
+                )
+                onSuccess()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 }
 

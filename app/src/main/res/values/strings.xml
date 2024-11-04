@@ -32,4 +32,8 @@
     <string name="name_is_not_valid">Name can only contain alphabet!</string>
     <string name="gender_is_blank">Select your gender!</string>
     <string name="birth_date_is_blank">Choose your birth date!</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="prefer_not_to_say">Prefer not to say</string>
+    <string name="select_gender">Select gender</string>
 </resources>
