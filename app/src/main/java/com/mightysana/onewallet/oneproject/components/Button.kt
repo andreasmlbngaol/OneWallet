@@ -1,5 +1,6 @@
 package com.mightysana.onewallet.oneproject.components
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -135,8 +136,10 @@ fun GoogleAuthButton(
                         context = context
                     )
                     onGetCredentialResponse(result.credential)
+                    Log.d("GoogleAuthButton", "Credential: ${result.credential}")
                 } catch (e: Exception) {
                     e.printStackTrace()
+                    Log.e("GoogleAuthButton", "Error getting credential: ${e.message}")
                 } finally {
                     onOkay()
                 }
