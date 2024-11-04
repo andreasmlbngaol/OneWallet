@@ -26,6 +26,8 @@ class EmailVerificationViewModel @Inject constructor() : AuthViewModel() {
         }
     }
 
+    val authUserEmail = authService.currentUser!!.email
+
     fun signOut(
         onSuccess: () -> Unit
     ) {
@@ -42,4 +44,12 @@ class EmailVerificationViewModel @Inject constructor() : AuthViewModel() {
             context
         )
     }
+}
+
+fun String.censoredEmail(): String {
+    val index = this.indexOf("@")
+    val name = this.substring(0, index)
+    val domain = this.substring(index)
+    return name.replaceRange(2, name.length - 1, "****") + domain
+
 }

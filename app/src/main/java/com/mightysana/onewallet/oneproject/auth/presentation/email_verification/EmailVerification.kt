@@ -62,7 +62,7 @@ fun EmailVerification(
                         modifier = Modifier.width(100.dp).aspectRatio(1f)
                     )
                     Text(
-                        text = stringResource(R.string.email_verification_message),
+                        text = stringResource(R.string.email_verification_message, viewModel.authUserEmail!!.censoredEmail()),
                         style = MaterialTheme.typography.titleMedium,
                         textAlign = TextAlign.Center
                     )

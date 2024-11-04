@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name" translatable="false">One Wallet</string>
-    <string name="register_title">Register</string>
-    <string name="login_title">Login</string>
+    <string name="sign_up_title">Register</string>
+    <string name="sign_in_title">Login</string>
     <string name="email_label" translatable="false">Email</string>
     <string name="password_label">Password</string>
     <string name="confirm_password_label">Confirm Password</string>
@@ -16,11 +16,16 @@
     <string name="email_is_not_valid">Insert valid email!</string>
     <string name="password_is_not_valid">Password must be >7 character, contain uppercase, lowercase, and number</string>
     <string name="sign_up_success">Sign up success!</string>
-    <string name="email_verification_message">Email verification has been sent.\nOpen your email to verify your account</string>
+    <string name="email_verification_message">Email verification has been sent to %s.\nOpen your email to verify your account</string>
     <string name="email_already_used">Email address is already in use!</string>
     <string name="sign_out">Sign out</string>
     <string name="back_to_sign_in">Back to Login</string>
     <string name="open_email_app">Open email</string>
     <string name="login_failed">Email or password is incorrect!</string>
     <string name="form_blank">Fill the form fist!</string>
+    <string name="register_title">Register</string>
+    <string name="name_label">Name</string>
+    <string name="username_label">Username</string>
+    <string name="gender_label">Gender</string>
+    <string name="birth_date_label">Birthday</string>
 </resources>

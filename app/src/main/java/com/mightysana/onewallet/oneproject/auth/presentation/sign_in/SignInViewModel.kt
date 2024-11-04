@@ -1,5 +1,7 @@
 package com.mightysana.onewallet.oneproject.auth.presentation.sign_in
 
+import android.content.Context
+import com.mightysana.onewallet.R
 import com.mightysana.onewallet.oneproject.auth.model.AuthViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -8,12 +10,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignInViewModel @Inject constructor() : AuthViewModel() {
-    private val _email =  MutableStateFlow("")
-    val email: StateFlow<String> = _email
-
-    private val _password = MutableStateFlow("")
-    val password: StateFlow<String> = _password
-
     private val _passwordVisibility = MutableStateFlow(false)
     val passwordVisibility: StateFlow<Boolean> = _passwordVisibility
 
@@ -44,4 +40,43 @@ class SignInViewModel @Inject constructor() : AuthViewModel() {
             }
         }
     }
+
+    private fun resetError() {
+        _emailError.value = Pair(false, "")
+        _passwordError.value = Pair(false, "")
+    }
+
+    fun validateForm(
+        context: Context,
+        onSuccess: () -> Unit,
+    ) {
+        resetError()
+        val validationState = when {
+            isEmailBlank() -> SignInFormValidationResult.EmailBlank
+            !isEmailValid() -> SignInFormValidationResult.EmailInvalid
+            isPasswordBlank() -> SignInFormValidationResult.PasswordBlank
+            else -> SignInFormValidationResult.Valid
+        }
+
+        if(validationState is SignInFormValidationResult.Valid) {
+            onSuccess()
+        } else {
+            when(validationState) {
+                is SignInFormValidationResult.EmailBlank -> emailError(context.getString(
+                    R.string.email_is_blank))
+                is SignInFormValidationResult.EmailInvalid -> emailError(context.getString(
+                    R.string.email_is_not_valid))
+                else -> passwordError(context.getString(
+                    R.string.password_is_blank))
+            }
+        }
+    }
+
+}
+
+sealed class SignInFormValidationResult {
+    data object Valid : SignInFormValidationResult()
+    data object EmailBlank : SignInFormValidationResult()
+    data object EmailInvalid : SignInFormValidationResult()
+    data object PasswordBlank : SignInFormValidationResult()
 }
