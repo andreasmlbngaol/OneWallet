@@ -24,7 +24,7 @@ fun OneScreen(
     Log.d("OneScreen", "state: $state")
     screenContent()
     AnimatedVisibility(
-        visible = state is OneAppState.Loading,
+        visible = state == OneAppState.LOADING,
         enter = fadeIn(),
         exit = fadeOut()
     ) {

@@ -10,7 +10,7 @@ data class OneUser(
     val birthDate: String? = null,
     val gender: String? = null,
     val address: String? = null,
-    val createdAt: String = "",
-    val lastLoginAt: String = "",
+    val createdAt: Long = 0L,
+    val lastLoginAt: Long = 0L,
     val verified: Boolean = false,
 )

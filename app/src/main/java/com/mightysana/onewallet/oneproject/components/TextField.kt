@@ -94,16 +94,41 @@ fun OneTextField(
     )
 }
 
-data class OneTextFieldDefault(
-    val value: String,
-    val onValueChange: (String) -> Unit = {},
-    val label: String,
-    val errorMessage: String? = null,
+open class OneTextFieldDefault(
+    open val value: String,
+    open val onValueChange: (String) -> Unit = {},
+    open val labelText: String,
+    open val errorMessage: String? = null,
     val enabled: Boolean = true,
-    val readOnly: Boolean = false,
+    open val readOnly: Boolean = false,
     val placeholderText: String? = null,
-    val leadingIcon: ImageVector? = null,
-    val trailingIcon: ImageVector? = null,
-    val prefixText: String? = null,
-    val suffixText: String? = null,
+    open val leadingIcon: ImageVector? = null,
+    open val trailingIcon: ImageVector? = null,
+    open val prefixText: String? = null,
+    open val suffixText: String? = null,
+)
+
+data class OneDropdownMenuDefault(
+    val expanded: Boolean,
+    val onExpandedChange: (Boolean) -> Unit,
+    val selectedItem: Any?,
+    override val labelText: String,
+    val items: Map<Any?, String>,
+    val onItemSelected: (Any?) -> Unit,
+    val onDismissRequest: () -> Unit,
+    override val errorMessage: String? = null,
+    override val readOnly: Boolean = true,
+    override val leadingIcon: ImageVector? = null,
+    override val trailingIcon: ImageVector? = null,
+    override val prefixText: String? = null,
+    override val suffixText: String? = null,
+): OneTextFieldDefault(
+    value = "Select Item",
+    labelText = labelText,
+    errorMessage = errorMessage,
+    readOnly = readOnly,
+    leadingIcon = leadingIcon,
+    trailingIcon = trailingIcon,
+    prefixText = prefixText,
+    suffixText = suffixText
 )

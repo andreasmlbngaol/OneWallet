@@ -7,13 +7,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.Person3
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DatePickerState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -33,9 +38,12 @@ import com.mightysana.onewallet.R
 import com.mightysana.onewallet.isNotNull
 import com.mightysana.onewallet.oneproject.components.GoogleAuthButton
 import com.mightysana.onewallet.oneproject.components.OneButton
+import com.mightysana.onewallet.oneproject.components.OneDropDownMenu
+import com.mightysana.onewallet.oneproject.components.OneDropdownMenuDefault
 import com.mightysana.onewallet.oneproject.components.OneTextField
 import com.mightysana.onewallet.oneproject.components.OneTextFieldDefault
 import com.mightysana.onewallet.oneproject.components.OneTextHorizontalDivider
+import com.mightysana.onewallet.oneproject.model.convertMillisToDate
 
 @Composable
 fun AuthForm(
@@ -57,15 +65,20 @@ fun AuthForm(
         modifier = modifier,
         shape = MaterialTheme.shapes.large
     ) {
+        val scrollState = rememberScrollState()
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier
+                .verticalScroll(scrollState)
+                .padding(16.dp)
         ) {
             if(formImage.isNotNull()) {
                 AuthFormImage(
                     painter = formImage!!,
-                    modifier = Modifier.width(100.dp).height(100.dp)
+                    modifier = Modifier
+                        .width(100.dp)
+                        .height(100.dp)
                 )
             }
             AuthFormTitle(
@@ -124,7 +137,7 @@ fun SignInFormContent(
     OneTextField(
         value = email.value,
         onValueChange = { email.onValueChange(it) },
-        labelText = email.label,
+        labelText = email.labelText,
         leadingIcon = Icons.Default.Person3,
         modifier = Modifier.fillMaxWidth(),
         supportingText = email.errorMessage,
@@ -134,7 +147,7 @@ fun SignInFormContent(
     OneTextField(
         value = password.value,
         onValueChange = { password.onValueChange(it) },
-        labelText = password.label,
+        labelText = password.labelText,
         modifier = Modifier.fillMaxWidth(),
         supportingText = password.errorMessage,
         isError = password.errorMessage.isNotNull(),
@@ -159,7 +172,7 @@ fun SignUpFormContent(
     OneTextField(
         value = email.value,
         onValueChange = { email.onValueChange(it) },
-        labelText = email.label,
+        labelText = email.labelText,
         leadingIcon = Icons.Default.Person3,
         modifier = Modifier.fillMaxWidth(),
         supportingText = email.errorMessage,
@@ -169,7 +182,7 @@ fun SignUpFormContent(
     OneTextField(
         value = password.value,
         onValueChange = { password.onValueChange(it) },
-        labelText = password.label,
+        labelText = password.labelText,
         modifier = Modifier.fillMaxWidth(),
         supportingText = password.errorMessage,
         isError = password.errorMessage.isNotNull(),
@@ -196,41 +209,49 @@ fun SignUpFormContent(
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterFormContent(
     name: OneTextFieldDefault,
-    gender: OneTextFieldDefault,
-    birthDate: OneTextFieldDefault
+    gender: OneDropdownMenuDefault,
+    birthDate: OneTextFieldDefault,
+    onBirthdateTrailingIconClick: () -> Unit,
+    datePickerState: DatePickerState
 ) {
     OneTextField(
         value = name.value,
         onValueChange = { name.onValueChange(it) },
-        labelText = name.label,
-//        leadingIcon = Icons.Default.Info,
+        labelText = name.labelText,
         modifier = Modifier.fillMaxWidth(),
         supportingText = name.errorMessage,
         isError = name.errorMessage.isNotNull()
     )
 
-    OneTextField(
-        value = gender.value,
-        onValueChange = { gender.onValueChange(it) },
-        labelText = gender.label,
-//        leadingIcon = Icons.Default.Person3,
+    OneDropDownMenu(
         modifier = Modifier.fillMaxWidth(),
-        supportingText = gender.errorMessage,
-        isError = gender.errorMessage.isNotNull()
+        expanded = gender.expanded,
+        onExpandedChange = { gender.onExpandedChange(it) },
+        selectedItem = gender.selectedItem,
+        labelText = gender.labelText,
+        items = gender.items,
+        onItemSelected = { gender.onItemSelected(it) },
+        onDismissRequest = gender.onDismissRequest,
     )
 
     OneTextField(
-        value = birthDate.value,
+        value = datePickerState.selectedDateMillis?.convertMillisToDate() ?: "",
         onValueChange = { birthDate.onValueChange(it) },
-        labelText = birthDate.label,
-//        leadingIcon = Icons.Default.Person3,
+//        readOnly = true,
+        labelText = birthDate.labelText,
         modifier = Modifier.fillMaxWidth(),
         supportingText = birthDate.errorMessage,
-        isError = birthDate.errorMessage.isNotNull()
+        isError = birthDate.errorMessage.isNotNull(),
+        trailingIcon = Icons.Default.DateRange,
+        onTrailingIconClick = {
+            onBirthdateTrailingIconClick()
+        }
     )
+
 }
 
 
@@ -257,3 +278,5 @@ fun AuthFormTitle(
         modifier = modifier
     )
 }
+
+const val MAX_FORM_WIDTH = 500
