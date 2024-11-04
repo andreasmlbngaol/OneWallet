@@ -28,6 +28,7 @@ import com.mightysana.onewallet.navigateAndPopUp
 import com.mightysana.onewallet.oneproject.auth.EmailVerification
 import com.mightysana.onewallet.oneproject.auth.functions.toast
 import com.mightysana.onewallet.oneproject.components.OneScreen
+import com.mightysana.onewallet.oneproject.components.OneTextFieldDefault
 
 @Composable
 fun SignUpScreen(
@@ -55,19 +56,28 @@ fun SignUpScreen(
                     title = stringResource(R.string.sign_up_title),
                     mainContent = {
                         SignUpFormContent(
-                            email = viewModel.email.collectAsState().value,
-                            password = viewModel.password.collectAsState().value,
-                            confirmPassword = viewModel.confirmPassword.collectAsState().value,
+                            email = OneTextFieldDefault(
+                                value = viewModel.email.collectAsState().value,
+                                onValueChange = { viewModel.setEmail(it) },
+                                label = context.getString(R.string.email_label),
+                                errorMessage = viewModel.emailError.collectAsState().value
+                            ),
+                            password = OneTextFieldDefault(
+                                value = viewModel.password.collectAsState().value,
+                                onValueChange = { viewModel.setPassword(it) },
+                                label = context.getString(R.string.password_label),
+                                errorMessage = viewModel.passwordError.collectAsState().value
+                            ),
+                            confirmPassword = OneTextFieldDefault(
+                                value = viewModel.confirmPassword.collectAsState().value,
+                                onValueChange = { viewModel.setConfirmPassword(it) },
+                                label = context.getString(R.string.confirm_password_label),
+                                errorMessage = viewModel.confirmPasswordError.collectAsState().value
+                            ),
                             passwordVisibility = viewModel.passwordVisibility.collectAsState().value,
                             confirmPasswordVisibility = viewModel.confirmPasswordVisibility.collectAsState().value,
-                            onEmailChange = { viewModel.setEmail(it) },
-                            onPasswordChange = { viewModel.setPassword(it) },
-                            onConfirmPasswordChange = { viewModel.setConfirmPassword(it) },
                             onPasswordVisibilityChange = { viewModel.togglePasswordVisibility() },
                             onConfirmPasswordVisibilityChange = { viewModel.toggleConfirmPasswordVisibility() },
-                            emailError = viewModel.emailError.collectAsState().value,
-                            passwordError = viewModel.passwordError.collectAsState().value,
-                            confirmPasswordError = viewModel.confirmPasswordError.collectAsState().value
                         )
                     },
                     onMainButtonClick = {

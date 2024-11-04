@@ -28,8 +28,9 @@ import com.mightysana.onewallet.R
 import com.mightysana.onewallet.navigateAndPopUp
 import com.mightysana.onewallet.oneproject.auth.EmailVerification
 import com.mightysana.onewallet.oneproject.auth.SignIn
-import com.mightysana.onewallet.oneproject.components.OneOutlinedButton
+import com.mightysana.onewallet.oneproject.components.OneButton
 import com.mightysana.onewallet.oneproject.components.OneScreen
+import kotlinx.coroutines.coroutineScope
 
 @Composable
 fun EmailVerification(
@@ -37,8 +38,10 @@ fun EmailVerification(
     viewModel: EmailVerificationViewModel = hiltViewModel()
 ) {
     viewModel.checkEmailVerification {
-        viewModel.checkUserRegistrationStatus { destination ->
-            navController.navigateAndPopUp(destination, EmailVerification)
+        coroutineScope {
+            viewModel.checkUserRegistrationStatus { destination ->
+                navController.navigateAndPopUp(destination, EmailVerification)
+            }
         }
     }
 
@@ -53,13 +56,15 @@ fun EmailVerification(
                     .padding(innerPadding)
             ) {
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Email,
                         contentDescription = null,
-                        modifier = Modifier.width(100.dp).aspectRatio(1f)
+                        modifier = Modifier
+                            .width(100.dp)
+                            .aspectRatio(1f)
                     )
                     Text(
                         text = stringResource(R.string.email_verification_message, viewModel.authUserEmail!!.censoredEmail()),
@@ -69,7 +74,7 @@ fun EmailVerification(
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        OneOutlinedButton(
+                        OneButton(
                             onClick = { viewModel.openEmailApp(context)}
                         ) {
                             Text(text = stringResource(R.string.open_email_app))

@@ -34,6 +34,7 @@ import com.mightysana.onewallet.isNotNull
 import com.mightysana.onewallet.oneproject.components.GoogleAuthButton
 import com.mightysana.onewallet.oneproject.components.OneButton
 import com.mightysana.onewallet.oneproject.components.OneTextField
+import com.mightysana.onewallet.oneproject.components.OneTextFieldDefault
 import com.mightysana.onewallet.oneproject.components.OneTextHorizontalDivider
 
 @Composable
@@ -57,7 +58,7 @@ fun AuthForm(
         shape = MaterialTheme.shapes.large
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.padding(16.dp)
         ) {
@@ -115,32 +116,28 @@ fun AuthOptions(
 
 @Composable
 fun SignInFormContent(
-    email: String,
-    password: String,
+    email: OneTextFieldDefault,
+    password: OneTextFieldDefault,
     visibility: Boolean,
-    onEmailChange: (String) -> Unit,
-    onPasswordChange: (String) -> Unit,
     onVisibilityChange: () -> Unit,
-    emailError: Pair<Boolean, String>,
-    passwordError: Pair<Boolean, String>
 ) {
     OneTextField(
-        value = email,
-        onValueChange = { onEmailChange(it) },
-        labelText = stringResource(R.string.email_label),
+        value = email.value,
+        onValueChange = { email.onValueChange(it) },
+        labelText = email.label,
         leadingIcon = Icons.Default.Person3,
         modifier = Modifier.fillMaxWidth(),
-        supportingText = emailError.second,
-        isError = emailError.first
+        supportingText = email.errorMessage,
+        isError = email.errorMessage.isNotNull()
     )
 
     OneTextField(
-        value = password,
-        onValueChange = { onPasswordChange(it) },
-        labelText = stringResource(R.string.password_label),
+        value = password.value,
+        onValueChange = { password.onValueChange(it) },
+        labelText = password.label,
         modifier = Modifier.fillMaxWidth(),
-        supportingText = passwordError.second,
-        isError = passwordError.first,
+        supportingText = password.errorMessage,
+        isError = password.errorMessage.isNotNull(),
         visualTransformation = if (visibility) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = if (visibility) Icons.Default.VisibilityOff else Icons.Default.Visibility,
         leadingIcon = Icons.Default.Key,
@@ -150,94 +147,32 @@ fun SignInFormContent(
 }
 
 @Composable
-fun RegisterFormContent(
-    name: String,
-    username: String,
-    gender: String,
-    birthDate: String,
-    onEmailChange: (String) -> Unit,
-    onUsernameChange: (String) -> Unit,
-    onGenderChange: (String) -> Unit,
-    onBirthDateChange: (String) -> Unit,
-    nameError: Pair<Boolean, String>,
-    usernameError: Pair<Boolean, String>,
-    genderError: Pair<Boolean, String>,
-    birthDateError: Pair<Boolean, String>
-) {
-    OneTextField(
-        value = name,
-        onValueChange = { onEmailChange(it) },
-        labelText = stringResource(R.string.name_label),
-        leadingIcon = Icons.Default.Person3,
-        modifier = Modifier.fillMaxWidth(),
-        supportingText = nameError.second,
-        isError = nameError.first
-    )
-
-    OneTextField(
-        value = username,
-        onValueChange = { onUsernameChange(it) },
-        labelText = stringResource(R.string.username_label),
-        leadingIcon = Icons.Default.Person3,
-        modifier = Modifier.fillMaxWidth(),
-        supportingText = usernameError.second,
-        isError = usernameError.first
-    )
-
-    OneTextField(
-        value = gender,
-        onValueChange = { onGenderChange(it) },
-        labelText = stringResource(R.string.gender_label),
-        leadingIcon = Icons.Default.Person3,
-        modifier = Modifier.fillMaxWidth(),
-        supportingText = genderError.second,
-        isError = genderError.first
-    )
-
-    OneTextField(
-        value = birthDate,
-        onValueChange = { onBirthDateChange(it) },
-        labelText = stringResource(R.string.birth_date_label),
-        leadingIcon = Icons.Default.Person3,
-        modifier = Modifier.fillMaxWidth(),
-        supportingText = birthDateError.second,
-        isError = birthDateError.first
-    )
-}
-
-@Composable
 fun SignUpFormContent(
-    email: String,
-    password: String,
-    confirmPassword: String,
+    email: OneTextFieldDefault,
+    password: OneTextFieldDefault,
+    confirmPassword: OneTextFieldDefault,
     passwordVisibility: Boolean,
     confirmPasswordVisibility: Boolean,
-    emailError: Pair<Boolean, String>,
-    passwordError: Pair<Boolean, String>,
-    confirmPasswordError: Pair<Boolean, String>,
-    onEmailChange: (String) -> Unit,
-    onPasswordChange: (String) -> Unit,
-    onConfirmPasswordChange: (String) -> Unit,
     onPasswordVisibilityChange: () -> Unit,
     onConfirmPasswordVisibilityChange: () -> Unit
 ) {
     OneTextField(
-        value = email,
-        onValueChange = { onEmailChange(it) },
-        labelText = stringResource(R.string.email_label),
+        value = email.value,
+        onValueChange = { email.onValueChange(it) },
+        labelText = email.label,
         leadingIcon = Icons.Default.Person3,
         modifier = Modifier.fillMaxWidth(),
-        supportingText = emailError.second,
-        isError = emailError.first
+        supportingText = email.errorMessage,
+        isError = email.errorMessage.isNotNull()
     )
 
     OneTextField(
-        value = password,
-        onValueChange = { onPasswordChange(it) },
-        labelText = stringResource(R.string.password_label),
+        value = password.value,
+        onValueChange = { password.onValueChange(it) },
+        labelText = password.label,
         modifier = Modifier.fillMaxWidth(),
-        supportingText = passwordError.second,
-        isError = passwordError.first,
+        supportingText = password.errorMessage,
+        isError = password.errorMessage.isNotNull(),
         visualTransformation = if(passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = if(passwordVisibility) Icons.Default.VisibilityOff else Icons.Default.Visibility,
         leadingIcon = Icons.Default.Key,
@@ -246,17 +181,55 @@ fun SignUpFormContent(
     )
 
     OneTextField(
-        value = confirmPassword,
-        onValueChange = { onConfirmPasswordChange(it) },
+        value = confirmPassword.value,
+        onValueChange = { confirmPassword.onValueChange(it) },
         labelText = stringResource(R.string.confirm_password_label),
         modifier = Modifier.fillMaxWidth(),
-        supportingText = confirmPasswordError.second,
-        isError = confirmPasswordError.first,
+        supportingText = confirmPassword.errorMessage,
+        isError = confirmPassword.errorMessage.isNotNull(),
         visualTransformation = if(confirmPasswordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = if(confirmPasswordVisibility) Icons.Default.VisibilityOff else Icons.Default.Visibility,
         leadingIcon = Icons.Default.Key,
         onTrailingIconClick = { onConfirmPasswordVisibilityChange() },
         autoCorrectEnabled = false
+    )
+}
+
+
+@Composable
+fun RegisterFormContent(
+    name: OneTextFieldDefault,
+    gender: OneTextFieldDefault,
+    birthDate: OneTextFieldDefault
+) {
+    OneTextField(
+        value = name.value,
+        onValueChange = { name.onValueChange(it) },
+        labelText = name.label,
+//        leadingIcon = Icons.Default.Info,
+        modifier = Modifier.fillMaxWidth(),
+        supportingText = name.errorMessage,
+        isError = name.errorMessage.isNotNull()
+    )
+
+    OneTextField(
+        value = gender.value,
+        onValueChange = { gender.onValueChange(it) },
+        labelText = gender.label,
+//        leadingIcon = Icons.Default.Person3,
+        modifier = Modifier.fillMaxWidth(),
+        supportingText = gender.errorMessage,
+        isError = gender.errorMessage.isNotNull()
+    )
+
+    OneTextField(
+        value = birthDate.value,
+        onValueChange = { birthDate.onValueChange(it) },
+        labelText = birthDate.label,
+//        leadingIcon = Icons.Default.Person3,
+        modifier = Modifier.fillMaxWidth(),
+        supportingText = birthDate.errorMessage,
+        isError = birthDate.errorMessage.isNotNull()
     )
 }
 

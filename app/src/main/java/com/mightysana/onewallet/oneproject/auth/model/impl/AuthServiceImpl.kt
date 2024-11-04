@@ -36,8 +36,13 @@ class AuthServiceImpl @Inject constructor() : AuthService {
     override suspend fun sendEmailVerification() {
         val user = Firebase.auth.currentUser
         if(user.isNotNull()) {
-            user!!.sendEmailVerification().await()
-            Log.d("AuthServiceImpl", "Email sent.")
+            user!!.sendEmailVerification().addOnCompleteListener { verificationTask ->
+                if (verificationTask.isSuccessful) {
+                    Log.d("AuthServiceImpl", "Email sent.")
+                } else {
+                    Log.d("AuthServiceImpl", "Email not sent.")
+                }
+            }.await()
         } else {
             Log.d("AuthServiceImpl", "User is null.")
         }

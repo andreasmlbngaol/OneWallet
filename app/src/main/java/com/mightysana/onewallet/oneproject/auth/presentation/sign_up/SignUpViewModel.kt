@@ -6,6 +6,7 @@ import com.mightysana.onewallet.oneproject.auth.model.AuthViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,8 +21,8 @@ class SignUpViewModel @Inject constructor(): AuthViewModel() {
     private val _confirmPasswordVisibility = MutableStateFlow(false)
     val confirmPasswordVisibility: StateFlow<Boolean> = _confirmPasswordVisibility
 
-    private val _confirmPasswordError = MutableStateFlow(Pair(false, ""))
-    val confirmPasswordError: StateFlow<Pair<Boolean, String>> = _confirmPasswordError
+    private val _confirmPasswordError = MutableStateFlow<String?>(null)
+    val confirmPasswordError = _confirmPasswordError.asStateFlow()
 
     fun setEmail(newEmail: String) {
         _email.value = newEmail
@@ -57,13 +58,13 @@ class SignUpViewModel @Inject constructor(): AuthViewModel() {
 
 
     private fun confirmPasswordError(message: String) {
-        _confirmPasswordError.value = Pair(true, message)
+        _confirmPasswordError.value = message
     }
 
     private fun resetError() {
-        _emailError.value = Pair(false, "")
-        _passwordError.value = Pair(false, "")
-        _confirmPasswordError.value = Pair(false, "")
+        _emailError.value = null
+        _passwordError.value = null
+        _confirmPasswordError.value = null
     }
 
     fun validateForm(
@@ -126,6 +127,7 @@ class SignUpViewModel @Inject constructor(): AuthViewModel() {
 //                )
                 onSuccess()
             } catch (e: Exception) {
+                e.printStackTrace()
                 onFailure()
             }
         }

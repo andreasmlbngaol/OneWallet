@@ -29,7 +29,7 @@ open class OneViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    private val _appState: MutableStateFlow<OneAppState> = MutableStateFlow(OneAppState.Okay)
+    protected val _appState: MutableStateFlow<OneAppState> = MutableStateFlow(OneAppState.Okay)
     val appState: StateFlow<OneAppState> = _appState
 
     private fun setAppState(state: OneAppState) {
