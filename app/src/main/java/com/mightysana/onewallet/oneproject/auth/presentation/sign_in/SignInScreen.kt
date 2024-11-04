@@ -24,6 +24,7 @@ import com.mightysana.onewallet.oneproject.auth.presentation.components.AuthForm
 import com.mightysana.onewallet.oneproject.auth.presentation.components.AuthOptions
 import com.mightysana.onewallet.oneproject.auth.presentation.components.SignInFormContent
 import com.mightysana.onewallet.oneproject.components.OneScreen
+import com.mightysana.onewallet.oneproject.components.OneTextFieldDefault
 
 @Composable
 fun SignInScreen(
@@ -53,14 +54,20 @@ fun SignInScreen(
                     title = stringResource(R.string.sign_in_title),
                     mainContent = {
                         SignInFormContent(
-                            email = viewModel.email.collectAsState().value,
-                            password = viewModel.password.collectAsState().value,
+                            email = OneTextFieldDefault(
+                                value = viewModel.email.collectAsState().value,
+                                onValueChange = { viewModel.setEmail(it) },
+                                label = context.getString(R.string.email_label),
+                                errorMessage = viewModel.emailError.collectAsState().value
+                            ),
+                            password = OneTextFieldDefault(
+                                value = viewModel.password.collectAsState().value,
+                                onValueChange = { viewModel.setPassword(it) },
+                                label = context.getString(R.string.password_label),
+                                errorMessage = viewModel.passwordError.collectAsState().value
+                            ),
                             visibility = viewModel.passwordVisibility.collectAsState().value,
-                            onEmailChange = { viewModel.setEmail(it) },
-                            onPasswordChange = { viewModel.setPassword(it) },
-                            onVisibilityChange = { viewModel.togglePasswordVisibility() },
-                            emailError = viewModel.emailError.collectAsState().value,
-                            passwordError = viewModel.passwordError.collectAsState().value
+                            onVisibilityChange = { viewModel.togglePasswordVisibility() }
                         )
                     },
                     onMainButtonClick = {

@@ -18,7 +18,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextOverflow
 
 @Composable
 fun OneTextField(
@@ -54,7 +53,7 @@ fun OneTextField(
         enabled = enabled,
         readOnly = readOnly,
         textStyle = LocalTextStyle.current,
-        label = { Text(text = labelText, style = MaterialTheme.typography.labelLarge, overflow = TextOverflow.Ellipsis) },
+        label = { Text(text = labelText, style = MaterialTheme.typography.bodyMedium) },
         placeholder = placeholderText?.let { { Text(text = placeholderText) } },
         leadingIcon = leadingIcon?.let {
             {
@@ -94,3 +93,17 @@ fun OneTextField(
         colors
     )
 }
+
+data class OneTextFieldDefault(
+    val value: String,
+    val onValueChange: (String) -> Unit = {},
+    val label: String,
+    val errorMessage: String? = null,
+    val enabled: Boolean = true,
+    val readOnly: Boolean = false,
+    val placeholderText: String? = null,
+    val leadingIcon: ImageVector? = null,
+    val trailingIcon: ImageVector? = null,
+    val prefixText: String? = null,
+    val suffixText: String? = null,
+)

@@ -14,6 +14,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,18 +28,18 @@ open class AuthViewModel @Inject constructor() : OneViewModel() {
     protected val _password = MutableStateFlow("")
     val password: StateFlow<String> = _password
 
-    protected val _emailError = MutableStateFlow(Pair(false, ""))
-    val emailError: StateFlow<Pair<Boolean, String>> = _emailError
+    protected val _emailError = MutableStateFlow<String?>(null)
+    val emailError = _emailError.asStateFlow()
 
-    protected val _passwordError = MutableStateFlow(Pair(false, ""))
-    val passwordError: StateFlow<Pair<Boolean, String>> = _passwordError
+    protected val _passwordError = MutableStateFlow<String?>(null)
+    val passwordError = _passwordError.asStateFlow()
 
     protected fun emailError(message: String) {
-        _emailError.value = Pair(true, message)
+        _emailError.value = message
     }
 
     protected fun passwordError(message: String) {
-        _passwordError.value = Pair(true, message)
+        _passwordError.value = message
     }
 
     fun onSignInWithGoogle(
@@ -47,18 +48,22 @@ open class AuthViewModel @Inject constructor() : OneViewModel() {
         onSuccess: (Any) -> Unit
     ) {
         viewModelScope.launch {
+            appLoading()
             try {
+                Log.d("AuthViewModel", "onSignInWithGoogle: ${appState.value}")
                 if (credential is CustomCredential && credential.type == TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
                     val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
                     authService.signInWithGoogle(googleIdTokenCredential.idToken)
                 }
                 while (authService.currentUser == null) {
-                    delay(100L)  // Cek setiap 100ms sampai currentUser tidak null
+                    Log.d("AuthViewModel", "onSignInWithGoogle: Waiting for currentUser")
+                    delay(1000L)
                 }
-
+                Log.d("AuthViewModel", "afterDelay: ${appState.value}")
                 checkUserRegistrationStatus { destination ->
                     onSuccess(destination)
                 }
+                Log.d("AuthViewModel", "onSignInWithGoogle: ${appState.value}")
             } catch (e: Exception) {
                 Log.e("AuthViewModel", "onSignInWithGoogle: $e")
                 onFailure()
@@ -66,10 +71,10 @@ open class AuthViewModel @Inject constructor() : OneViewModel() {
         }
     }
 
-    fun checkUserRegistrationStatus(destinationRoute: (Any) -> Unit) {
-        viewModelScope.launch {
-            destinationRoute(if (oneRepository.isUserRegistered(authService.currentUser!!.uid)) Home else Register)
-        }
+    suspend fun checkUserRegistrationStatus(destinationRoute: (Any) -> Unit) {
+        appLoading()
+        Log.d("AuthViewModel", "checkUserRegistrationStatus: ${appState.value}")
+        destinationRoute(if (oneRepository.isUserRegistered(authService.currentUser!!.uid)) Home else Register)
     }
 
     protected fun isEmailBlank(): Boolean {

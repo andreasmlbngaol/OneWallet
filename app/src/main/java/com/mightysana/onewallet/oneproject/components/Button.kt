@@ -139,9 +139,8 @@ fun GoogleAuthButton(
                     Log.d("GoogleAuthButton", "Credential: ${result.credential}")
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    Log.e("GoogleAuthButton", "Error getting credential: ${e.message}")
-                } finally {
                     onOkay()
+                    Log.e("GoogleAuthButton", "Error getting credential: ${e.message}")
                 }
             }
         },

@@ -13,7 +13,7 @@ import javax.inject.Inject
 class EmailVerificationViewModel @Inject constructor() : AuthViewModel() {
     private val _emailState = MutableStateFlow(false)
 
-    fun checkEmailVerification(onVerified: () -> Unit) {
+    fun checkEmailVerification(onVerified: suspend () -> Unit) {
         launchCatching {
             while (!_emailState.value) {
                 authService.reloadCurrentUser()

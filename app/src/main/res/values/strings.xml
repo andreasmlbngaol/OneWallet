@@ -28,4 +28,8 @@
     <string name="username_label">Username</string>
     <string name="gender_label">Gender</string>
     <string name="birth_date_label">Birthday</string>
+    <string name="name_is_blank">Name is blank!</string>
+    <string name="name_is_not_valid">Name can only contain alphabet!</string>
+    <string name="gender_is_blank">Select your gender!</string>
+    <string name="birth_date_is_blank">Choose your birth date!</string>
 </resources>

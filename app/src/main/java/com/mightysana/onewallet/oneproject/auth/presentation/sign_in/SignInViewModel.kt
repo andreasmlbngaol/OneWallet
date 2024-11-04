@@ -35,6 +35,7 @@ class SignInViewModel @Inject constructor() : AuthViewModel() {
                 authService.signInWithEmailAndPassword(_email.value.trim(), _password.value.trim())
                 if (!authService.isEmailVerified()) onEmailNotVerified() else checkUserRegistrationStatus { onEmailVerified(it) }
             } catch (e: Exception) {
+                e.printStackTrace()
                 val errorCode = if(_email.value.trim().isEmpty() || _password.value.trim().isEmpty()) 1 else 2
                 onFailure(errorCode)
             }
@@ -42,8 +43,8 @@ class SignInViewModel @Inject constructor() : AuthViewModel() {
     }
 
     private fun resetError() {
-        _emailError.value = Pair(false, "")
-        _passwordError.value = Pair(false, "")
+        _emailError.value = null
+        _passwordError.value = null
     }
 
     fun validateForm(

@@ -17,11 +17,13 @@ import androidx.navigation.NavHostController
 import com.mightysana.onewallet.Home
 import com.mightysana.onewallet.R
 import com.mightysana.onewallet.navigateAndPopUp
+import com.mightysana.onewallet.oneproject.auth.Register
 import com.mightysana.onewallet.oneproject.auth.SignIn
 import com.mightysana.onewallet.oneproject.auth.presentation.components.AuthForm
 import com.mightysana.onewallet.oneproject.auth.presentation.components.RegisterFormContent
 import com.mightysana.onewallet.oneproject.components.OneOutlinedButton
 import com.mightysana.onewallet.oneproject.components.OneScreen
+import com.mightysana.onewallet.oneproject.components.OneTextFieldDefault
 
 @Composable
 fun RegisterScreen(
@@ -47,29 +49,38 @@ fun RegisterScreen(
                     title = stringResource(R.string.register_title),
                     mainContent = {
                         RegisterFormContent(
-                            name = viewModel.name.collectAsState().value,
-                            username = viewModel.username.collectAsState().value,
-                            gender = viewModel.gender.collectAsState().value,
-                            birthDate = viewModel.birthDate.collectAsState().value,
-                            onEmailChange = { viewModel.setName(it) },
-                            onUsernameChange = { viewModel.setUsername(it) },
-                            onGenderChange = { viewModel.setGender(it) },
-                            onBirthDateChange = { viewModel.setBirthDate(it) },
-                            nameError = viewModel.nameError.collectAsState().value,
-                            usernameError = viewModel.usernameError.collectAsState().value,
-                            genderError = viewModel.genderError.collectAsState().value,
-                            birthDateError = viewModel.birthDateError.collectAsState().value
+                            name = OneTextFieldDefault(
+                                value = viewModel.name.collectAsState().value,
+                                onValueChange = { viewModel.setName(it) },
+                                label = stringResource(R.string.name_label),
+                                errorMessage = viewModel.nameError.collectAsState().value
+                            ),
+                            gender = OneTextFieldDefault(
+                                value = viewModel.gender.collectAsState().value,
+                                onValueChange = { viewModel.setGender(it) },
+                                label = stringResource(R.string.gender_label),
+                                errorMessage = viewModel.genderError.collectAsState().value
+                            ),
+                            birthDate = OneTextFieldDefault(
+                                value = viewModel.birthDate.collectAsState().value,
+                                onValueChange = { viewModel.setBirthDate(it) },
+                                label = stringResource(R.string.birth_date_label),
+                                errorMessage = viewModel.birthDateError.collectAsState().value
+                            )
                         )
                     },
                     onMainButtonClick = {
                         viewModel.validateForm(context) {
+                            viewModel.register {
+                                navController.navigateAndPopUp(Home, Register)
+                            }
                         }
                     },
                     secondaryContent ={
                         OneOutlinedButton(
                             onClick = {
                                 viewModel.onSignOut {
-                                    navController.navigateAndPopUp(SignIn, Home)
+                                    navController.navigateAndPopUp(SignIn, Register)
                                 }
                             }
                         ) {
