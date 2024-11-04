@@ -1,5 +1,6 @@
 package com.mightysana.onewallet.oneproject.components
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -74,7 +75,11 @@ fun OneTextField(
         },
         prefix = prefixText?.let { { Text(text = prefixText) } },
         suffix = suffixText?.let { { Text(text = suffixText) } },
-        supportingText = if(isError) supportingText?.let { { Text(text = supportingText, color = supportingTextColor) } } else { null },
+        supportingText = {
+            AnimatedVisibility(isError) {
+                Text(text = supportingText!!, color = supportingTextColor)
+            }
+        },
         isError = isError,
         visualTransformation = visualTransformation,
         keyboardOptions = if(autoCorrectEnabled) keyboardOptions else KeyboardOptions.Default.copy(

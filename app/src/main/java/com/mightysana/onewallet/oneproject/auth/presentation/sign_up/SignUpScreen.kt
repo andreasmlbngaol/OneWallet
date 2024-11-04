@@ -52,7 +52,7 @@ fun SignUpScreen(
                 val context = LocalContext.current
                 AuthForm(
                     formImage = iconLauncher,
-                    title = stringResource(R.string.register_title),
+                    title = stringResource(R.string.sign_up_title),
                     mainContent = {
                         SignUpFormContent(
                             email = viewModel.email.collectAsState().value,
@@ -64,7 +64,10 @@ fun SignUpScreen(
                             onPasswordChange = { viewModel.setPassword(it) },
                             onConfirmPasswordChange = { viewModel.setConfirmPassword(it) },
                             onPasswordVisibilityChange = { viewModel.togglePasswordVisibility() },
-                            onConfirmPasswordVisibilityChange = { viewModel.toggleConfirmPasswordVisibility() }
+                            onConfirmPasswordVisibilityChange = { viewModel.toggleConfirmPasswordVisibility() },
+                            emailError = viewModel.emailError.collectAsState().value,
+                            passwordError = viewModel.passwordError.collectAsState().value,
+                            confirmPasswordError = viewModel.confirmPasswordError.collectAsState().value
                         )
                     },
                     onMainButtonClick = {

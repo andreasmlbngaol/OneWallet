@@ -30,6 +30,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.credentials.Credential
 import com.mightysana.onewallet.R
+import com.mightysana.onewallet.isNotNull
 import com.mightysana.onewallet.oneproject.components.GoogleAuthButton
 import com.mightysana.onewallet.oneproject.components.OneButton
 import com.mightysana.onewallet.oneproject.components.OneTextField
@@ -37,8 +38,8 @@ import com.mightysana.onewallet.oneproject.components.OneTextHorizontalDivider
 
 @Composable
 fun AuthForm(
-    formImage: Painter,
     title: String,
+    formImage: Painter? = null,
     mainContent: @Composable () -> Unit,
     mainButtonText: String = title,
     onMainButtonClick: () -> Unit = {},
@@ -60,11 +61,12 @@ fun AuthForm(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.padding(16.dp)
         ) {
-            AuthFormImage(
-                painter = formImage,
-                modifier = Modifier.width(100.dp).height(100.dp)
-            )
-
+            if(formImage.isNotNull()) {
+                AuthFormImage(
+                    painter = formImage!!,
+                    modifier = Modifier.width(100.dp).height(100.dp)
+                )
+            }
             AuthFormTitle(
                 text = title
             )
@@ -118,7 +120,9 @@ fun SignInFormContent(
     visibility: Boolean,
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
-    onVisibilityChange: () -> Unit
+    onVisibilityChange: () -> Unit,
+    emailError: Pair<Boolean, String>,
+    passwordError: Pair<Boolean, String>
 ) {
     OneTextField(
         value = email,
@@ -126,7 +130,8 @@ fun SignInFormContent(
         labelText = stringResource(R.string.email_label),
         leadingIcon = Icons.Default.Person3,
         modifier = Modifier.fillMaxWidth(),
-        supportingText = "Enter your email"
+        supportingText = emailError.second,
+        isError = emailError.first
     )
 
     OneTextField(
@@ -134,12 +139,69 @@ fun SignInFormContent(
         onValueChange = { onPasswordChange(it) },
         labelText = stringResource(R.string.password_label),
         modifier = Modifier.fillMaxWidth(),
-        supportingText = "Enter your password",
+        supportingText = passwordError.second,
+        isError = passwordError.first,
         visualTransformation = if (visibility) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = if (visibility) Icons.Default.VisibilityOff else Icons.Default.Visibility,
         leadingIcon = Icons.Default.Key,
         onTrailingIconClick = { onVisibilityChange() },
         autoCorrectEnabled = false
+    )
+}
+
+@Composable
+fun RegisterFormContent(
+    name: String,
+    username: String,
+    gender: String,
+    birthDate: String,
+    onEmailChange: (String) -> Unit,
+    onUsernameChange: (String) -> Unit,
+    onGenderChange: (String) -> Unit,
+    onBirthDateChange: (String) -> Unit,
+    nameError: Pair<Boolean, String>,
+    usernameError: Pair<Boolean, String>,
+    genderError: Pair<Boolean, String>,
+    birthDateError: Pair<Boolean, String>
+) {
+    OneTextField(
+        value = name,
+        onValueChange = { onEmailChange(it) },
+        labelText = stringResource(R.string.name_label),
+        leadingIcon = Icons.Default.Person3,
+        modifier = Modifier.fillMaxWidth(),
+        supportingText = nameError.second,
+        isError = nameError.first
+    )
+
+    OneTextField(
+        value = username,
+        onValueChange = { onUsernameChange(it) },
+        labelText = stringResource(R.string.username_label),
+        leadingIcon = Icons.Default.Person3,
+        modifier = Modifier.fillMaxWidth(),
+        supportingText = usernameError.second,
+        isError = usernameError.first
+    )
+
+    OneTextField(
+        value = gender,
+        onValueChange = { onGenderChange(it) },
+        labelText = stringResource(R.string.gender_label),
+        leadingIcon = Icons.Default.Person3,
+        modifier = Modifier.fillMaxWidth(),
+        supportingText = genderError.second,
+        isError = genderError.first
+    )
+
+    OneTextField(
+        value = birthDate,
+        onValueChange = { onBirthDateChange(it) },
+        labelText = stringResource(R.string.birth_date_label),
+        leadingIcon = Icons.Default.Person3,
+        modifier = Modifier.fillMaxWidth(),
+        supportingText = birthDateError.second,
+        isError = birthDateError.first
     )
 }
 
@@ -150,6 +212,9 @@ fun SignUpFormContent(
     confirmPassword: String,
     passwordVisibility: Boolean,
     confirmPasswordVisibility: Boolean,
+    emailError: Pair<Boolean, String>,
+    passwordError: Pair<Boolean, String>,
+    confirmPasswordError: Pair<Boolean, String>,
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onConfirmPasswordChange: (String) -> Unit,
@@ -162,7 +227,8 @@ fun SignUpFormContent(
         labelText = stringResource(R.string.email_label),
         leadingIcon = Icons.Default.Person3,
         modifier = Modifier.fillMaxWidth(),
-        supportingText = "Enter your email"
+        supportingText = emailError.second,
+        isError = emailError.first
     )
 
     OneTextField(
@@ -170,7 +236,8 @@ fun SignUpFormContent(
         onValueChange = { onPasswordChange(it) },
         labelText = stringResource(R.string.password_label),
         modifier = Modifier.fillMaxWidth(),
-        supportingText = "Enter your password",
+        supportingText = passwordError.second,
+        isError = passwordError.first,
         visualTransformation = if(passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = if(passwordVisibility) Icons.Default.VisibilityOff else Icons.Default.Visibility,
         leadingIcon = Icons.Default.Key,
@@ -183,7 +250,8 @@ fun SignUpFormContent(
         onValueChange = { onConfirmPasswordChange(it) },
         labelText = stringResource(R.string.confirm_password_label),
         modifier = Modifier.fillMaxWidth(),
-        supportingText = "Enter your password",
+        supportingText = confirmPasswordError.second,
+        isError = confirmPasswordError.first,
         visualTransformation = if(confirmPasswordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = if(confirmPasswordVisibility) Icons.Default.VisibilityOff else Icons.Default.Visibility,
         leadingIcon = Icons.Default.Key,
