@@ -239,9 +239,9 @@ fun RegisterFormContent(
     )
 
     OneTextField(
-        value = datePickerState.selectedDateMillis?.convertMillisToDate() ?: "",
+        value = birthDate.value,
         onValueChange = { birthDate.onValueChange(it) },
-//        readOnly = true,
+        readOnly = true,
         labelText = birthDate.labelText,
         modifier = Modifier.fillMaxWidth(),
         supportingText = birthDate.errorMessage,

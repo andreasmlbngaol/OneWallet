@@ -1,6 +1,7 @@
 package com.mightysana.onewallet.oneproject.auth.presentation.register
 
 import android.content.Context
+import android.icu.util.ULocale
 import com.mightysana.onewallet.R
 import com.mightysana.onewallet.isNotNull
 import com.mightysana.onewallet.oneproject.auth.model.AuthViewModel
@@ -9,6 +10,7 @@ import com.mightysana.onewallet.oneproject.model.OneUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import java.text.SimpleDateFormat
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,10 +31,18 @@ class RegisterViewModel @Inject constructor() : AuthViewModel() {
     private val _genderExpanded = MutableStateFlow(false)
     val genderExpanded = _genderExpanded.asStateFlow()
 
-    private val _datePickerVisible = MutableStateFlow(false)
+    private val _showDatePicker = MutableStateFlow(false)
+    val showDatePicker = _showDatePicker.asStateFlow()
 
-    fun setDatePickerVisible(visible: Boolean) {
-        _datePickerVisible.value = visible
+    fun setShowDatePicker(show: Boolean) {
+        _showDatePicker.value = show
+    }
+
+    private val _selectedDate = MutableStateFlow(0L)
+    val selectedDate = _selectedDate.asStateFlow()
+
+    fun setSelectedDate(date: Long) {
+        _selectedDate.value = date
     }
 
     fun setGenderExpanded(expanded: Boolean) {
@@ -80,7 +90,7 @@ class RegisterViewModel @Inject constructor() : AuthViewModel() {
     }
 
     private fun isBirthDateBlank(): Boolean {
-        return _birthDate.value.trim().isBlank()
+        return _selectedDate.value == 0L
     }
 
     private fun isNameValid(): Boolean {
@@ -154,4 +164,9 @@ sealed class RegisterFormValidationResult {
     data object NameNotValid : RegisterFormValidationResult()
     data object GenderBlank : RegisterFormValidationResult()
     data object BirthDateBlank : RegisterFormValidationResult()
+}
+
+fun Long.convertMillisToDate(): String {
+    val date = java.util.Date(this)
+    return SimpleDateFormat("dd-MM-yyyy").format(date)
 }

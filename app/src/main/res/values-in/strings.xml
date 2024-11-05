@@ -34,4 +34,7 @@
     <string name="female">Perempuan</string>
     <string name="prefer_not_to_say">Memilih tidak memberi tahu</string>
     <string name="select_gender">Pilih gender</string>
+    <string name="save">Simpan</string>
+    <string name="cancel">Batal</string>
+    <string name="select_date">Pilih tanggal</string>
 </resources>
