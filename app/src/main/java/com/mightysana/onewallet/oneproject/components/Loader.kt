@@ -1,6 +1,6 @@
 package com.mightysana.onewallet.oneproject.components
 
-import android.util.Log
+import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
@@ -16,9 +16,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -35,18 +32,20 @@ import com.mightysana.onewallet.oneproject.model.OneAppState
 fun OneScreen(
     state: OneAppState,
     modifier: Modifier = Modifier,
+    backgroundColor: Color = Color.Black.copy(alpha = 0.3f),
+    @DrawableRes drawableRes: Int = R.drawable.loading_icon,
     screenContent: @Composable () -> Unit
 ) {
-//    Log.d("OneScreen", "state: $state")
     screenContent()
-    val infiniteTransition = rememberInfiniteTransition()
+    val infiniteTransition = rememberInfiniteTransition(label = "")
     val scale by infiniteTransition.animateFloat(
         initialValue = 0.5f,
         targetValue = 1.0f,
         animationSpec = infiniteRepeatable(
             animation = tween(durationMillis = 800, easing = LinearOutSlowInEasing),
             repeatMode = RepeatMode.Reverse
-        ), label = ""
+        ),
+        label = ""
     )
 
     val rotation by infiniteTransition.animateFloat(
@@ -55,7 +54,8 @@ fun OneScreen(
         animationSpec = infiniteRepeatable(
             animation = tween(durationMillis = 1000, easing = LinearEasing),
             repeatMode = RepeatMode.Restart
-        ), label = ""
+        ),
+        label = ""
     )
 
     AnimatedVisibility(
@@ -64,14 +64,11 @@ fun OneScreen(
         exit = fadeOut()
     ) {
         Box(
-            modifier = modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.3f)),
+            modifier = modifier.fillMaxSize().background(backgroundColor),
             contentAlignment = Alignment.Center
         ) {
-//            CircularProgressIndicator(
-//                color = MaterialTheme.colorScheme.onBackground
-//            )
             Image(
-                painter = painterResource(id = R.drawable.loading_icon), // Ganti dengan ikon loading Anda
+                painter = painterResource(id = drawableRes), // Ganti dengan ikon loading Anda
                 contentDescription = "Loading",
                 modifier = Modifier
                     .size(64.dp)

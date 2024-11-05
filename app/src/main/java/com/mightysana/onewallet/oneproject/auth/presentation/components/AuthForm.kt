@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.Person3
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DatePickerState
@@ -36,25 +37,17 @@ import androidx.compose.ui.unit.dp
 import androidx.credentials.Credential
 import com.mightysana.onewallet.R
 import com.mightysana.onewallet.isNotNull
-import com.mightysana.onewallet.oneproject.components.GoogleAuthButton
-import com.mightysana.onewallet.oneproject.components.OneButton
-import com.mightysana.onewallet.oneproject.components.OneDropDownMenu
-import com.mightysana.onewallet.oneproject.components.OneDropdownMenuDefault
+import com.mightysana.onewallet.oneproject.auth.components.GoogleAuthButton
+import com.mightysana.onewallet.oneproject.components.OneDropdownFieldMenu
 import com.mightysana.onewallet.oneproject.components.OneTextField
-import com.mightysana.onewallet.oneproject.components.OneTextFieldDefault
 import com.mightysana.onewallet.oneproject.components.OneTextHorizontalDivider
-import com.mightysana.onewallet.oneproject.model.convertMillisToDate
+import com.mightysana.onewallet.oneproject.model.OneTextFieldDefault
 
 @Composable
 fun AuthForm(
-    title: String,
+    title: String? = null,
     formImage: Painter? = null,
-    mainContent: @Composable () -> Unit,
-    mainButtonText: String = title,
-    onMainButtonClick: () -> Unit = {},
-    secondaryContent: @Composable () -> Unit = {},
-    navButtonText: String? = null,
-    onNavButtonClick: () -> Unit = {},
+    content: @Composable () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -65,12 +58,11 @@ fun AuthForm(
         modifier = modifier,
         shape = MaterialTheme.shapes.large
     ) {
-        val scrollState = rememberScrollState()
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .verticalScroll(scrollState)
+                .verticalScroll(rememberScrollState())
                 .padding(16.dp)
         ) {
             if(formImage.isNotNull()) {
@@ -81,28 +73,30 @@ fun AuthForm(
                         .height(100.dp)
                 )
             }
-            AuthFormTitle(
-                text = title
-            )
-
-            mainContent()
-
-            OneButton(
-                onClick = onMainButtonClick,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(text = mainButtonText, fontWeight = FontWeight.Bold)
+            if(title.isNotNull()) {
+                AuthFormTitle(
+                    text = title!!
+                )
             }
 
-            secondaryContent()
+            content()
 
-            navButtonText?.let {
-                TextButton(
-                    onClick = onNavButtonClick,
-                ) {
-                    Text(text = navButtonText)
-                }
-            }
+//            Button(
+//                onClick = onMainButtonClick,
+//                modifier = Modifier.fillMaxWidth()
+//            ) {
+//                Text(text = mainButtonText, fontWeight = FontWeight.Bold)
+//            }
+//
+//            secondaryContent()
+//
+//            navButtonText?.let {
+//                TextButton(
+//                    onClick = onNavButtonClick,
+//                ) {
+//                    Text(text = navButtonText)
+//                }
+//            }
         }
     }
 }
@@ -227,7 +221,7 @@ fun RegisterFormContent(
         isError = name.errorMessage.isNotNull()
     )
 
-    OneDropDownMenu(
+    OneDropdownFieldMenu(
         modifier = Modifier.fillMaxWidth(),
         expanded = gender.expanded,
         onExpandedChange = { gender.onExpandedChange(it) },
