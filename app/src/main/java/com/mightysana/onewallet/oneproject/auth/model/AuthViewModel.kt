@@ -7,8 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
 import com.mightysana.onewallet.Home
-import com.mightysana.onewallet.oneproject.auth.Register
-import com.mightysana.onewallet.oneproject.auth.model.impl.AuthServiceImpl
+import com.mightysana.onewallet.oneproject.auth.model.service.AuthService
+import com.mightysana.onewallet.oneproject.auth.model.service.AuthServiceImpl
 import com.mightysana.onewallet.oneproject.model.OneViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -34,6 +34,27 @@ open class AuthViewModel @Inject constructor() : OneViewModel() {
     protected val _passwordError = MutableStateFlow<String?>(null)
     val passwordError = _passwordError.asStateFlow()
 
+    protected fun resetEmailError() {
+        _emailError.value = null
+    }
+
+    protected fun resetPasswordError() {
+        _passwordError.value = null
+    }
+
+    protected fun resetErrors() {
+        resetEmailError()
+        resetPasswordError()
+    }
+
+    fun setEmail(newEmail: String) {
+        _email.value = newEmail
+    }
+
+    fun setPassword(newPassword: String) {
+        _password.value = newPassword
+    }
+
     protected fun emailError(message: String) {
         _emailError.value = message
     }
@@ -44,7 +65,6 @@ open class AuthViewModel @Inject constructor() : OneViewModel() {
 
     fun onSignInWithGoogle(
         credential: Credential,
-        onFailure: () -> Unit,
         onSuccess: (Any) -> Unit
     ) {
         viewModelScope.launch {
@@ -66,7 +86,6 @@ open class AuthViewModel @Inject constructor() : OneViewModel() {
                 Log.d("AuthViewModel", "onSignInWithGoogle: ${appState.value}")
             } catch (e: Exception) {
                 Log.e("AuthViewModel", "onSignInWithGoogle: $e")
-                onFailure()
             }
         }
     }
@@ -88,6 +107,4 @@ open class AuthViewModel @Inject constructor() : OneViewModel() {
     protected fun isEmailValid(): Boolean {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(_email.value.trim()).matches()
     }
-
-
 }

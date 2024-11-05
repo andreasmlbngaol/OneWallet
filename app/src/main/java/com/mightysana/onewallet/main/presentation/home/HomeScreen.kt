@@ -2,6 +2,7 @@ package com.mightysana.onewallet.main.presentation.home
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -11,9 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.mightysana.onewallet.Home
-import com.mightysana.onewallet.oneproject.auth.SignIn
+import com.mightysana.onewallet.oneproject.auth.model.SignIn
 import com.mightysana.onewallet.navigateAndPopUp
-import com.mightysana.onewallet.oneproject.components.OneOutlinedButton
 import com.mightysana.onewallet.oneproject.components.OneScreen
 
 @Composable
@@ -27,7 +27,7 @@ fun HomeScreen(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.padding(innerPadding)
             ) {
-                OneOutlinedButton(
+                OutlinedButton(
                     onClick = {
                         viewModel.onSignOut {
                             navController.navigateAndPopUp(SignIn, Home)

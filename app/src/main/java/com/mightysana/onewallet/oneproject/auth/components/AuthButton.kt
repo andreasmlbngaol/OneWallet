@@ -43,11 +43,9 @@ fun GoogleAuthButton(
                         context = context
                     )
                     onGetCredentialResponse(result.credential)
-                    Log.d("GoogleAuthButton", "Credential: ${result.credential}")
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    Log.e("GoogleAuthButton", "Error getting credential", e)
                     onOkay()
-                    Log.e("GoogleAuthButton", "Error getting credential: ${e.message}")
                 }
             }
         },

@@ -12,10 +12,10 @@ import androidx.navigation.compose.composable
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.mightysana.onewallet.main.presentation.home.HomeScreen
-import com.mightysana.onewallet.oneproject.auth.EmailVerification
-import com.mightysana.onewallet.oneproject.auth.Register
-import com.mightysana.onewallet.oneproject.auth.SignIn
-import com.mightysana.onewallet.oneproject.auth.SignUp
+import com.mightysana.onewallet.oneproject.auth.model.EmailVerification
+import com.mightysana.onewallet.oneproject.auth.model.Register
+import com.mightysana.onewallet.oneproject.auth.model.SignIn
+import com.mightysana.onewallet.oneproject.auth.model.SignUp
 import com.mightysana.onewallet.oneproject.auth.presentation.email_verification.EmailVerification
 import com.mightysana.onewallet.oneproject.auth.presentation.register.RegisterScreen
 import com.mightysana.onewallet.oneproject.auth.presentation.sign_in.SignInScreen

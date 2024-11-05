@@ -17,17 +17,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.mightysana.onewallet.R
-import com.mightysana.onewallet.navigateAndPopUp
-import com.mightysana.onewallet.oneproject.auth.EmailVerification
-import com.mightysana.onewallet.oneproject.auth.SignIn
-import com.mightysana.onewallet.oneproject.auth.SignUp
-import com.mightysana.onewallet.oneproject.auth.functions.toast
-import com.mightysana.onewallet.oneproject.auth.presentation.components.AuthForm
-import com.mightysana.onewallet.oneproject.auth.presentation.components.AuthOptions
-import com.mightysana.onewallet.oneproject.auth.presentation.components.MAX_FORM_WIDTH
-import com.mightysana.onewallet.oneproject.auth.presentation.components.SignUpFormContent
+import com.mightysana.onewallet.oneproject.auth.components.AuthFormCard
 import com.mightysana.onewallet.oneproject.components.OneScreen
-import com.mightysana.onewallet.oneproject.model.OneTextFieldDefault
+import com.mightysana.onewallet.oneproject.model.MAX_FORM_WIDTH
 
 @Composable
 fun SignUpScreen(
@@ -50,68 +42,68 @@ fun SignUpScreen(
                     .padding(innerPadding)
             ) {
                 val context = LocalContext.current
-                AuthForm(
+                AuthFormCard(
                     formImage = iconLauncher,
                     title = stringResource(R.string.sign_up_title),
-                    content = {
-                        SignUpFormContent(
-                            email = OneTextFieldDefault(
-                                value = viewModel.email.collectAsState().value,
-                                onValueChange = { viewModel.setEmail(it) },
-                                labelText = context.getString(R.string.email_label),
-                                errorMessage = viewModel.emailError.collectAsState().value
-                            ),
-                            password = OneTextFieldDefault(
-                                value = viewModel.password.collectAsState().value,
-                                onValueChange = { viewModel.setPassword(it) },
-                                labelText = context.getString(R.string.password_label),
-                                errorMessage = viewModel.passwordError.collectAsState().value
-                            ),
-                            confirmPassword = OneTextFieldDefault(
-                                value = viewModel.confirmPassword.collectAsState().value,
-                                onValueChange = { viewModel.setConfirmPassword(it) },
-                                labelText = context.getString(R.string.confirm_password_label),
-                                errorMessage = viewModel.confirmPasswordError.collectAsState().value
-                            ),
-                            passwordVisibility = viewModel.passwordVisibility.collectAsState().value,
-                            confirmPasswordVisibility = viewModel.confirmPasswordVisibility.collectAsState().value,
-                            onPasswordVisibilityChange = { viewModel.togglePasswordVisibility() },
-                            onConfirmPasswordVisibilityChange = { viewModel.toggleConfirmPasswordVisibility() },
-                        )
-                    },
-                    onMainButtonClick = {
-                        viewModel.validateForm(
-                            context = context,
-                            onSuccess = {
-                                viewModel.onSignUpWithEmailAndPassword(
-                                    {
-                                        context.toast(context.getString(R.string.email_already_used))
-                                    }
-                                ) {
-                                    navController.navigateAndPopUp(EmailVerification, SignUp)
-                                }
-                            }
-                        )
-                    },
-                    secondaryContent = {
-                        AuthOptions(
-                            horizontalDividerText = stringResource(R.string.or_continue_with),
-                            onLoad = { viewModel.appLoading() },
-                            onOkay = { viewModel.appOkay() },
-                            onGetCredentialResponse = { credential ->
-                                viewModel.onSignInWithGoogle(
-                                    credential = credential,
-                                    onFailure = {
-                                        context.toast(R.string.email_already_used)
-                                    }
-                                ) { destination ->
-                                    navController.navigateAndPopUp(destination, SignUp)
-                                }
-                            }
-                        )
-                    },
-                    navButtonText = stringResource(R.string.already_have_account),
-                    onNavButtonClick = { navController.navigateAndPopUp(SignIn, SignUp) },
+                    content = { },
+//                        SignUpFormContent(
+//                            email = OneTextFieldDefault(
+//                                value = viewModel.email.collectAsState().value,
+//                                onValueChange = { viewModel.setEmail(it) },
+//                                labelText = context.getString(R.string.email_label),
+//                                errorMessage = viewModel.emailError.collectAsState().value
+//                            ),
+//                            password = OneTextFieldDefault(
+//                                value = viewModel.password.collectAsState().value,
+//                                onValueChange = { viewModel.setPassword(it) },
+//                                labelText = context.getString(R.string.password_label),
+//                                errorMessage = viewModel.passwordError.collectAsState().value
+//                            ),
+//                            confirmPassword = OneTextFieldDefault(
+//                                value = viewModel.confirmPassword.collectAsState().value,
+//                                onValueChange = { viewModel.setConfirmPassword(it) },
+//                                labelText = context.getString(R.string.confirm_password_label),
+//                                errorMessage = viewModel.confirmPasswordError.collectAsState().value
+//                            ),
+//                            passwordVisibility = viewModel.passwordVisibility.collectAsState().value,
+//                            confirmPasswordVisibility = viewModel.confirmPasswordVisibility.collectAsState().value,
+//                            onPasswordVisibilityChange = { viewModel.togglePasswordVisibility() },
+//                            onConfirmPasswordVisibilityChange = { viewModel.toggleConfirmPasswordVisibility() },
+//                        )
+//                    },
+//                    onMainButtonClick = {
+//                        viewModel.validateForm(
+//                            context = context,
+//                            onSuccess = {
+//                                viewModel.onSignUpWithEmailAndPassword(
+//                                    {
+//                                        context.toast(context.getString(R.string.email_already_used))
+//                                    }
+//                                ) {
+//                                    navController.navigateAndPopUp(EmailVerification, SignUp)
+//                                }
+//                            }
+//                        )
+//                    },
+//                    secondaryContent = {
+//                        AuthOptions(
+//                            horizontalDividerText = stringResource(R.string.or_continue_with),
+//                            onLoad = { viewModel.appLoading() },
+//                            onOkay = { viewModel.appOkay() },
+//                            onGetCredentialResponse = { credential ->
+//                                viewModel.onSignInWithGoogle(
+//                                    credential = credential,
+//                                    onFailure = {
+//                                        context.toast(R.string.email_already_used)
+//                                    }
+//                                ) { destination ->
+//                                    navController.navigateAndPopUp(destination, SignUp)
+//                                }
+//                            }
+//                        )
+//                    },
+//                    navButtonText = stringResource(R.string.already_have_account),
+//                    onNavButtonClick = { navController.navigateAndPopUp(SignIn, SignUp) },
                     modifier = Modifier.widthIn(max = MAX_FORM_WIDTH.dp).fillMaxWidth(0.85f)
                 )
             }

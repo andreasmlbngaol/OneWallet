@@ -1,4 +1,4 @@
-package com.mightysana.onewallet.oneproject.auth.model.impl
+package com.mightysana.onewallet.oneproject.auth.model.service
 
 import android.util.Log
 import com.google.firebase.auth.FirebaseUser
@@ -6,7 +6,6 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.mightysana.onewallet.isNotNull
-import com.mightysana.onewallet.oneproject.auth.model.AuthService
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 

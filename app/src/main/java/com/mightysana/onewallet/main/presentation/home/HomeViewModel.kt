@@ -1,7 +1,6 @@
 package com.mightysana.onewallet.main.presentation.home
 
-import com.google.firebase.auth.FirebaseUser
-import com.mightysana.onewallet.oneproject.auth.model.AuthService
+import com.mightysana.onewallet.oneproject.auth.model.service.AuthService
 import com.mightysana.onewallet.oneproject.model.OneViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

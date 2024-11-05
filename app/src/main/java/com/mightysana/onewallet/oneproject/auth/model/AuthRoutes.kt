@@ -1,4 +1,4 @@
-package com.mightysana.onewallet.oneproject.auth
+package com.mightysana.onewallet.oneproject.auth.model
 
 import kotlinx.serialization.Serializable
 
