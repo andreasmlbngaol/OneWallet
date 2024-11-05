@@ -1,4 +1,4 @@
-package com.mightysana.onewallet.oneproject.auth.model
+package com.mightysana.onewallet.oneproject.auth.model.service
 
 import com.google.firebase.auth.FirebaseUser
 

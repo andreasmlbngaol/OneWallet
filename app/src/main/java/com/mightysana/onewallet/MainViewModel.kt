@@ -1,10 +1,10 @@
 package com.mightysana.onewallet
 
 import androidx.lifecycle.viewModelScope
-import com.mightysana.onewallet.oneproject.auth.EmailVerification
-import com.mightysana.onewallet.oneproject.auth.Register
-import com.mightysana.onewallet.oneproject.auth.SignIn
-import com.mightysana.onewallet.oneproject.auth.model.AuthService
+import com.mightysana.onewallet.oneproject.auth.model.EmailVerification
+import com.mightysana.onewallet.oneproject.auth.model.Register
+import com.mightysana.onewallet.oneproject.auth.model.SignIn
+import com.mightysana.onewallet.oneproject.auth.model.service.AuthService
 import com.mightysana.onewallet.oneproject.model.OneAppState
 import com.mightysana.onewallet.oneproject.model.OneViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel

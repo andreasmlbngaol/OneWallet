@@ -1,7 +1,7 @@
 package com.mightysana.onewallet.oneproject.auth.model.di
 
-import com.mightysana.onewallet.oneproject.auth.model.AuthService
-import com.mightysana.onewallet.oneproject.auth.model.impl.AuthServiceImpl
+import com.mightysana.onewallet.oneproject.auth.model.service.AuthService
+import com.mightysana.onewallet.oneproject.auth.model.service.AuthServiceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,5 +14,4 @@ object AccountModule {
     fun provideAccountService(): AuthService {
         return AuthServiceImpl() // Or however you create an instance
     }
-
 }

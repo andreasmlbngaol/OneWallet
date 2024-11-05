@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -26,9 +27,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.mightysana.onewallet.R
 import com.mightysana.onewallet.navigateAndPopUp
-import com.mightysana.onewallet.oneproject.auth.EmailVerification
-import com.mightysana.onewallet.oneproject.auth.SignIn
-import com.mightysana.onewallet.oneproject.components.OneButton
+import com.mightysana.onewallet.oneproject.auth.model.EmailVerification
+import com.mightysana.onewallet.oneproject.auth.model.SignIn
 import com.mightysana.onewallet.oneproject.components.OneScreen
 import kotlinx.coroutines.coroutineScope
 
@@ -74,7 +74,7 @@ fun EmailVerification(
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        OneButton(
+                        Button(
                             onClick = { viewModel.openEmailApp(context)}
                         ) {
                             Text(text = stringResource(R.string.open_email_app))

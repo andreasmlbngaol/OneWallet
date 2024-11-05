@@ -14,9 +14,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 open class OneViewModel @Inject constructor() : ViewModel() {
-    val oneRepository = OneRepository()
+    protected val oneRepository = OneRepository()
 
-    fun launchCatching(
+    private val _appState = MutableStateFlow(OneAppState.OKAY)
+    val appState: StateFlow<OneAppState> = _appState
+
+    protected fun launchCatching(
         exception: (Throwable) -> Unit = {},
         block: suspend CoroutineScope.() -> Unit
     ) {
@@ -29,50 +32,42 @@ open class OneViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    protected open val _appState = MutableStateFlow(OneAppState.OKAY)
-    open val appState: StateFlow<OneAppState> = _appState
-
-    private fun setAppState(state: OneAppState) {
-        _appState.value = state
-        Log.d("OneViewModel", _appState.value.toString())
-    }
-
-    fun appLoading() {
-        setAppState(OneAppState.LOADING)
-    }
-
-    fun appOkay() {
-        setAppState(OneAppState.OKAY)
-    }
-
-    fun loadScope(block: suspend CoroutineScope.() -> Unit) {
-        viewModelScope.launch {
+    protected fun loadScope(block: suspend CoroutineScope.() -> Unit) {
+        launchCatching {
             appLoading()
             block()
             appOkay()
         }
     }
 
-    fun openOtherApp(
+    private fun setAppState(state: OneAppState) {
+        _appState.value = state
+    }
+
+    protected fun appLoading() {
+        setAppState(OneAppState.LOADING)
+    }
+
+    protected fun appOkay() {
+        setAppState(OneAppState.OKAY)
+    }
+
+
+    protected fun openOtherApp(
         category: String,
         packageName: String,
         context: Context,
         flags: Int = Intent.FLAG_ACTIVITY_NEW_TASK
     ) {
         val intent = Intent(Intent.ACTION_MAIN).apply {
-            addCategory(category)
-            // Intent.CATEGORY_APP_EMAIL
-            setPackage(packageName)
-            // "com.google.android.gm"
+            addCategory(category) // Intent.CATEGORY_APP_EMAIL
+            setPackage(packageName) // "com.google.android.gm"
             addFlags(flags)
         }
         try {
             context.startActivity(intent)
         } catch (e: Exception) {
-            Log.e("openOtherApp", "Error launching other app")
-            e.printStackTrace()
+            Log.e("OneViewModel", e.toString())
         }
-
     }
-
 }
