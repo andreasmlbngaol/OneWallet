@@ -1,22 +1,31 @@
 package com.mightysana.onewallet.oneproject.auth.presentation.register
 
 import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.mightysana.onewallet.Home
@@ -54,6 +63,9 @@ fun RegisterScreen(
                     .fillMaxSize()
                     .padding(innerPadding)
             ) {
+                val showDatePicker by viewModel.showDatePicker.collectAsState()
+                val selectedDate by viewModel.selectedDate.collectAsState()
+
                 val datePickerState = rememberDatePickerState()
 
                 AuthForm(
@@ -74,7 +86,7 @@ fun RegisterScreen(
                                 },
                                 selectedItem = viewModel.gender.collectAsState().value,
                                 labelText = stringResource(R.string.gender_label),
-                                items = mapOf<Any?, String>(
+                                items = mapOf(
                                     null to stringResource(R.string.select_gender),
                                     Gender.MALE to stringResource(R.string.male),
                                     Gender.FEMALE to stringResource(R.string.female),
@@ -88,13 +100,14 @@ fun RegisterScreen(
                                 errorMessage = viewModel.genderError.collectAsState().value
                             ),
                             birthDate = OneTextFieldDefault(
-                                value = viewModel.birthDate.collectAsState().value,
+//                                value = (if(selectedDate == 0L) System.currentTimeMillis() else selectedDate).convertMillisToDate(),
+                                value = if(selectedDate == 0L) stringResource(R.string.select_date) else selectedDate.convertMillisToDate(),
                                 onValueChange = { viewModel.setBirthDate(it) },
                                 labelText = stringResource(R.string.birth_date_label),
                                 errorMessage = viewModel.birthDateError.collectAsState().value
                             ),
                             onBirthdateTrailingIconClick = {
-                                viewModel.setDatePickerVisible(true)
+                                viewModel.setShowDatePicker(true)
                             },
                             datePickerState = datePickerState
                         )
@@ -119,6 +132,37 @@ fun RegisterScreen(
                     },
                     modifier = Modifier.widthIn(max = MAX_FORM_WIDTH.dp).fillMaxWidth(0.85f)
                 )
+                AnimatedVisibility(showDatePicker) {
+                    DatePickerDialog(
+                        onDismissRequest = {
+                            viewModel.setShowDatePicker(false)
+                        },
+                        confirmButton = {
+                            OneOutlinedButton(
+                                onClick = {
+                                    viewModel.setShowDatePicker(false)
+                                    viewModel.setSelectedDate(datePickerState.selectedDateMillis!!)
+                                }
+                            ) {
+                                Text(text = stringResource(R.string.save))
+                            }
+                        },
+                        dismissButton = {
+                            OneOutlinedButton(
+                                onClick = {
+                                    viewModel.setShowDatePicker(false)
+                                }
+                            ) {
+                                Text(text = stringResource(R.string.cancel))
+                            }
+                        }
+                    ) {
+                        DatePicker(
+                            state = datePickerState,
+                            modifier = Modifier.verticalScroll(rememberScrollState())
+                        )
+                    }
+                }
             }
         }
     }

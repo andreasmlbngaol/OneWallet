@@ -36,4 +36,7 @@
     <string name="female">Female</string>
     <string name="prefer_not_to_say">Prefer not to say</string>
     <string name="select_gender">Select gender</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="select_date">Select Date</string>
 </resources>
