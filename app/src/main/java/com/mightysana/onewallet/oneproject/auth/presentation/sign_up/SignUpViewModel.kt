@@ -1,8 +1,11 @@
 package com.mightysana.onewallet.oneproject.auth.presentation.sign_up
 
 import android.content.Context
+import android.util.Log
 import com.mightysana.onewallet.R
 import com.mightysana.onewallet.oneproject.auth.model.AuthViewModel
+import com.mightysana.onewallet.oneproject.model.SignUpFormValidationResult
+import com.mightysana.onewallet.oneproject.model.clip
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -11,67 +14,49 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(): AuthViewModel() {
-
     private val _confirmPassword = MutableStateFlow("")
     val confirmPassword: StateFlow<String> = _confirmPassword
 
-    private val _passwordVisibility = MutableStateFlow(false)
-    val passwordVisibility: StateFlow<Boolean> = _passwordVisibility
-
-    private val _confirmPasswordVisibility = MutableStateFlow(false)
-    val confirmPasswordVisibility: StateFlow<Boolean> = _confirmPasswordVisibility
+    private val _confirmPasswordVisible = MutableStateFlow(false)
+    val confirmPasswordVisible: StateFlow<Boolean> = _confirmPasswordVisible
 
     private val _confirmPasswordError = MutableStateFlow<String?>(null)
     val confirmPasswordError = _confirmPasswordError.asStateFlow()
-
-    fun setEmail(newEmail: String) {
-        _email.value = newEmail
-    }
-
-    fun setPassword(newPassword: String) {
-        _password.value = newPassword
-    }
 
     fun setConfirmPassword(newConfirmPassword: String) {
         _confirmPassword.value = newConfirmPassword
     }
 
-    fun togglePasswordVisibility() {
-        _passwordVisibility.value = !_passwordVisibility.value
-    }
-
     fun toggleConfirmPasswordVisibility() {
-        _confirmPasswordVisibility.value = !_confirmPasswordVisibility.value
+        _passwordVisible.value = !_passwordVisible.value
     }
-
-    private fun isConfirmPasswordBlank(): Boolean {
-        return _confirmPassword.value.trim().isBlank()
-    }
-
-    private fun isPasswordAndConfirmPasswordSame(): Boolean {
-        return _password.value.trim() == _confirmPassword.value.trim()
-    }
-
-    private fun isPasswordValid(): Boolean {
-        return Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$").matches(_password.value.trim())
-    }
-
 
     private fun confirmPasswordError(message: String) {
         _confirmPasswordError.value = message
     }
 
-    private fun resetError() {
-        _emailError.value = null
-        _passwordError.value = null
+    private fun resetConfirmPasswordError() {
         _confirmPasswordError.value = null
     }
 
-    fun validateForm(
+    private fun isConfirmPasswordBlank(): Boolean {
+        return _confirmPassword.clip().isBlank()
+    }
+
+    private fun isPasswordAndConfirmPasswordSame(): Boolean {
+        return _password.clip() == _confirmPassword.clip()
+    }
+
+    override fun resetErrors() {
+        super.resetErrors()
+        resetConfirmPasswordError()
+    }
+
+    fun validateSignUpForm(
         context: Context,
         onSuccess: () -> Unit,
     ) {
-        resetError()
+        resetErrors()
         val validationState = when {
             isEmailBlank() -> SignUpFormValidationResult.EmailBlank
             !isEmailValid() -> SignUpFormValidationResult.EmailNotValid
@@ -103,25 +88,15 @@ class SignUpViewModel @Inject constructor(): AuthViewModel() {
         loadScope {
             try {
                 authService.signUpWithEmailAndPassword(
-                    _email.value.trim(),
-                    _password.value.trim()
+                    email = _email.clip(),
+                    password = _password.clip()
                 )
                 authService.sendEmailVerification()
                 onSuccess()
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.e("SignUpWithEmailAndPassword", e.message.toString())
                 onFailure()
             }
         }
     }
-}
-
-sealed class SignUpFormValidationResult {
-    data object Valid : SignUpFormValidationResult()
-    data object EmailBlank : SignUpFormValidationResult()
-    data object PasswordBlank : SignUpFormValidationResult()
-    data object ConfirmPasswordBlank : SignUpFormValidationResult()
-    data object PasswordAndConfirmPasswordNotSame : SignUpFormValidationResult()
-    data object EmailNotValid : SignUpFormValidationResult()
-    data object PasswordNotValid : SignUpFormValidationResult()
 }

@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
@@ -31,17 +29,19 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.mightysana.onewallet.R
-import com.mightysana.onewallet.navigateAndPopUp
+import com.mightysana.onewallet.oneproject.auth.components.AuthFormCard
+import com.mightysana.onewallet.oneproject.auth.components.AuthOptions
 import com.mightysana.onewallet.oneproject.auth.model.EmailVerification
 import com.mightysana.onewallet.oneproject.auth.model.SignIn
 import com.mightysana.onewallet.oneproject.auth.model.SignUp
-import com.mightysana.onewallet.oneproject.auth.components.AuthFormCard
-import com.mightysana.onewallet.oneproject.auth.components.AuthOtherOptions
 import com.mightysana.onewallet.oneproject.components.ErrorSupportingText
 import com.mightysana.onewallet.oneproject.components.OneIcon
 import com.mightysana.onewallet.oneproject.components.OneScreen
 import com.mightysana.onewallet.oneproject.components.OneTextField
 import com.mightysana.onewallet.oneproject.model.MAX_FORM_WIDTH
+import com.mightysana.onewallet.oneproject.model.OneDefault
+import com.mightysana.onewallet.oneproject.model.OneIcons
+import com.mightysana.onewallet.oneproject.model.navigateAndPopUp
 import com.mightysana.onewallet.oneproject.model.toast
 
 @Composable
@@ -82,16 +82,17 @@ fun SignInScreen(
                                 style = MaterialTheme.typography.bodyMedium
                             )
                         },
-                        leadingIcon = { OneIcon(Icons.Default.Email) },
+                        leadingIcon = { OneIcon(OneIcons.Email) },
                         supportingText = {
                             ErrorSupportingText(viewModel.emailError.collectAsState().value)
                         },
+                        singleLine = true,
                         modifier = Modifier.fillMaxWidth()
                     )
 
 
                     // PasswordTextField
-                    val visible by viewModel.visible.collectAsState()
+                    val passwordVisible by viewModel.passwordVisible.collectAsState()
                     OneTextField(
                         value = viewModel.password.collectAsState().value,
                         onValueChange = { viewModel.setPassword(it) },
@@ -101,20 +102,25 @@ fun SignInScreen(
                                 style = MaterialTheme.typography.bodyMedium
                             )
                         },
-                        leadingIcon = { OneIcon(Icons.Default.Key) },
+                        leadingIcon = { OneIcon(OneIcons.Password) },
                         trailingIcon = {
                             IconButton(
                                 onClick = { viewModel.togglePasswordVisibility() }
                             ) {
                                 OneIcon(
-                                    if(!visible) Icons.Default.Visibility else Icons.Default.VisibilityOff
+                                    if(!passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff
                                 )
                             }
                         },
                         supportingText = {
                             ErrorSupportingText(viewModel.passwordError.collectAsState().value)
                         },
-                        visualTransformation = if(!visible) PasswordVisualTransformation() else VisualTransformation.None,
+                        visualTransformation = if(!passwordVisible)
+                            PasswordVisualTransformation(
+                                mask = OneDefault.CENSORED_CHAR
+                            )
+                        else VisualTransformation.None,
+                        singleLine = true,
                         modifier = Modifier.fillMaxWidth()
                     )
 
@@ -142,10 +148,10 @@ fun SignInScreen(
                     }
 
                     // OtherAuthOptions
-                    AuthOtherOptions(
+                    AuthOptions(
                         horizontalDividerText = stringResource(R.string.or_continue_with),
-                        onLoad = { viewModel.triggerAppLoading() },
-                        onOkay = { viewModel.triggerAppOkay() },
+                        onLoad = { viewModel.appLoading() },
+                        onOkay = { viewModel.appOkay() },
                     ) { credential ->
                         viewModel.onSignInWithGoogle(credential) { destination ->
                             navController.navigateAndPopUp(destination, SignIn)
@@ -154,7 +160,7 @@ fun SignInScreen(
 
                     // NavToRegisterButton
                     TextButton(
-                        onClick = { navController.navigate(SignUp) }
+                        onClick = { navController.navigateAndPopUp(SignUp, SignIn) }
                     ) {
                         Text(
                             text = stringResource(R.string.dont_have_an_account),

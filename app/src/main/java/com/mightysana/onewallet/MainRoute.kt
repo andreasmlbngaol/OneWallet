@@ -9,14 +9,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.google.firebase.Firebase
-import com.google.firebase.auth.auth
 import com.mightysana.onewallet.main.presentation.home.HomeScreen
 import com.mightysana.onewallet.oneproject.auth.model.EmailVerification
 import com.mightysana.onewallet.oneproject.auth.model.Register
 import com.mightysana.onewallet.oneproject.auth.model.SignIn
 import com.mightysana.onewallet.oneproject.auth.model.SignUp
-import com.mightysana.onewallet.oneproject.auth.presentation.email_verification.EmailVerification
+import com.mightysana.onewallet.oneproject.auth.presentation.email_verification.EmailVerificationScreen
 import com.mightysana.onewallet.oneproject.auth.presentation.register.RegisterScreen
 import com.mightysana.onewallet.oneproject.auth.presentation.sign_in.SignInScreen
 import com.mightysana.onewallet.oneproject.auth.presentation.sign_up.SignUpScreen
@@ -58,7 +56,7 @@ fun MyAppRoute(
                 }
 
                 composable<EmailVerification> {
-                    EmailVerification(
+                    EmailVerificationScreen(
                         navController = navController
                     )
                 }
@@ -79,14 +77,3 @@ fun MyAppRoute(
             }
     }
 }
-
-fun NavHostController.navigateAndPopUp(route: Any, popUp: Any) {
-    this.navigate(route) {
-        launchSingleTop = true
-        popUpTo(popUp) { inclusive = true }
-    }
-}
-
-val currentUser = Firebase.auth.currentUser
-
-fun Any?.isNotNull(): Boolean = this != null

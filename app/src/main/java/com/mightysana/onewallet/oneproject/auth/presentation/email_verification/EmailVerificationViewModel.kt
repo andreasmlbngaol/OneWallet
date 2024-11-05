@@ -11,45 +11,28 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EmailVerificationViewModel @Inject constructor() : AuthViewModel() {
-    private val _emailState = MutableStateFlow(false)
+    private val _isEmailVerified = MutableStateFlow(false)
+
+    val authUserEmail = authService.currentUser!!.email
 
     fun checkEmailVerification(onVerified: suspend () -> Unit) {
         launchCatching {
-            while (!_emailState.value) {
+            while (!_isEmailVerified.value) {
                 authService.reloadCurrentUser()
                 val isEmailVerified = authService.isEmailVerified()
                 Log.d("EmailVerificationViewModel", "checkEmailVerification: $isEmailVerified")
-                _emailState.value = isEmailVerified
-                delay(2000L)
+                _isEmailVerified.value = isEmailVerified
+                delay(1500L)
             }
             onVerified()
         }
     }
 
-    val authUserEmail = authService.currentUser!!.email
-
-    fun signOut(
-        onSuccess: () -> Unit
-    ) {
-        loadScope {
-            authService.signOut()
-            onSuccess()
-        }
-    }
-
     fun openEmailApp(context: Context) {
         openOtherApp(
-            Intent.CATEGORY_APP_EMAIL,
-            "com.google.android.gm",
-            context
+            category = Intent.CATEGORY_APP_EMAIL,
+            packageName = "com.google.android.gm",
+            context = context
         )
     }
-}
-
-fun String.censoredEmail(): String {
-    val index = this.indexOf("@")
-    val name = this.substring(0, index)
-    val domain = this.substring(index)
-    return name.replaceRange(2, name.length - 1, "****") + domain
-
 }

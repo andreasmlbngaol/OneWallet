@@ -6,27 +6,10 @@ import com.mightysana.onewallet.oneproject.auth.model.AuthViewModel
 import com.mightysana.onewallet.oneproject.model.SignInFormValidationResult
 import com.mightysana.onewallet.oneproject.model.clip
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 @HiltViewModel
 class SignInViewModel @Inject constructor() : AuthViewModel() {
-    private val _visible = MutableStateFlow(false)
-    val visible: StateFlow<Boolean> = _visible
-
-    fun togglePasswordVisibility() {
-        _visible.value = !_visible.value
-    }
-
-    fun triggerAppLoading() {
-        appLoading()
-    }
-
-    fun triggerAppOkay() {
-        appOkay()
-    }
-
     fun validateSignInForm(
         context: Context,
         onSuccess: () -> Unit,

@@ -1,6 +1,5 @@
 package com.mightysana.onewallet.oneproject.auth.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
@@ -20,9 +19,9 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.credentials.Credential
-import com.mightysana.onewallet.isNotNull
 import com.mightysana.onewallet.oneproject.components.OneImage
 import com.mightysana.onewallet.oneproject.components.OneTextHorizontalDivider
+import com.mightysana.onewallet.oneproject.model.isNotNull
 
 @Composable
 fun AuthFormCard(
@@ -81,7 +80,7 @@ fun AuthFormCard(
 }
 
 @Composable
-fun AuthOtherOptions(
+fun AuthOptions(
     horizontalDividerText: String,
     horizontalLineColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
     onLoad: () -> Unit,
@@ -100,142 +99,3 @@ fun AuthOtherOptions(
         onGetCredentialResponse(it)
     }
 }
-
-@Composable
-fun AuthFormImage(
-    painter: Painter,
-    modifier: Modifier = Modifier) {
-    Image(
-        painter = painter,
-        contentDescription = "Icon Launcher",
-        modifier = modifier
-    )
-}
-
-
-//@Composable
-//fun SignInFormContent(
-//    email: OneTextFieldDefault,
-//    password: OneTextFieldDefault,
-//    visibility: Boolean,
-//    onVisibilityChange: () -> Unit,
-//) {
-//    OneTextField(
-//        value = email.value,
-//        onValueChange = { email.onValueChange(it) },
-//        labelText = email.labelText,
-//        leadingIcon = Icons.Default.Person3,
-//        modifier = Modifier.fillMaxWidth(),
-//        supportingText = email.errorMessage,
-//        isError = email.errorMessage.isNotNull()
-//    )
-//
-//    OneTextField(
-//        value = password.value,
-//        onValueChange = { password.onValueChange(it) },
-//        labelText = password.labelText,
-//        modifier = Modifier.fillMaxWidth(),
-//        supportingText = password.errorMessage,
-//        isError = password.errorMessage.isNotNull(),
-//        visualTransformation = if (visibility) VisualTransformation.None else PasswordVisualTransformation(),
-//        trailingIcon = if (visibility) Icons.Default.VisibilityOff else Icons.Default.Visibility,
-//        leadingIcon = Icons.Default.Key,
-//        onTrailingIconClick = { onVisibilityChange() },
-//        autoCorrectEnabled = false
-//    )
-//}
-
-//@Composable
-//fun SignUpFormContent(
-//    email: OneTextFieldDefault,
-//    password: OneTextFieldDefault,
-//    confirmPassword: OneTextFieldDefault,
-//    passwordVisibility: Boolean,
-//    confirmPasswordVisibility: Boolean,
-//    onPasswordVisibilityChange: () -> Unit,
-//    onConfirmPasswordVisibilityChange: () -> Unit
-//) {
-//    OneTextField(
-//        value = email.value,
-//        onValueChange = { email.onValueChange(it) },
-//        labelText = email.labelText,
-//        leadingIcon = Icons.Default.Person3,
-//        modifier = Modifier.fillMaxWidth(),
-//        supportingText = email.errorMessage,
-//        isError = email.errorMessage.isNotNull()
-//    )
-//
-//    OneTextField(
-//        value = password.value,
-//        onValueChange = { password.onValueChange(it) },
-//        labelText = password.labelText,
-//        modifier = Modifier.fillMaxWidth(),
-//        supportingText = password.errorMessage,
-//        isError = password.errorMessage.isNotNull(),
-//        visualTransformation = if(passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
-//        trailingIcon = if(passwordVisibility) Icons.Default.VisibilityOff else Icons.Default.Visibility,
-//        leadingIcon = Icons.Default.Key,
-//        onTrailingIconClick = { onPasswordVisibilityChange() },
-//        autoCorrectEnabled = false
-//    )
-//
-//    OneTextField(
-//        value = confirmPassword.value,
-//        onValueChange = { confirmPassword.onValueChange(it) },
-//        labelText = stringResource(R.string.confirm_password_label),
-//        modifier = Modifier.fillMaxWidth(),
-//        supportingText = confirmPassword.errorMessage,
-//        isError = confirmPassword.errorMessage.isNotNull(),
-//        visualTransformation = if(confirmPasswordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
-//        trailingIcon = if(confirmPasswordVisibility) Icons.Default.VisibilityOff else Icons.Default.Visibility,
-//        leadingIcon = Icons.Default.Key,
-//        onTrailingIconClick = { onConfirmPasswordVisibilityChange() },
-//        autoCorrectEnabled = false
-//    )
-//}
-//
-//
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Composable
-//fun RegisterFormContent(
-//    name: OneTextFieldDefault,
-//    gender: OneDropdownMenuDefault,
-//    birthDate: OneTextFieldDefault,
-//    onBirthdateTrailingIconClick: () -> Unit,
-//    datePickerState: DatePickerState
-//) {
-//    OneTextField(
-//        value = name.value,
-//        onValueChange = { name.onValueChange(it) },
-//        labelText = name.labelText,
-//        modifier = Modifier.fillMaxWidth(),
-//        supportingText = name.errorMessage,
-//        isError = name.errorMessage.isNotNull()
-//    )
-//
-//    OneDropdownFieldMenu(
-//        modifier = Modifier.fillMaxWidth(),
-//        expanded = gender.expanded,
-//        onExpandedChange = { gender.onExpandedChange(it) },
-//        selectedItem = gender.selectedItem,
-//        labelText = gender.labelText,
-//        items = gender.items,
-//        onItemSelected = { gender.onItemSelected(it) },
-//        onDismissRequest = gender.onDismissRequest,
-//    )
-//
-//    OneTextField(
-//        value = birthDate.value,
-//        onValueChange = { birthDate.onValueChange(it) },
-//        readOnly = true,
-//        labelText = birthDate.labelText,
-//        modifier = Modifier.fillMaxWidth(),
-//        supportingText = birthDate.errorMessage,
-//        isError = birthDate.errorMessage.isNotNull(),
-//        trailingIcon = Icons.Default.DateRange,
-//        onTrailingIconClick = {
-//            onBirthdateTrailingIconClick()
-//        }
-//    )
-//
-//}
