@@ -12,6 +12,6 @@ import dagger.hilt.components.SingletonComponent
 object AccountModule {
     @Provides
     fun provideAccountService(): AuthService {
-        return AuthServiceImpl() // Or however you create an instance
+        return AuthServiceImpl()
     }
 }

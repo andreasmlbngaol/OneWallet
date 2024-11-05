@@ -7,8 +7,8 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -26,14 +26,16 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.mightysana.onewallet.R
-import com.mightysana.onewallet.navigateAndPopUp
 import com.mightysana.onewallet.oneproject.auth.model.EmailVerification
 import com.mightysana.onewallet.oneproject.auth.model.SignIn
 import com.mightysana.onewallet.oneproject.components.OneScreen
+import com.mightysana.onewallet.oneproject.model.OneIcons
+import com.mightysana.onewallet.oneproject.model.censoredEmail
+import com.mightysana.onewallet.oneproject.model.navigateAndPopUp
 import kotlinx.coroutines.coroutineScope
 
 @Composable
-fun EmailVerification(
+fun EmailVerificationScreen(
     navController: NavHostController,
     viewModel: EmailVerificationViewModel = hiltViewModel()
 ) {
@@ -54,13 +56,15 @@ fun EmailVerification(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
+                    .padding(horizontal = 16.dp)
             ) {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.verticalScroll(rememberScrollState())
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.Email,
+                        imageVector = OneIcons.EmailVerification,
                         contentDescription = null,
                         modifier = Modifier
                             .width(100.dp)
@@ -82,14 +86,13 @@ fun EmailVerification(
 
                         TextButton(
                             onClick = {
-                                viewModel.signOut {
+                                viewModel.onSignOut {
                                     navController.navigateAndPopUp(SignIn, EmailVerification)
                                 }
                             }
                         ) {
                             Text(text = stringResource(R.string.back_to_sign_in))
                         }
-
                     }
                 }
             }

@@ -7,7 +7,7 @@ data class OneUser(
     val profilePhotoUrl: String? = null,
     val phoneNumber: String? = null,
     val bio: String? = null,
-    val birthDate: String? = null,
+    val birthDate: Long? = null,
     val gender: String? = null,
     val address: String? = null,
     val createdAt: Long = 0L,

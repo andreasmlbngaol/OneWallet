@@ -19,6 +19,18 @@ open class OneViewModel @Inject constructor() : ViewModel() {
     private val _appState = MutableStateFlow(OneAppState.OKAY)
     val appState: StateFlow<OneAppState> = _appState
 
+    private fun setAppState(state: OneAppState) {
+        _appState.value = state
+    }
+
+    fun appLoading() {
+        setAppState(OneAppState.LOADING)
+    }
+
+    fun appOkay() {
+        setAppState(OneAppState.OKAY)
+    }
+
     protected fun launchCatching(
         exception: (Throwable) -> Unit = {},
         block: suspend CoroutineScope.() -> Unit
@@ -27,6 +39,7 @@ open class OneViewModel @Inject constructor() : ViewModel() {
             try {
                 block()
             } catch (e: Exception) {
+                Log.e("OneViewModel", e.message.toString())
                 exception(e)
             }
         }
@@ -40,19 +53,6 @@ open class OneViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    private fun setAppState(state: OneAppState) {
-        _appState.value = state
-    }
-
-    protected fun appLoading() {
-        setAppState(OneAppState.LOADING)
-    }
-
-    protected fun appOkay() {
-        setAppState(OneAppState.OKAY)
-    }
-
-
     protected fun openOtherApp(
         category: String,
         packageName: String,
@@ -60,14 +60,15 @@ open class OneViewModel @Inject constructor() : ViewModel() {
         flags: Int = Intent.FLAG_ACTIVITY_NEW_TASK
     ) {
         val intent = Intent(Intent.ACTION_MAIN).apply {
-            addCategory(category) // Intent.CATEGORY_APP_EMAIL
-            setPackage(packageName) // "com.google.android.gm"
+            addCategory(category)
+            setPackage(packageName)
             addFlags(flags)
         }
         try {
             context.startActivity(intent)
         } catch (e: Exception) {
             Log.e("OneViewModel", e.toString())
+            e.printStackTrace()
         }
     }
 }

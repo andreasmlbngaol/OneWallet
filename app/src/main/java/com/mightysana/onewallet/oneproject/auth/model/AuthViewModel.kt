@@ -10,6 +10,7 @@ import com.mightysana.onewallet.Home
 import com.mightysana.onewallet.oneproject.auth.model.service.AuthService
 import com.mightysana.onewallet.oneproject.auth.model.service.AuthServiceImpl
 import com.mightysana.onewallet.oneproject.model.OneViewModel
+import com.mightysana.onewallet.oneproject.model.clip
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,11 +23,15 @@ import javax.inject.Inject
 open class AuthViewModel @Inject constructor() : OneViewModel() {
     protected val authService: AuthService = AuthServiceImpl()
 
+    // Declaration
     protected val _email =  MutableStateFlow("")
     val email: StateFlow<String> = _email
 
     protected val _password = MutableStateFlow("")
     val password: StateFlow<String> = _password
+
+    protected val _passwordVisible = MutableStateFlow(false)
+    val passwordVisible: StateFlow<Boolean> = _passwordVisible
 
     protected val _emailError = MutableStateFlow<String?>(null)
     val emailError = _emailError.asStateFlow()
@@ -34,25 +39,17 @@ open class AuthViewModel @Inject constructor() : OneViewModel() {
     protected val _passwordError = MutableStateFlow<String?>(null)
     val passwordError = _passwordError.asStateFlow()
 
-    protected fun resetEmailError() {
-        _emailError.value = null
-    }
-
-    protected fun resetPasswordError() {
-        _passwordError.value = null
-    }
-
-    protected fun resetErrors() {
-        resetEmailError()
-        resetPasswordError()
-    }
-
+    // Assignment
     fun setEmail(newEmail: String) {
         _email.value = newEmail
     }
 
     fun setPassword(newPassword: String) {
         _password.value = newPassword
+    }
+
+    fun togglePasswordVisibility() {
+        _passwordVisible.value = !_passwordVisible.value
     }
 
     protected fun emailError(message: String) {
@@ -63,6 +60,46 @@ open class AuthViewModel @Inject constructor() : OneViewModel() {
         _passwordError.value = message
     }
 
+    // Reset Values
+    private fun resetEmailError() {
+        _emailError.value = null
+    }
+
+    private fun resetPasswordError() {
+        _passwordError.value = null
+    }
+
+    protected open fun resetErrors() {
+        resetEmailError()
+        resetPasswordError()
+    }
+
+    // Form Checking
+    protected fun isEmailBlank(): Boolean {
+        return _email.clip().isBlank()
+    }
+
+    protected fun isEmailValid(): Boolean {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(_email.clip()).matches()
+    }
+
+    protected fun isPasswordBlank(): Boolean {
+        Log.d("AuthViewModel", "isPasswordBlank: ${_password.clip().isBlank()}")
+        return _password.clip().isBlank()
+    }
+
+    protected fun isPasswordValid(): Boolean {
+        return Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$").matches(_password.clip())
+    }
+
+    // User Authentication Checking
+    suspend fun checkUserRegistrationStatus(destinationRoute: (Any) -> Unit) {
+        appLoading()
+        Log.d("AuthViewModel", "checkUserRegistrationStatus: ${appState.value}")
+        destinationRoute(if (oneRepository.isUserRegistered(authService.currentUser!!.uid)) Home else Register)
+    }
+
+    // Sign In With Google
     fun onSignInWithGoogle(
         credential: Credential,
         onSuccess: (Any) -> Unit
@@ -70,41 +107,30 @@ open class AuthViewModel @Inject constructor() : OneViewModel() {
         viewModelScope.launch {
             appLoading()
             try {
-                Log.d("AuthViewModel", "onSignInWithGoogle: ${appState.value}")
                 if (credential is CustomCredential && credential.type == TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
                     val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
                     authService.signInWithGoogle(googleIdTokenCredential.idToken)
                 }
                 while (authService.currentUser == null) {
-                    Log.d("AuthViewModel", "onSignInWithGoogle: Waiting for currentUser")
-                    delay(1000L)
+                    delay(500L)
                 }
-                Log.d("AuthViewModel", "afterDelay: ${appState.value}")
                 checkUserRegistrationStatus { destination ->
                     onSuccess(destination)
                 }
-                Log.d("AuthViewModel", "onSignInWithGoogle: ${appState.value}")
             } catch (e: Exception) {
                 Log.e("AuthViewModel", "onSignInWithGoogle: $e")
+                e.printStackTrace()
             }
         }
     }
 
-    suspend fun checkUserRegistrationStatus(destinationRoute: (Any) -> Unit) {
-        appLoading()
-        Log.d("AuthViewModel", "checkUserRegistrationStatus: ${appState.value}")
-        destinationRoute(if (oneRepository.isUserRegistered(authService.currentUser!!.uid)) Home else Register)
-    }
-
-    protected fun isEmailBlank(): Boolean {
-        return _email.value.trim().isBlank()
-    }
-
-    protected fun isPasswordBlank(): Boolean {
-        return _password.value.trim().isBlank()
-    }
-
-    protected fun isEmailValid(): Boolean {
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(_email.value.trim()).matches()
+    // Sign Out User
+    fun onSignOut(
+        onSuccess: () -> Unit
+    ) {
+        loadScope {
+            authService.signOut()
+            onSuccess()
+        }
     }
 }

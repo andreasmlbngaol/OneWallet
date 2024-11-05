@@ -13,8 +13,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.mightysana.onewallet.Home
 import com.mightysana.onewallet.oneproject.auth.model.SignIn
-import com.mightysana.onewallet.navigateAndPopUp
 import com.mightysana.onewallet.oneproject.components.OneScreen
+import com.mightysana.onewallet.oneproject.model.navigateAndPopUp
 
 @Composable
 fun HomeScreen(
