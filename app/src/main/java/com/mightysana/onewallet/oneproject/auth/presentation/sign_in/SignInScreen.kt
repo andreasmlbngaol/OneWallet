@@ -55,7 +55,7 @@ fun SignInScreen(
                 AuthForm(
                     formImage = iconLauncher,
                     title = stringResource(R.string.sign_in_title),
-                    mainContent = {
+                    content = {
                         SignInFormContent(
                             email = OneTextFieldDefault(
                                 value = viewModel.email.collectAsState().value,

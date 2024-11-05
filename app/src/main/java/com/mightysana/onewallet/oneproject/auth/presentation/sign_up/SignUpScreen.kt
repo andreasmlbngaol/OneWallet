@@ -12,26 +12,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.mightysana.onewallet.R
-import com.mightysana.onewallet.oneproject.auth.SignIn
-import com.mightysana.onewallet.oneproject.auth.SignUp
-import com.mightysana.onewallet.oneproject.auth.presentation.components.AuthForm
-import com.mightysana.onewallet.oneproject.auth.presentation.components.AuthOptions
-import com.mightysana.onewallet.oneproject.auth.presentation.components.SignUpFormContent
-import com.mightysana.onewallet.oneproject.components.Preview
 import com.mightysana.onewallet.navigateAndPopUp
 import com.mightysana.onewallet.oneproject.auth.EmailVerification
+import com.mightysana.onewallet.oneproject.auth.SignIn
+import com.mightysana.onewallet.oneproject.auth.SignUp
 import com.mightysana.onewallet.oneproject.auth.functions.toast
+import com.mightysana.onewallet.oneproject.auth.presentation.components.AuthForm
+import com.mightysana.onewallet.oneproject.auth.presentation.components.AuthOptions
 import com.mightysana.onewallet.oneproject.auth.presentation.components.MAX_FORM_WIDTH
+import com.mightysana.onewallet.oneproject.auth.presentation.components.SignUpFormContent
 import com.mightysana.onewallet.oneproject.components.OneScreen
-import com.mightysana.onewallet.oneproject.components.OneTextFieldDefault
+import com.mightysana.onewallet.oneproject.model.OneTextFieldDefault
 
 @Composable
 fun SignUpScreen(
@@ -57,7 +53,7 @@ fun SignUpScreen(
                 AuthForm(
                     formImage = iconLauncher,
                     title = stringResource(R.string.sign_up_title),
-                    mainContent = {
+                    content = {
                         SignUpFormContent(
                             email = OneTextFieldDefault(
                                 value = viewModel.email.collectAsState().value,
@@ -120,17 +116,5 @@ fun SignUpScreen(
                 )
             }
         }
-    }
-}
-
-@PreviewLightDark
-@Composable
-fun RegisterScreenPreview() {
-    Preview {
-        SignUpScreen(
-            iconLauncher = painterResource(R.drawable.one_wallet_logo_round),
-            modifier = Modifier.fillMaxSize(),
-            navController = rememberNavController()
-        )
     }
 }
