@@ -13,13 +13,13 @@ import javax.inject.Inject
 class EmailVerificationViewModel @Inject constructor() : AuthViewModel() {
     private val _isEmailVerified = MutableStateFlow(false)
 
-    val authUserEmail = authService.currentUser!!.email
+    val authUserEmail = accountService.currentUser!!.email
 
     fun checkEmailVerification(onVerified: suspend () -> Unit) {
         launchCatching {
             while (!_isEmailVerified.value) {
-                authService.reloadCurrentUser()
-                val isEmailVerified = authService.isEmailVerified()
+                accountService.reloadCurrentUser()
+                val isEmailVerified = accountService.isEmailVerified()
                 Log.d("EmailVerificationViewModel", "checkEmailVerification: $isEmailVerified")
                 _isEmailVerified.value = isEmailVerified
                 delay(1500L)

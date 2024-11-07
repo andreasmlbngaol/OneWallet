@@ -7,6 +7,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
+import com.mightysana.onewallet.oneproject.model.OneProject.ONE_WALLET_REF
+import com.mightysana.onewallet.oneproject.model.OneProject.USERS_REF
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -23,7 +25,7 @@ class OneRepository @Inject constructor() {
         return usersRef.child(userId).get().await().exists()
     }
 
-    fun observeUser(
+    fun observeUserProfile(
         userId: String,
         onUpdate: (OneUser) -> Unit
     ) {

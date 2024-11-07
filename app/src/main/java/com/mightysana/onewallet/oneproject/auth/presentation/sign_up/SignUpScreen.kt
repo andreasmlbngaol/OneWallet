@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -23,9 +24,9 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.mightysana.onewallet.R
@@ -38,8 +39,8 @@ import com.mightysana.onewallet.oneproject.components.ErrorSupportingText
 import com.mightysana.onewallet.oneproject.components.OneIcon
 import com.mightysana.onewallet.oneproject.components.OneScreen
 import com.mightysana.onewallet.oneproject.components.OneTextField
-import com.mightysana.onewallet.oneproject.model.MAX_FORM_WIDTH
 import com.mightysana.onewallet.oneproject.model.OneIcons
+import com.mightysana.onewallet.oneproject.model.OneProject
 import com.mightysana.onewallet.oneproject.model.navigateAndPopUp
 import com.mightysana.onewallet.oneproject.model.toast
 
@@ -69,7 +70,7 @@ fun SignUpScreen(
                 AuthFormCard(
                     formImage = iconLauncher,
                     title = stringResource(R.string.sign_in_title),
-                    modifier = Modifier.widthIn(max = MAX_FORM_WIDTH.dp).fillMaxWidth(0.85f),
+                    modifier = Modifier.widthIn(max = OneProject.MaxFormWidth).fillMaxWidth(0.85f),
                 ) {
                     // EmailTextField
                     OneTextField(
@@ -85,6 +86,9 @@ fun SignUpScreen(
                         supportingText = {
                             ErrorSupportingText(viewModel.emailError.collectAsState().value)
                         },
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Email
+                        ),
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -114,6 +118,9 @@ fun SignUpScreen(
                         supportingText = {
                             ErrorSupportingText(viewModel.passwordError.collectAsState().value)
                         },
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Password
+                        ),
                         visualTransformation = if(!passwordVisible) PasswordVisualTransformation() else VisualTransformation.None,
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth()
@@ -143,6 +150,9 @@ fun SignUpScreen(
                         supportingText = {
                             ErrorSupportingText(viewModel.confirmPasswordError.collectAsState().value)
                         },
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Password,
+                        ),
                         visualTransformation = if(!confirmPasswordVisible) PasswordVisualTransformation() else VisualTransformation.None,
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth()

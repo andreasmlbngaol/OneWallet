@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
@@ -22,7 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.mightysana.onewallet.Home
@@ -38,8 +39,8 @@ import com.mightysana.onewallet.oneproject.components.OneIcon
 import com.mightysana.onewallet.oneproject.components.OneScreen
 import com.mightysana.onewallet.oneproject.components.OneTextField
 import com.mightysana.onewallet.oneproject.model.Gender
-import com.mightysana.onewallet.oneproject.model.MAX_FORM_WIDTH
 import com.mightysana.onewallet.oneproject.model.OneIcons
+import com.mightysana.onewallet.oneproject.model.OneProject
 import com.mightysana.onewallet.oneproject.model.convertMillisToDate
 import com.mightysana.onewallet.oneproject.model.navigateAndPopUp
 
@@ -72,7 +73,7 @@ fun RegisterScreen(
                 AuthFormCard(
                     title = stringResource(R.string.register_title),
                     subtitle = stringResource(R.string.register_subtitle),
-                    modifier = Modifier.widthIn(max = MAX_FORM_WIDTH.dp).fillMaxWidth(0.85f),
+                    modifier = Modifier.widthIn(max = OneProject.MaxFormWidth).fillMaxWidth(0.85f),
                 ) {
                     // NameTextField
                     OneTextField(
@@ -88,6 +89,9 @@ fun RegisterScreen(
                         supportingText = {
                             ErrorSupportingText(viewModel.nameError.collectAsState().value)
                         },
+                        keyboardOptions = KeyboardOptions(
+                            capitalization = KeyboardCapitalization.Words
+                        ),
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth()
                     )

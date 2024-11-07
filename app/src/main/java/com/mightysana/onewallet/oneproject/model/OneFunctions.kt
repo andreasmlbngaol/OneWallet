@@ -14,6 +14,11 @@ fun Long.convertMillisToDate(): String {
     return formatter.format(Date(this))
 }
 
+fun Long.convertMillisToDateTime(): String {
+    val formatter = SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.getDefault())
+    return formatter.format(Date(this))
+}
+
 fun Context.toast(
     @StringRes messageResource: Int,
     duration: Int = Toast.LENGTH_SHORT
