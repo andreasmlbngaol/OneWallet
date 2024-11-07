@@ -7,22 +7,15 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
 import com.mightysana.onewallet.Home
-import com.mightysana.onewallet.oneproject.auth.model.service.AuthService
-import com.mightysana.onewallet.oneproject.auth.model.service.AuthServiceImpl
 import com.mightysana.onewallet.oneproject.model.OneViewModel
 import com.mightysana.onewallet.oneproject.model.clip
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-open class AuthViewModel @Inject constructor() : OneViewModel() {
-    protected val authService: AuthService = AuthServiceImpl()
-
+abstract class AuthViewModel : OneViewModel() {
     // Declaration
     protected val _email =  MutableStateFlow("")
     val email: StateFlow<String> = _email
@@ -41,7 +34,7 @@ open class AuthViewModel @Inject constructor() : OneViewModel() {
 
     // Assignment
     fun setEmail(newEmail: String) {
-        _email.value = newEmail
+        _email.value = newEmail.lowercase()
     }
 
     fun setPassword(newPassword: String) {
@@ -96,7 +89,7 @@ open class AuthViewModel @Inject constructor() : OneViewModel() {
     suspend fun checkUserRegistrationStatus(destinationRoute: (Any) -> Unit) {
         appLoading()
         Log.d("AuthViewModel", "checkUserRegistrationStatus: ${appState.value}")
-        destinationRoute(if (oneRepository.isUserRegistered(authService.currentUser!!.uid)) Home else Register)
+        destinationRoute(if (oneRepository.isUserRegistered(accountService.currentUser!!.uid)) Home else Register)
     }
 
     // Sign In With Google
@@ -109,9 +102,9 @@ open class AuthViewModel @Inject constructor() : OneViewModel() {
             try {
                 if (credential is CustomCredential && credential.type == TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
                     val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
-                    authService.signInWithGoogle(googleIdTokenCredential.idToken)
+                    accountService.signInWithGoogle(googleIdTokenCredential.idToken)
                 }
-                while (authService.currentUser == null) {
+                while (accountService.currentUser == null) {
                     delay(500L)
                 }
                 checkUserRegistrationStatus { destination ->
@@ -121,16 +114,6 @@ open class AuthViewModel @Inject constructor() : OneViewModel() {
                 Log.e("AuthViewModel", "onSignInWithGoogle: $e")
                 e.printStackTrace()
             }
-        }
-    }
-
-    // Sign Out User
-    fun onSignOut(
-        onSuccess: () -> Unit
-    ) {
-        loadScope {
-            authService.signOut()
-            onSuccess()
         }
     }
 }

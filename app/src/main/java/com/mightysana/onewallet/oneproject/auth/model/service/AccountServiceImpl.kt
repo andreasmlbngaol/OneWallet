@@ -9,10 +9,12 @@ import com.mightysana.onewallet.oneproject.model.isNotNull
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class AuthServiceImpl @Inject constructor() : AuthService {
+class AccountServiceImpl @Inject constructor() : AccountService {
 
     override val currentUser: FirebaseUser?
         get() = Firebase.auth.currentUser
+
+    override val userId: String? = currentUser?.uid
 
     override fun hasUser(): Boolean = false
 

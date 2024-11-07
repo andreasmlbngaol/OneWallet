@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.QuestionMark
 import androidx.compose.material.icons.filled.Wc
 import androidx.compose.material.icons.filled.Woman
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
 
 enum class Gender {
     MALE, FEMALE, SECRET
@@ -63,6 +64,11 @@ object OneIcons {
     val Secret: ImageVector = Icons.Default.QuestionMark
 }
 
-object OneDefault {
-    const val CENSORED_CHAR = '•'
+object OneProject {
+    const val CENSORED_CHARACTER = '•'
+    val MaxFormWidth = 500.dp
+    val HorizontalPadding = 16.dp
+    const val USERS_REF = "users"
+    const val ONE_WALLET_REF = "one_wallet"
+
 }

@@ -150,7 +150,7 @@ class RegisterViewModel @Inject constructor() : AuthViewModel() {
     fun register(onSuccess: () -> Unit) {
         loadScope {
             try {
-                val user = authService.currentUser
+                val user = accountService.currentUser
                 oneRepository.updateUser(
                     OneUser(
                         uid = user!!.uid,

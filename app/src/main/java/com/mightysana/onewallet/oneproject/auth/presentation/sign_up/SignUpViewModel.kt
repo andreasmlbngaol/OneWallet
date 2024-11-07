@@ -28,7 +28,7 @@ class SignUpViewModel @Inject constructor(): AuthViewModel() {
     }
 
     fun toggleConfirmPasswordVisibility() {
-        _passwordVisible.value = !_passwordVisible.value
+        _confirmPasswordVisible.value = !_confirmPasswordVisible.value
     }
 
     private fun confirmPasswordError(message: String) {
@@ -87,11 +87,11 @@ class SignUpViewModel @Inject constructor(): AuthViewModel() {
     ) {
         loadScope {
             try {
-                authService.signUpWithEmailAndPassword(
+                accountService.signUpWithEmailAndPassword(
                     email = _email.clip(),
                     password = _password.clip()
                 )
-                authService.sendEmailVerification()
+                accountService.sendEmailVerification()
                 onSuccess()
             } catch (e: Exception) {
                 Log.e("SignUpWithEmailAndPassword", e.message.toString())

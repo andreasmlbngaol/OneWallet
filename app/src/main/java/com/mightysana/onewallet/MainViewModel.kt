@@ -1,12 +1,13 @@
 package com.mightysana.onewallet
 
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import com.mightysana.onewallet.oneproject.auth.model.EmailVerification
 import com.mightysana.onewallet.oneproject.auth.model.Register
 import com.mightysana.onewallet.oneproject.auth.model.SignIn
-import com.mightysana.onewallet.oneproject.auth.model.service.AuthService
+import com.mightysana.onewallet.oneproject.auth.model.service.AccountService
 import com.mightysana.onewallet.oneproject.model.OneViewModel
-import com.mightysana.onewallet.oneproject.model.currentUser
 import com.mightysana.onewallet.oneproject.model.isNotNull
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,22 +18,22 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val authServices: AuthService
+    private val accountServices: AccountService
 ): OneViewModel() {
     private val _startDestination = MutableStateFlow<Any?>(null)
     val startDestination = _startDestination.asStateFlow()
 
-    fun isUserLoggedIn(): Boolean {
-        return authServices.currentUser.isNotNull()
+    private fun isUserLoggedIn(): Boolean {
+        return accountServices.currentUser.isNotNull()
     }
 
-    fun isUserVerified(): Boolean{
-        return authServices.currentUser!!.isEmailVerified
+    private fun isUserVerified(): Boolean{
+        return accountServices.currentUser!!.isEmailVerified
     }
 
-    suspend fun isUserRegistered(): Boolean {
+    private suspend fun isUserRegistered(): Boolean {
         return oneRepository.usersRef
-            .child(currentUser!!.uid)
+            .child(Firebase.auth.currentUser!!.uid)
             .get()
             .await()
             .exists()
@@ -41,7 +42,7 @@ class MainViewModel @Inject constructor(
     init {
         appLoading()
         viewModelScope.launch {
-            authServices.reloadUser()
+            accountServices.reloadUser()
 
             if(!isUserLoggedIn()) {
                 _startDestination.value = SignIn

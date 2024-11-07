@@ -43,11 +43,11 @@ class SignInViewModel @Inject constructor() : AuthViewModel() {
     ) {
         loadScope {
             try {
-                authService.signInWithEmailAndPassword(
+                accountService.signInWithEmailAndPassword(
                     email = _email.clip(),
                     password = _password.clip()
                 )
-                if (!authService.isEmailVerified())
+                if (!accountService.isEmailVerified())
                     onEmailNotVerified()
                 else
                     checkUserRegistrationStatus {

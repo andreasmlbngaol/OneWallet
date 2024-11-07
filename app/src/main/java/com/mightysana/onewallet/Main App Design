@@ -1,0 +1,137 @@
+1. Struktur Database
+Node Root:
+users: Menyimpan data pengguna untuk digunakan di berbagai aplikasi.
+friends: Menyimpan daftar teman pengguna.
+friendRequests: Menyimpan permintaan pertemanan, termasuk informasi status permintaan.
+oneWallet: Menyimpan data spesifik untuk aplikasi OneWallet, dengan masing-masing pengguna direpresentasikan dengan node UID mereka.
+wallets: Setiap pengguna memiliki satu atau lebih dompet (wallet), masing-masing memiliki properti seperti id, name, dan balance.
+payables (Utang): Menyimpan utang yang dimiliki pengguna kepada orang lain, dengan detail seperti toUserId, amount, note, dateIssued, dan status.
+receivables (Piutang): Menyimpan piutang yang diharapkan pengguna dari orang lain, memiliki properti seperti fromUserId, amount, note, dateIssued, dan status.
+transactions: Menyimpan riwayat transaksi pengguna, baik pemasukan maupun pengeluaran, termasuk kategori (kebutuhan atau keinginan).
+2. Fitur Utang dan Piutang
+Implementasi Utang dan Piutang:
+Utang (payables) dan piutang (receivables) dicatat di oneWallet untuk setiap pengguna.
+Setiap transaksi utang akan dicatat di kedua pengguna yang terlibat (pemberi dan penerima utang), sehingga keduanya dapat melihat status dan detail transaksi.
+Catatan untuk Pengguna Non-Aplikasi: Jika pengguna mencatat utang kepada orang yang tidak menggunakan aplikasi, mereka dapat mencatatnya dengan nama atau catatan saja tanpa referensi ke userId.
+3. Fitur Pertemanan
+Pentingnya Fitur Teman: Mempermudah pengguna untuk mencatat utang dan piutang dengan teman-teman di dalam aplikasi.
+Pengelolaan Permintaan Pertemanan: Fitur pertemanan akan mencakup sistem permintaan pertemanan, di mana pengguna dapat menerima atau menolak permintaan pertemanan dari pengguna lain.
+4. Konfirmasi Utang dan Pengelolaan Status
+Konfirmasi Saat Membuat Utang: Ketika utang dibuat, penerima utang harus mengonfirmasi utang tersebut agar statusnya menjadi aktif.
+Kontrol Perubahan Status: Hanya pemberi utang yang memiliki hak final untuk mengubah status menjadi "paid." Namun, peminjam dapat mengajukan permintaan perubahan status yang akan dikonfirmasi oleh pemberi utang.
+
+
+/
+├── users
+│   ├── user123
+│   │   ├── email: "user123@example.com"
+│   │   ├── name: "User 123"
+│   │   ├── friends: ["user456", "user789"]
+│   │   ├── friendRequests
+│   │   │   └── user101: 1680739200000 // timestamp dalam milidetik dari user yang mengajukan
+│   │   └── friendRequesteds
+│   │       └── user456: 1680739200000 // timestamp dalam milidetik untuk user yang diminta
+│   └── user456
+│       ├── email: "user456@example.com"
+│       ├── name: "User 456"
+│       ├── friends: ["user123", "user789"]
+│       ├── friendRequests
+│       │   └── user789: 1680739200000
+│       └── friendRequesteds
+│           └── user123: 1680739200000
+└── oneWallet
+    ├── user123
+    │   ├── wallets
+    │   │   ├── wallet1
+    │   │   │   ├── id: "wallet1"
+    │   │   │   ├── name: "Cash"
+    │   │   │   └── balance: 100000
+    │   │   └── wallet2
+    │   │       ├── id: "wallet2"
+    │   │       ├── name: "Bank Mandiri"
+    │   │       └── balance: 500000
+    │   ├── payables
+    │   │   └── debt456
+    │   │       ├── toUserId: "user456"
+    │   │       ├── amount: 20000
+    │   │       ├── note: "Dinner at restaurant"
+    │   │       ├── timeIssued: 1680739200000
+    │   │       └── status: "pending"
+    │   ├── receivables
+    │   │   └── debt789
+    │   │       ├── fromUserId: "user789"
+    │   │       ├── amount: 50000
+    │   │       ├── note: "Loan repayment"
+    │   │       ├── timeIssued: 1680739200000
+    │   │       └── status: "active"
+    │   └── transactions
+    │       ├── trans1
+    │       │   ├── id: "trans1"
+    │       │   ├── walletId: "wallet1"
+    │       │   ├── type: "expense"
+    │       │   ├── category: "Food"
+    │       │   ├── amount: 20000
+    │       │   ├── note: "Lunch with friends"
+    │       │   └── time: 1680739200000
+    │       └── trans2
+    │           ├── id: "trans2"
+    │           ├── walletId: "wallet2"
+    │           ├── type: "income"
+    │           ├── category: "Salary"
+    │           ├── amount: 500000
+    │           ├── note: "Monthly salary"
+    │           └── time: 1680739200000
+    └── user456
+        ├── wallets
+        │   ├── wallet1
+        │   │   ├── id: "wallet1"
+        │   │   ├── name: "Cash"
+        │   │   └── balance: 80000
+        │   └── wallet2
+        │       ├── id: "wallet2"
+        │       ├── name: "Bank BCA"
+        │       └── balance: 300000
+        ├── payables
+        │   └── debt789
+        │       ├── toUserId: "user123"
+        │       ├── amount: 50000
+        │       ├── note: "Loan repayment"
+        │       ├── timeIssued: 1680739200000
+        │       └── status: "active"
+        ├── receivables
+        │   └── debt456
+        │       ├── fromUserId: "user123"
+        │       ├── amount: 20000
+        │       ├── note: "Dinner at restaurant"
+        │       ├── timeIssued: 1680739200000
+        │       └── status: "pending"
+        └── transactions
+            ├── trans1
+            │   ├── id: "trans1"
+            │   ├── walletId: "wallet1"
+            │   ├── type: "expense"
+            │   ├── category: "Transportation"
+            │   ├── amount: 15000
+            │   ├── note: "Taxi ride"
+            │   └── time: 1680739200000
+            └── trans2
+                ├── id: "trans2"
+                ├── walletId: "wallet2"
+                ├── type: "income"
+                ├── category: "Bonus"
+                ├── amount: 100000
+                ├── note: "Quarterly bonus"
+                └── time: 1680739200000
+
+Baik, berikut adalah tiga kategori utama untuk pendapatan yang lebih ringkas:
+
+Penghasilan: Semua pendapatan dari pekerjaan, usaha, dan investasi.
+Hibah: Hadiah, bantuan, atau dana dari orang lain.
+Pembayaran Utang: Uang yang diterima sebagai pelunasan utang dari orang lain.
+Dengan kategori ini, pendapatan bisa dicatat dengan lebih sederhana namun tetap mencakup berbagai sumber.
+
+
+
+
+
+

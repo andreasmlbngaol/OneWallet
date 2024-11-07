@@ -5,22 +5,23 @@ import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
+import com.mightysana.onewallet.oneproject.auth.model.service.AccountService
+import com.mightysana.onewallet.oneproject.auth.model.service.AccountServiceImpl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-open class OneViewModel @Inject constructor() : ViewModel() {
-    protected val oneRepository = OneRepository()
+abstract class OneViewModel: ViewModel() {
+    protected val oneRepository: OneRepository = OneRepository()
+    protected val accountService: AccountService = AccountServiceImpl()
 
     private val _appState = MutableStateFlow(OneAppState.OKAY)
     val appState: StateFlow<OneAppState> = _appState
 
     private fun setAppState(state: OneAppState) {
         _appState.value = state
+        Log.d("OneViewModel", "${_appState.value}")
     }
 
     fun appLoading() {
@@ -69,6 +70,13 @@ open class OneViewModel @Inject constructor() : ViewModel() {
         } catch (e: Exception) {
             Log.e("OneViewModel", e.toString())
             e.printStackTrace()
+        }
+    }
+
+    fun onSignOut(onSuccess: () -> Unit) {
+        loadScope {
+            accountService.signOut()
+            onSuccess()
         }
     }
 }

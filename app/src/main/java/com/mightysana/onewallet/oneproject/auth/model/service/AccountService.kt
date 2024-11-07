@@ -2,8 +2,9 @@ package com.mightysana.onewallet.oneproject.auth.model.service
 
 import com.google.firebase.auth.FirebaseUser
 
-interface AuthService {
+interface AccountService {
     val currentUser: FirebaseUser?
+    val userId: String?
     fun hasUser(): Boolean
     suspend fun reloadUser()
     suspend fun signInWithGoogle(idToken: String)
