@@ -6,7 +6,7 @@ import androidx.credentials.CustomCredential
 import androidx.lifecycle.viewModelScope
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
-import com.mightysana.onewallet.Home
+import com.mightysana.onewallet.Main
 import com.mightysana.onewallet.oneproject.model.OneViewModel
 import com.mightysana.onewallet.oneproject.model.clip
 import kotlinx.coroutines.delay
@@ -89,7 +89,7 @@ abstract class AuthViewModel : OneViewModel() {
     suspend fun checkUserRegistrationStatus(destinationRoute: (Any) -> Unit) {
         appLoading()
         Log.d("AuthViewModel", "checkUserRegistrationStatus: ${appState.value}")
-        destinationRoute(if (oneRepository.isUserRegistered(accountService.currentUser!!.uid)) Home else Register)
+        destinationRoute(if (oneRepository.isUserRegistered(accountService.currentUser!!.uid)) Main else Register)
     }
 
     // Sign In With Google
