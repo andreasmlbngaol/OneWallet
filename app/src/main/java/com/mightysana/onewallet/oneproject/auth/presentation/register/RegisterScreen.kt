@@ -26,7 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.mightysana.onewallet.Home
+import com.mightysana.onewallet.Main
 import com.mightysana.onewallet.R
 import com.mightysana.onewallet.oneproject.auth.components.AuthFormCard
 import com.mightysana.onewallet.oneproject.auth.model.Register
@@ -161,7 +161,7 @@ fun RegisterScreen(
                         onClick = {
                             viewModel.validateRegisterForm(context) {
                                 viewModel.register {
-                                    navController.navigateAndPopUp(Home, Register)
+                                    navController.navigateAndPopUp(Main, Register)
                                 }
                             }
                         },

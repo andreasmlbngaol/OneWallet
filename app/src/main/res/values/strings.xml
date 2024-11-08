@@ -40,4 +40,9 @@
     <string name="cancel">Cancel</string>
     <string name="select_date">Select Date</string>
     <string name="register_subtitle">Complete your registration</string>
+    <string name="dashboard">Home</string>
+    <string name="transactions">History</string>
+    <string name="wallets">Wallets</string>
+    <string name="debts">Debts</string>
+    <string name="profile">Profile</string>
 </resources>

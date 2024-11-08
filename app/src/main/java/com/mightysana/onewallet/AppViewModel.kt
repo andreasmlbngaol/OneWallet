@@ -1,8 +1,10 @@
 package com.mightysana.onewallet
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
+import com.mightysana.onewallet.oneproject.auth.model.AuthGraph
 import com.mightysana.onewallet.oneproject.auth.model.EmailVerification
 import com.mightysana.onewallet.oneproject.auth.model.Register
 import com.mightysana.onewallet.oneproject.auth.model.SignIn
@@ -17,11 +19,14 @@ import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
+class AppViewModel @Inject constructor(
     private val accountServices: AccountService
 ): OneViewModel() {
-    private val _startDestination = MutableStateFlow<Any?>(null)
+    private val _startDestination = MutableStateFlow<Any?>(AuthGraph)
     val startDestination = _startDestination.asStateFlow()
+
+    private val _authStartDestination = MutableStateFlow<Any?>(SignIn)
+    val authStartDestination = _authStartDestination.asStateFlow()
 
     private fun isUserLoggedIn(): Boolean {
         return accountServices.currentUser.isNotNull()
@@ -45,14 +50,15 @@ class MainViewModel @Inject constructor(
             accountServices.reloadUser()
 
             if(!isUserLoggedIn()) {
-                _startDestination.value = SignIn
+                _authStartDestination.value = SignIn
             } else if(!isUserVerified()) {
-                _startDestination.value = EmailVerification
+                _authStartDestination.value = EmailVerification
             } else if(!isUserRegistered()) {
-                _startDestination.value = Register
+                _authStartDestination.value = Register
             } else {
-                _startDestination.value = Home
+                _startDestination.value = Main
             }
+            Log.d("MainViewModel", _startDestination.value.toString())
             appOkay()
         }
     }

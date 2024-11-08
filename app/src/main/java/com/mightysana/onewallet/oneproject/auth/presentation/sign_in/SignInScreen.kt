@@ -1,5 +1,6 @@
 package com.mightysana.onewallet.oneproject.auth.presentation.sign_in
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -137,6 +138,7 @@ fun SignInScreen(
                                 viewModel.onSignInWithEmailAndPassword(
                                     onFailure = { context.toast(if (it == 1) R.string.form_blank else R.string.login_failed) },
                                     onEmailVerified = { destination ->
+                                        Log.d("SignInScreen", destination.toString())
                                         navController.navigateAndPopUp(destination, SignIn)
                                     },
                                     onEmailNotVerified = {
@@ -160,6 +162,7 @@ fun SignInScreen(
                         onOkay = { viewModel.appOkay() },
                     ) { credential ->
                         viewModel.onSignInWithGoogle(credential) { destination ->
+                            Log.d("SignInScreen", destination.toString())
                             navController.navigateAndPopUp(destination, SignIn)
                         }
                     }

@@ -1,4 +1,4 @@
-package com.mightysana.onewallet.main
+package com.mightysana.onewallet.main.model
 
 import com.mightysana.onewallet.oneproject.model.OneUser
 import com.mightysana.onewallet.oneproject.model.OneViewModel
