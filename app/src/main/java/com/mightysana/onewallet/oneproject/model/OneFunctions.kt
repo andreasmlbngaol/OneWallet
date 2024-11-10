@@ -45,3 +45,9 @@ fun NavHostController.navigateAndPopUp(route: Any, popUp: Any) {
 }
 
 fun Any?.isNotNull(): Boolean = this != null
+
+//fun Any.qualifiedName(): String? = this::class.qualifiedName
+
+fun String.getObject(): Any? {
+    return Class.forName(this).kotlin.objectInstance
+}

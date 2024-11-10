@@ -97,8 +97,12 @@ dependencies {
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.play.services.auth)
 
+    // Coil
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
 
-
+    // Reflect
+    implementation(libs.kotlin.reflect)
 }
 
 java {

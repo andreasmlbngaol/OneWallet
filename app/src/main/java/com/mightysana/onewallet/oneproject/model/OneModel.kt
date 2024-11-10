@@ -2,29 +2,26 @@ package com.mightysana.onewallet.oneproject.model
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.AlternateEmail
 import androidx.compose.material.icons.filled.Analytics
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Man
 import androidx.compose.material.icons.filled.MarkEmailUnread
 import androidx.compose.material.icons.filled.MonetizationOn
 import androidx.compose.material.icons.filled.Password
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Person2
-import androidx.compose.material.icons.filled.PersonPin
 import androidx.compose.material.icons.filled.QuestionMark
-import androidx.compose.material.icons.filled.Wallet
+import androidx.compose.material.icons.filled.Savings
 import androidx.compose.material.icons.filled.Wc
 import androidx.compose.material.icons.filled.Woman
 import androidx.compose.material.icons.outlined.Analytics
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.MonetizationOn
-import androidx.compose.material.icons.outlined.PersonPin
-import androidx.compose.material.icons.outlined.Wallet
+import androidx.compose.material.icons.outlined.Savings
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 
@@ -74,14 +71,13 @@ object OneIcons {
     val DashboardUnselected: ImageVector = Icons.Outlined.Home
     val TransactionsSelected: ImageVector = Icons.Filled.Analytics
     val TransactionsUnselected: ImageVector = Icons.Outlined.Analytics
-    val WalletsSelected: ImageVector = Icons.Filled.Wallet
-    val WalletsUnselected: ImageVector = Icons.Outlined.Wallet
+    val WalletsSelected: ImageVector = Icons.Filled.Savings
+    val WalletsUnselected: ImageVector = Icons.Outlined.Savings
     val DebtsSelected: ImageVector = Icons.Filled.MonetizationOn
     val DebtsUnselected: ImageVector = Icons.Outlined.MonetizationOn
-    val ProfileSelected: ImageVector = Icons.Filled.PersonPin
-    val ProfileUnselected: ImageVector = Icons.Outlined.PersonPin
+    val Profile: ImageVector = Icons.Filled.Person
     val Email: ImageVector = Icons.Default.AlternateEmail
-    val Logout: ImageVector = Icons.AutoMirrored.Filled.Logout
+//    val Logout: ImageVector = Icons.AutoMirrored.Filled.Logout
     val Password: ImageVector = Icons.Default.Password
     val ConfirmPassword: ImageVector = Icons.Default.Password
     val EmailVerification: ImageVector = Icons.Default.MarkEmailUnread
@@ -100,6 +96,10 @@ object OneProject {
     const val CENSORED_CHARACTER = '•'
     val MaxFormWidth = 500.dp
     val HorizontalPadding = 16.dp
+    val TopPadding = 8.dp
     const val USERS_REF = "users"
     const val ONE_WALLET_REF = "one_wallet"
+    val Morning = 4..10
+    val Day = 11..14
+    val Afternoon = 15..18
 }
