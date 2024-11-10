@@ -2,7 +2,6 @@ package com.mightysana.onewallet.oneproject.auth.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -34,8 +33,8 @@ fun AuthFormCard(
 ) {
     Card(
         colors = CardDefaults.cardColors().copy(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant,
-            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
         ),
         modifier = modifier,
         shape = MaterialTheme.shapes.large
@@ -83,7 +82,7 @@ fun AuthFormCard(
 @Composable
 fun AuthOptions(
     horizontalDividerText: String,
-    horizontalLineColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+    horizontalLineColor: Color = MaterialTheme.colorScheme.onSecondaryContainer,
     onLoad: () -> Unit,
     onOkay: () -> Unit,
     onGetCredentialResponse: (Credential) -> Unit

@@ -1,41 +1,48 @@
 package com.mightysana.onewallet.main.presentation.main
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
-import androidx.navigation.Navigation
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.mightysana.onewallet.Main
-import com.mightysana.onewallet.AppViewModel
 import com.mightysana.onewallet.R
 import com.mightysana.onewallet.main.presentation.dashboard.DashboardScreen
 import com.mightysana.onewallet.oneproject.auth.model.AuthGraph
-import com.mightysana.onewallet.oneproject.auth.model.SignIn
+import com.mightysana.onewallet.oneproject.components.OneAsyncImage
 import com.mightysana.onewallet.oneproject.components.OneIcon
 import com.mightysana.onewallet.oneproject.model.BottomNavBarItem
 import com.mightysana.onewallet.oneproject.model.OneIcons
 import com.mightysana.onewallet.oneproject.model.OneProject
+import com.mightysana.onewallet.oneproject.model.getObject
 import com.mightysana.onewallet.oneproject.model.navigateAndPopUp
 import kotlinx.serialization.Serializable
 
@@ -53,8 +60,6 @@ object Debts
 
 @Serializable
 object Profile
-
-class Bottom
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -89,66 +94,115 @@ fun MainScreen(
             unselectedIcon = OneIcons.DebtsUnselected,
             route = Debts
         ),
-        BottomNavBarItem(
-            labelResId = R.string.profile,
-            selectedIcon = OneIcons.ProfileSelected,
-            unselectedIcon = OneIcons.ProfileUnselected,
-            route = Profile
-        )
     )
 
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+    val userProfile by viewModel.userProfile.collectAsState()
+
+    val containerColor = MaterialTheme.colorScheme.secondaryContainer
+    val contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+    val selectedContainerColor = MaterialTheme.colorScheme.secondary
+    val selectedContentColor = MaterialTheme.colorScheme.onSecondary
+
     Scaffold(
-        modifier = modifier,
+        modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            CenterAlignedTopAppBar(
-                title = {},
+            TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors().copy(
+                    containerColor = containerColor,
+                    scrolledContainerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = contentColor,
+                ),
+                title = {
+//                    val nickname = userProfile.nickname
+                    val nickname = userProfile.name
+                    Text(
+                        text = viewModel.greetings(
+                            morning = stringResource(R.string.good_morning, nickname),
+                            day = stringResource(R.string.good_day, nickname),
+                            afternoon = stringResource(R.string.good_afternoon, nickname),
+                            evening = stringResource(R.string.good_evening, nickname)
+                        ),
+                        overflow = TextOverflow.Ellipsis,
+                        style = MaterialTheme.typography.titleMedium,
+                        maxLines = 1,
+                        modifier = Modifier.padding(end = 16.dp)
+                    )
+                },
                 actions = {
                     IconButton(
                         onClick = {
                             viewModel.onSignOut {
                                 appController.navigateAndPopUp(AuthGraph, Main)
                             }
-                        }
+                        },
+                        modifier = Modifier
+                            .border(
+                                BorderStroke(
+                                    width = 2.dp,
+                                    color = contentColor
+                                ),
+                                shape = CircleShape
+                            )
                     ) {
-                        OneIcon(OneIcons.Logout)
+                        OneAsyncImage(
+                            model = userProfile.profilePhotoUrl,
+                            modifier = Modifier
+                                .clip(CircleShape)
+                        )
                     }
 
                 },
-                scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+                scrollBehavior = scrollBehavior
             )
         },
         bottomBar = {
-            NavigationBar {
+            NavigationBar(
+                containerColor = containerColor,
+                contentColor = contentColor,
+                modifier = Modifier.clip(MaterialTheme.shapes.medium),
+                windowInsets = NavigationBarDefaults.windowInsets
+            ) {
                 val entry by mainController.currentBackStackEntryAsState()
                 val currentDestination = entry?.destination
-                bottomNavDestinations.forEachIndexed { index, item ->
-                    val selected = currentDestination?.hierarchy?.any {
-                        it.route != item.route
-                    }
-                    if (selected != null) {
-                        NavigationBarItem(
-                            selected = selected,
-                            icon = {
-                                OneIcon(if(selected) item.selectedIcon else item.unselectedIcon)
-                            },
-                            label = {
-                                Text(
-                                    text = stringResource(item.labelResId),
-                                    style = MaterialTheme.typography.labelSmall
-                                )
-                            },
-                            onClick = {
-                                if(!selected)
-                                    mainController.navigate(item.route)
+                bottomNavDestinations.forEach { navItem ->
+                    val selected = currentDestination?.route?.getObject() == navItem.route
+                    NavigationBarItem(
+                        colors = NavigationBarItemDefaults.colors().copy(
+                            selectedIndicatorColor = selectedContainerColor,
+                            selectedIconColor = selectedContentColor,
+                            unselectedIconColor = contentColor,
+                            unselectedTextColor = contentColor
+                        ),
+                        selected = selected,
+                        icon = {
+                            OneIcon(
+                                imageVector = if (selected) navItem.selectedIcon else navItem.unselectedIcon,
+                            )
+                        },
+                        label = {
+                            Text(
+                                text = stringResource(navItem.labelResId),
+                                style = MaterialTheme.typography.labelSmall,
+                            )
+                        },
+                        onClick = {
+                            if (!selected) {
+                                val currentRoute = currentDestination?.route!!.getObject()!!
+                                mainController.navigateAndPopUp(navItem.route, currentRoute)
                             }
-                        )
-                    }
+                        }
+                    )
                 }
             }
         }
     ) {
         Surface(
-            modifier = Modifier.padding(it).padding(horizontal = OneProject.HorizontalPadding)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it)
+                .padding(horizontal = OneProject.HorizontalPadding)
+                .padding(top = OneProject.TopPadding)
         ) {
             NavHost(
                 navController = mainController,
@@ -163,9 +217,15 @@ fun MainScreen(
                 composable<Transactions> {
                     Text(text = "Transactions")
                 }
-                composable<Wallets> {}
-                composable<Debts> {}
-                composable<Profile> {}
+                composable<Wallets> {
+                    Text(text = "Wallets")
+                }
+                composable<Debts> {
+                    Text(text = "Debts")
+                }
+                composable<Profile> {
+                    Text(text = "Profile")
+                }
             }
         }
     }

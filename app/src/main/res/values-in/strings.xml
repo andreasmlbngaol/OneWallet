@@ -38,4 +38,13 @@
     <string name="cancel">Batal</string>
     <string name="select_date">Pilih tanggal</string>
     <string name="register_subtitle">Selesaikan pendaftaran</string>
+    <string name="dashboard">Utama</string>
+    <string name="transactions">Transaksi</string>
+    <string name="wallets">Dompet</string>
+    <string name="debts">Utang</string>
+    <string name="profile">Profil</string>
+    <string name="good_morning">Pagi, %s</string>
+    <string name="good_day">Siang, %s</string>
+    <string name="good_afternoon">Sore, %s</string>
+    <string name="good_evening">Malam, %s</string>
 </resources>

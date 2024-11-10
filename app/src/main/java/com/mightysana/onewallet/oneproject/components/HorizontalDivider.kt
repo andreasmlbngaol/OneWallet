@@ -17,8 +17,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun OneTextHorizontalDivider(
     modifier: Modifier = Modifier,
-    lineColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
-    backgroundColor: Color = MaterialTheme.colorScheme.surfaceVariant,
+    lineColor: Color = MaterialTheme.colorScheme.onSecondaryContainer,
+    backgroundColor: Color = MaterialTheme.colorScheme.secondaryContainer,
     thickness: Dp = 1.dp,
     text: String,
     style: TextStyle = MaterialTheme.typography.bodyMedium

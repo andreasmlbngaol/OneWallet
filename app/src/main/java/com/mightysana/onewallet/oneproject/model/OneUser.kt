@@ -3,6 +3,8 @@ package com.mightysana.onewallet.oneproject.model
 data class OneUser(
     val uid: String = "",
     val name: String = uid,
+    val nickname: String = name,
+    val username: String = "",
     val email: String = "",
     val profilePhotoUrl: String? = null,
     val phoneNumber: String? = null,
