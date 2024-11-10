@@ -40,6 +40,7 @@ fun DashboardScreen(
             "Last Sign In: ${userProfile.lastLoginAt.convertMillisToDateTime()}",
             "Verified: ${userProfile.verified}",
         )
+
         LazyColumn(
             horizontalAlignment = Alignment.Start,
             modifier = Modifier.fillMaxWidth()
