@@ -1,11 +1,15 @@
 package com.mightysana.onewallet.main.presentation.main
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -17,10 +21,12 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -98,11 +104,12 @@ fun MainScreen(
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val userProfile by viewModel.userProfile.collectAsState()
+    val expanded by viewModel.expanded.collectAsState()
 
     val containerColor = MaterialTheme.colorScheme.secondaryContainer
-    val contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+    val contentColor = contentColorFor(containerColor)
     val selectedContainerColor = MaterialTheme.colorScheme.secondary
-    val selectedContentColor = MaterialTheme.colorScheme.onSecondary
+    val selectedContentColor = contentColorFor(selectedContainerColor)
 
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -195,7 +202,58 @@ fun MainScreen(
                     )
                 }
             }
+        },
+        floatingActionButton = {
+            AnimatedContent(expanded, label = "") {
+                val buttonContainerColor = MaterialTheme.colorScheme.primaryContainer
+                val buttonContentColor = contentColorFor(buttonContainerColor)
+
+                Column(
+                    horizontalAlignment = Alignment.End,
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    val optionContainerColor = MaterialTheme.colorScheme.secondary
+                    val optionContentColor = contentColorFor(optionContainerColor)
+
+                    if (it) {
+                        ExtendedFloatingActionButton(
+                            onClick = {},
+                            text = { Text(text = "Wallet") },
+                            containerColor = buttonContainerColor,
+                            contentColor = buttonContentColor,
+                            icon = { OneIcon(OneIcons.WalletsUnselected) }
+                        )
+
+                        ExtendedFloatingActionButton(
+                            onClick = {},
+                            text = { Text(text = "Debt") },
+                            containerColor = buttonContainerColor,
+                            contentColor = buttonContentColor,
+                            icon = { OneIcon(OneIcons.DebtsUnselected) }
+                        )
+
+                        ExtendedFloatingActionButton(
+                            onClick = {},
+                            text = { Text(text = "Transaction") },
+                            containerColor = buttonContainerColor,
+                            contentColor = buttonContentColor,
+                            icon = { OneIcon(OneIcons.TransactionsUnselected) }
+                        )
+
+                    }
+
+                    ExtendedFloatingActionButton(
+                        expanded = !it,
+                        onClick = { viewModel.toggleExpanded() },
+                        text = { Text(text = "New") },
+                        containerColor = optionContainerColor,
+                        contentColor = optionContentColor,
+                        icon = { OneIcon(if(!it) OneIcons.Plus else OneIcons.Minus) }
+                    )
+                }
+            }
         }
+
     ) {
         Surface(
             modifier = Modifier

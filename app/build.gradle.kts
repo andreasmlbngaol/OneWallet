@@ -16,6 +16,7 @@ android {
     defaultConfig {
         applicationId = "com.mightysana.onewallet"
         minSdk = 30
+        //noinspection OldTargetApi
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -41,6 +42,7 @@ android {
     }
     kotlinOptions {
         jvmTarget = "11"
+        freeCompilerArgs += listOf("-Xlint:deprecation")
     }
     buildFeatures {
         compose = true

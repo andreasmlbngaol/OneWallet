@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -161,6 +162,10 @@ fun SignUpScreen(
 
                     // LoginButton
                     Button(
+                        colors = ButtonDefaults.buttonColors().copy(
+                            containerColor = MaterialTheme.colorScheme.secondary,
+                            contentColor = MaterialTheme.colorScheme.onSecondary
+                        ),
                         onClick = {
                             viewModel.validateSignUpForm(context) {
                                 viewModel.onSignUpWithEmailAndPassword(
