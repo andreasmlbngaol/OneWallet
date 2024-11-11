@@ -47,4 +47,5 @@
     <string name="good_day">Siang, %s</string>
     <string name="good_afternoon">Sore, %s</string>
     <string name="good_evening">Malam, %s</string>
+    <string name="no_internet">Tidak ada jaringan…</string>
 </resources>

@@ -49,4 +49,5 @@
     <string name="good_day">Day, %s</string>"
     <string name="good_afternoon">Afternoon, %s</string>
     <string name="good_evening">Evening, %s</string>
+    <string name="no_internet">No Internet Connection…</string>
 </resources>

@@ -11,12 +11,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.mightysana.onewallet.main.presentation.main.MainScreen
 import com.mightysana.onewallet.oneproject.auth.model.authGraph
+import com.mightysana.onewallet.oneproject.components.NetworkCheckerScreen
 import com.mightysana.onewallet.oneproject.components.OneScreen
 import com.mightysana.onewallet.oneproject.model.OneAppState
 import kotlinx.serialization.Serializable
 
 @Serializable
 object Main
+
+@Serializable
+object Profile
 
 @Composable
 fun MyAppRoute(
@@ -27,22 +31,29 @@ fun MyAppRoute(
     val startDestination by viewModel.startDestination.collectAsState()
     val authStartDestination by viewModel.authStartDestination.collectAsState()
     val appState by viewModel.appState.collectAsState()
-    OneScreen(appState) {
-        if (appState == OneAppState.OKAY)
-            NavHost(
-                navController = navController,
-                startDestination = startDestination!!,
-                modifier = modifier
-            ) {
-                authGraph(
+    val networkAvailable by viewModel.isNetworkAvailable.collectAsState()
+    NetworkCheckerScreen(!networkAvailable) {
+        OneScreen(appState) {
+            if  (appState == OneAppState.OKAY)
+                NavHost(
                     navController = navController,
-                    startDestination = authStartDestination!!
-                )
+                    startDestination = startDestination!!,
+                    modifier = modifier
+                ) {
+                    authGraph(
+                        navController = navController,
+                        startDestination = authStartDestination!!
+                    )
 
-                composable<Main> {
-                    Log.d("AppRoute", "Main...")
-                    MainScreen(appController = navController)
+                    composable<Main> {
+                        Log.d("AppRoute", "Main...")
+                        MainScreen(appController = navController)
+                    }
+
+                    composable<Profile> {
+                        MainScreen(appController = navController)
+                    }
                 }
-            }
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.mightysana.onewallet.oneproject.auth.model
 
+import android.content.Context
 import android.util.Log
 import androidx.credentials.Credential
 import androidx.credentials.CustomCredential
@@ -9,13 +10,16 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Co
 import com.mightysana.onewallet.Main
 import com.mightysana.onewallet.oneproject.model.OneViewModel
 import com.mightysana.onewallet.oneproject.model.clip
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-abstract class AuthViewModel : OneViewModel() {
+abstract class AuthViewModel(
+    @ApplicationContext context: Context
+) : OneViewModel(context) {
     // Declaration
     protected val _email =  MutableStateFlow("")
     val email: StateFlow<String> = _email

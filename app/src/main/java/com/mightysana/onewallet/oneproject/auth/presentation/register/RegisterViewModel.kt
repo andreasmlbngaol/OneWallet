@@ -9,12 +9,15 @@ import com.mightysana.onewallet.oneproject.model.OneUser
 import com.mightysana.onewallet.oneproject.model.RegisterFormValidationResult
 import com.mightysana.onewallet.oneproject.model.isNotNull
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
-class RegisterViewModel @Inject constructor() : AuthViewModel() {
+class RegisterViewModel @Inject constructor(
+    @ApplicationContext context: Context
+) : AuthViewModel(context) {
     // Declaration
     private val _name = MutableStateFlow("")
     val name = _name.asStateFlow()

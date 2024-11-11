@@ -50,7 +50,9 @@ fun EmailVerificationScreen(
     val context = LocalContext.current
 
     Scaffold { innerPadding ->
-        OneScreen(viewModel.appState.collectAsState().value) {
+        OneScreen(
+            viewModel.appState.collectAsState().value
+        ) {
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier

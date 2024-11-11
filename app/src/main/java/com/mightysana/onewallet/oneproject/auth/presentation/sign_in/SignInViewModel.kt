@@ -6,10 +6,13 @@ import com.mightysana.onewallet.oneproject.auth.model.AuthViewModel
 import com.mightysana.onewallet.oneproject.model.SignInFormValidationResult
 import com.mightysana.onewallet.oneproject.model.clip
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 @HiltViewModel
-class SignInViewModel @Inject constructor() : AuthViewModel() {
+class SignInViewModel @Inject constructor(
+    @ApplicationContext context: Context
+) : AuthViewModel(context) {
     fun validateSignInForm(
         context: Context,
         onSuccess: () -> Unit,

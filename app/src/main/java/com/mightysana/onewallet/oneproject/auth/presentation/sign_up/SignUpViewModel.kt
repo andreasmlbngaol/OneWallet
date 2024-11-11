@@ -7,13 +7,16 @@ import com.mightysana.onewallet.oneproject.auth.model.AuthViewModel
 import com.mightysana.onewallet.oneproject.model.SignUpFormValidationResult
 import com.mightysana.onewallet.oneproject.model.clip
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
-class SignUpViewModel @Inject constructor(): AuthViewModel() {
+class SignUpViewModel @Inject constructor(
+    @ApplicationContext context: Context
+): AuthViewModel(context) {
     private val _confirmPassword = MutableStateFlow("")
     val confirmPassword: StateFlow<String> = _confirmPassword
 

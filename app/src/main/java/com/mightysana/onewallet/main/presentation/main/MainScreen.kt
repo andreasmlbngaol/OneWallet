@@ -64,8 +64,6 @@ object Wallets
 @Serializable
 object Debts
 
-@Serializable
-object Profile
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -167,7 +165,7 @@ fun MainScreen(
             NavigationBar(
                 containerColor = containerColor,
                 contentColor = contentColor,
-                modifier = Modifier.clip(MaterialTheme.shapes.medium),
+                modifier = Modifier.clip(MaterialTheme.shapes.extraLarge),
                 windowInsets = NavigationBarDefaults.windowInsets
             ) {
                 val entry by mainController.currentBackStackEntryAsState()
@@ -219,24 +217,24 @@ fun MainScreen(
                         ExtendedFloatingActionButton(
                             onClick = {},
                             text = { Text(text = "Wallet") },
-                            containerColor = buttonContainerColor,
-                            contentColor = buttonContentColor,
+                            containerColor = optionContainerColor,
+                            contentColor = optionContentColor,
                             icon = { OneIcon(OneIcons.WalletsUnselected) }
                         )
 
                         ExtendedFloatingActionButton(
                             onClick = {},
                             text = { Text(text = "Debt") },
-                            containerColor = buttonContainerColor,
-                            contentColor = buttonContentColor,
+                            containerColor = optionContainerColor,
+                            contentColor = optionContentColor,
                             icon = { OneIcon(OneIcons.DebtsUnselected) }
                         )
 
                         ExtendedFloatingActionButton(
                             onClick = {},
                             text = { Text(text = "Transaction") },
-                            containerColor = buttonContainerColor,
-                            contentColor = buttonContentColor,
+                            containerColor = optionContainerColor,
+                            contentColor = optionContentColor,
                             icon = { OneIcon(OneIcons.TransactionsUnselected) }
                         )
 
@@ -246,8 +244,8 @@ fun MainScreen(
                         expanded = !it,
                         onClick = { viewModel.toggleExpanded() },
                         text = { Text(text = "New") },
-                        containerColor = optionContainerColor,
-                        contentColor = optionContentColor,
+                        containerColor = if(it) buttonContainerColor else optionContainerColor,
+                        contentColor = if(it) buttonContentColor else optionContentColor,
                         icon = { OneIcon(if(!it) OneIcons.Plus else OneIcons.Minus) }
                     )
                 }
@@ -280,9 +278,6 @@ fun MainScreen(
                 }
                 composable<Debts> {
                     Text(text = "Debts")
-                }
-                composable<Profile> {
-                    Text(text = "Profile")
                 }
             }
         }

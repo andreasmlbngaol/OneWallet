@@ -10,14 +10,34 @@ import com.mightysana.onewallet.oneproject.auth.model.service.AccountServiceImpl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-abstract class OneViewModel: ViewModel() {
+abstract class OneViewModel(
+    context: Context
+) : ViewModel() {
     protected val oneRepository: OneRepository = OneRepository()
     protected val accountService: AccountService = AccountServiceImpl()
 
+    private val networkStatusTracker: NetworkStatusTracker = NetworkStatusTracker(context)
+    private val _isNetworkAvailable = MutableStateFlow(true)
+    val isNetworkAvailable: StateFlow<Boolean> = _isNetworkAvailable
+
     private val _appState = MutableStateFlow(OneAppState.OKAY)
     val appState: StateFlow<OneAppState> = _appState
+
+    private fun observeNetworkStatus() {
+        viewModelScope.launch {
+            networkStatusTracker.isNetworkAvailable.collectLatest { isConnected ->
+                _isNetworkAvailable.value = isConnected
+                Log.d("OneViewModel", "Network Available: ${_isNetworkAvailable.value}")
+            }
+        }
+    }
+
+    init {
+        observeNetworkStatus()
+    }
 
     private fun setAppState(state: OneAppState) {
         _appState.value = state

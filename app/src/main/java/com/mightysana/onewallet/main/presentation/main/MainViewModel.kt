@@ -1,15 +1,19 @@
 package com.mightysana.onewallet.main.presentation.main
 
+import android.content.Context
 import com.mightysana.onewallet.main.model.OneWalletViewModel
 import com.mightysana.onewallet.oneproject.model.OneProject
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.time.LocalTime
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(): OneWalletViewModel() {
+class MainViewModel @Inject constructor(
+    @ApplicationContext context: Context
+): OneWalletViewModel(context) {
     private val hour = LocalTime.now().hour
 
     private val _expanded = MutableStateFlow(false)

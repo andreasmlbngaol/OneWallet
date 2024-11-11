@@ -1,5 +1,6 @@
 package com.mightysana.onewallet
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.Firebase
@@ -8,10 +9,10 @@ import com.mightysana.onewallet.oneproject.auth.model.AuthGraph
 import com.mightysana.onewallet.oneproject.auth.model.EmailVerification
 import com.mightysana.onewallet.oneproject.auth.model.Register
 import com.mightysana.onewallet.oneproject.auth.model.SignIn
-import com.mightysana.onewallet.oneproject.auth.model.service.AccountService
 import com.mightysana.onewallet.oneproject.model.OneViewModel
 import com.mightysana.onewallet.oneproject.model.isNotNull
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -20,8 +21,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AppViewModel @Inject constructor(
-    private val accountServices: AccountService
-): OneViewModel() {
+    @ApplicationContext context: Context
+): OneViewModel(context) {
     private val _startDestination = MutableStateFlow<Any?>(AuthGraph)
     val startDestination = _startDestination.asStateFlow()
 
@@ -29,11 +30,11 @@ class AppViewModel @Inject constructor(
     val authStartDestination = _authStartDestination.asStateFlow()
 
     private fun isUserLoggedIn(): Boolean {
-        return accountServices.currentUser.isNotNull()
+        return accountService.currentUser.isNotNull()
     }
 
     private fun isUserVerified(): Boolean{
-        return accountServices.currentUser!!.isEmailVerified
+        return accountService.currentUser!!.isEmailVerified
     }
 
     private suspend fun isUserRegistered(): Boolean {
@@ -47,7 +48,7 @@ class AppViewModel @Inject constructor(
     init {
         appLoading()
         viewModelScope.launch {
-            accountServices.reloadUser()
+            accountService.reloadUser()
 
             if(!isUserLoggedIn()) {
                 _authStartDestination.value = SignIn
