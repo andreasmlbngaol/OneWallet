@@ -7,10 +7,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -33,11 +31,14 @@ import com.mightysana.onewallet.oneproject.auth.components.AuthFormCard
 import com.mightysana.onewallet.oneproject.auth.model.Register
 import com.mightysana.onewallet.oneproject.auth.model.SignIn
 import com.mightysana.onewallet.oneproject.components.ErrorSupportingText
+import com.mightysana.onewallet.oneproject.components.OneButton
 import com.mightysana.onewallet.oneproject.components.OneDatePicker
 import com.mightysana.onewallet.oneproject.components.OneDatePickerField
 import com.mightysana.onewallet.oneproject.components.OneDropdownMenuField
+import com.mightysana.onewallet.oneproject.components.OneDropdownMenuItem
+import com.mightysana.onewallet.oneproject.components.OneDropdownMenuItemPair
 import com.mightysana.onewallet.oneproject.components.OneIcon
-import com.mightysana.onewallet.oneproject.components.OneScreen
+import com.mightysana.onewallet.oneproject.components.LoaderScreen
 import com.mightysana.onewallet.oneproject.components.OneTextField
 import com.mightysana.onewallet.oneproject.model.Gender
 import com.mightysana.onewallet.oneproject.model.OneIcons
@@ -55,7 +56,7 @@ fun RegisterScreen(
     Scaffold(
         modifier = modifier
     ) { innerPadding ->
-        OneScreen(
+        LoaderScreen(
             state = viewModel.appState.collectAsState().value,
             modifier = Modifier.padding(innerPadding)
         ) {
@@ -98,10 +99,19 @@ fun RegisterScreen(
                     )
 
                     // GenderDropdownField
-                    val items: Map<Any?, String> = mapOf(
-                        Gender.MALE to stringResource(R.string.male),
-                        Gender.FEMALE to stringResource(R.string.female),
-                        Gender.SECRET to stringResource(R.string.prefer_not_to_say),
+                    val items = listOf(
+                        OneDropdownMenuItemPair(
+                            OneDropdownMenuItem(Gender.MALE),
+                            stringResource(R.string.male)
+                        ),
+                        OneDropdownMenuItemPair(
+                            OneDropdownMenuItem(Gender.FEMALE),
+                            stringResource(R.string.female)
+                        ),
+                        OneDropdownMenuItemPair(
+                            OneDropdownMenuItem(Gender.SECRET),
+                            stringResource(R.string.prefer_not_to_say)
+                        ),
                     )
                     val gender by viewModel.gender.collectAsState()
                     OneDropdownMenuField(
@@ -110,7 +120,7 @@ fun RegisterScreen(
                         items = items,
                         onExpandedChange = { viewModel.toggleGenderExpanded() },
                         onDismissRequest = { viewModel.collapseGender() },
-                        selectedItem = gender,
+                        selectedItem = OneDropdownMenuItem(gender),
                         leadingIcon = {
                             OneIcon(
                                 if(gender == Gender.FEMALE) OneIcons.Female
@@ -119,7 +129,7 @@ fun RegisterScreen(
                                 else OneIcons.Gender
                             )
                         },
-                        onItemSelected = { viewModel.setGender(it as Gender?) },
+                        onItemSelected = { viewModel.setGender(it.item as Gender?) },
                         label = {
                             Text(
                                 text = stringResource(R.string.gender_label),
@@ -145,20 +155,11 @@ fun RegisterScreen(
                         supportingText = {
                             ErrorSupportingText(viewModel.birthDateError.collectAsState().value)
                         },
-                        trailingIcon = {
-                            IconButton(
-                                onClick = {
-                                    viewModel.showDatePicker()
-                                }
-                            ) {
-                                OneIcon(OneIcons.DatePicker)
-                            }
-                        },
-                        onTap = { viewModel.showDatePicker() }
+                        onExpand = { viewModel.showDatePicker() }
                     )
 
                     // RegisterButton
-                    Button(
+                    OneButton(
                         colors = ButtonDefaults.buttonColors().copy(
                             containerColor = MaterialTheme.colorScheme.secondary,
                             contentColor = MaterialTheme.colorScheme.onSecondary

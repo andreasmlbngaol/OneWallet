@@ -28,7 +28,7 @@ import androidx.navigation.NavHostController
 import com.mightysana.onewallet.R
 import com.mightysana.onewallet.oneproject.auth.model.EmailVerification
 import com.mightysana.onewallet.oneproject.auth.model.SignIn
-import com.mightysana.onewallet.oneproject.components.OneScreen
+import com.mightysana.onewallet.oneproject.components.LoaderScreen
 import com.mightysana.onewallet.oneproject.model.OneIcons
 import com.mightysana.onewallet.oneproject.model.censoredEmail
 import com.mightysana.onewallet.oneproject.model.navigateAndPopUp
@@ -50,7 +50,7 @@ fun EmailVerificationScreen(
     val context = LocalContext.current
 
     Scaffold { innerPadding ->
-        OneScreen(
+        LoaderScreen(
             viewModel.appState.collectAsState().value
         ) {
             Box(

@@ -12,7 +12,7 @@ import androidx.navigation.compose.composable
 import com.mightysana.onewallet.main.presentation.main.MainScreen
 import com.mightysana.onewallet.oneproject.auth.model.authGraph
 import com.mightysana.onewallet.oneproject.components.NetworkCheckerScreen
-import com.mightysana.onewallet.oneproject.components.OneScreen
+import com.mightysana.onewallet.oneproject.components.LoaderScreen
 import com.mightysana.onewallet.oneproject.model.OneAppState
 import kotlinx.serialization.Serializable
 
@@ -33,7 +33,7 @@ fun MyAppRoute(
     val appState by viewModel.appState.collectAsState()
     val networkAvailable by viewModel.isNetworkAvailable.collectAsState()
     NetworkCheckerScreen(!networkAvailable) {
-        OneScreen(appState) {
+        LoaderScreen(appState) {
             if  (appState == OneAppState.OKAY)
                 NavHost(
                     navController = navController,

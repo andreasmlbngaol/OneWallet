@@ -33,7 +33,7 @@ import com.mightysana.onewallet.R
 import com.mightysana.onewallet.oneproject.model.OneAppState
 
 @Composable
-fun OneScreen(
+fun LoaderScreen(
     state: OneAppState,
     modifier: Modifier = Modifier,
     backgroundColor: Color = Color.Transparent,
@@ -41,45 +41,6 @@ fun OneScreen(
     screenContent: @Composable () -> Unit
 ) {
     screenContent()
-    Loader(
-        visible = state == OneAppState.LOADING,
-        modifier = modifier,
-        backgroundColor = backgroundColor,
-        drawableRes = drawableRes
-    )
-}
-
-@Composable
-fun NetworkCheckerScreen(
-    visible: Boolean,
-    modifier: Modifier = Modifier,
-    screenContent: @Composable () -> Unit
-) {
-    screenContent()
-    AnimatedVisibility(
-        visible = visible
-    ) {
-        Box(
-            modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = stringResource(R.string.no_internet),
-                color = MaterialTheme.colorScheme.onBackground,
-                style = MaterialTheme.typography.headlineSmall,
-                textAlign = TextAlign.Center
-            )
-        }
-    }
-}
-
-@Composable
-fun Loader(
-    visible: Boolean,
-    modifier: Modifier = Modifier,
-    backgroundColor: Color = Color.Transparent,
-    @DrawableRes drawableRes: Int = R.drawable.one_icon_round
-) {
     val infiniteTransition = rememberInfiniteTransition(label = "")
     val scale by infiniteTransition.animateFloat(
         initialValue = 0.5f,
@@ -102,7 +63,7 @@ fun Loader(
     )
 
     AnimatedVisibility(
-        visible = visible,
+        visible = state == OneAppState.LOADING,
         enter = scaleIn(),
         exit = scaleOut()
     ) {
@@ -117,6 +78,30 @@ fun Loader(
                     .size(64.dp)
                     .scale(scale)
                     .rotate(rotation)
+            )
+        }
+    }
+}
+
+@Composable
+fun NetworkCheckerScreen(
+    visible: Boolean,
+    modifier: Modifier = Modifier,
+    screenContent: @Composable () -> Unit
+) {
+    screenContent()
+    AnimatedVisibility(
+        visible = visible
+    ) {
+        Box(
+            modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = stringResource(R.string.no_internet),
+                color = MaterialTheme.colorScheme.onBackground,
+                style = MaterialTheme.typography.headlineSmall,
+                textAlign = TextAlign.Center
             )
         }
     }

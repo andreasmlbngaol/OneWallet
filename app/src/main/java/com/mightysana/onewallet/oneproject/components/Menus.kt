@@ -8,15 +8,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,18 +33,25 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntSize
 import com.mightysana.onewallet.oneproject.model.OneIcons
 
+data class OneDropdownMenuItem(
+    val item: Any?
+)
+
+data class OneDropdownMenuItemPair(
+    val item: OneDropdownMenuItem,
+    val displayText: String
+)
+
 @Composable
 fun OneDropdownMenuField(
     modifier: Modifier = Modifier,
     expanded: Boolean,
-    items: Map<Any?, String>, // Map<Object?, DisplayText>
+    items: List<OneDropdownMenuItemPair>,
     onExpandedChange: (Boolean) -> Unit,
     onDismissRequest: () -> Unit,
-    selectedItem: Any?,
-    leadingIcon: @Composable (() -> Unit)? = {
-        OneIcon(OneIcons.Gender)
-    },
-    onItemSelected: (Any?) -> Unit,
+    selectedItem: OneDropdownMenuItem,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    onItemSelected: (OneDropdownMenuItem) -> Unit,
     label: @Composable (() -> Unit)?,
     legendText: String = "Select an option",
     supportingText: @Composable (() -> Unit)? = null
@@ -60,7 +66,7 @@ fun OneDropdownMenuField(
             }
     ) {
         OneTextField(
-            value = items[selectedItem] ?: legendText,
+            value = items.find { it.item == selectedItem }?.displayText ?: legendText,
             onValueChange = { },
             readOnly = true,
             label = label,
@@ -102,7 +108,7 @@ fun OneDropdownMenuField(
             DropdownMenuItem(
                 text = { Text(legendText) },
                 onClick = {
-                    onItemSelected(null)
+                    onItemSelected(OneDropdownMenuItem(null))
                 }
             )
 
@@ -124,8 +130,8 @@ fun OneDatePickerField(
     label: @Composable (() -> Unit)?,
     modifier: Modifier = Modifier,
     supportingText: @Composable (() -> Unit)? = null,
-    trailingIcon: @Composable (() -> Unit)? = null,
-    onTap: () -> Unit
+    onExpand: () -> Unit,
+    isError: Boolean = false
 ) {
     var boxSize by remember { mutableStateOf(IntSize(0, 0)) }
     var textFieldSize by remember { mutableStateOf(IntSize(0, 0)) }
@@ -138,13 +144,18 @@ fun OneDatePickerField(
             }
     ) {
         OneTextField(
+            isError = isError,
             value = value,
             onValueChange = { },
             readOnly = true,
             label = label,
             supportingText = supportingText,
             singleLine = true,
-            trailingIcon = trailingIcon,
+            trailingIcon = {
+                IconButton(onClick = onExpand) {
+                    OneIcon(OneIcons.DatePicker)
+                }
+            },
             modifier = modifier
                 .onGloballyPositioned { coordinates ->
                     textFieldSize = coordinates.size
@@ -160,7 +171,7 @@ fun OneDatePickerField(
                 .pointerInput(Unit) {
                     detectTapGestures(
                         onTap = {
-                            onTap()
+                            onExpand()
                             focusRequester.requestFocus()
                         }
                     )
@@ -182,14 +193,14 @@ fun OneDatePicker(
     DatePickerDialog(
         onDismissRequest = onDismiss,
         confirmButton = {
-            Button(
+            OneButton(
                 onClick = onConfirm
             ) {
                 confirmButtonText()
             }
         },
         dismissButton = {
-            OutlinedButton(
+            OneOutlinedButton(
                 onClick = onDismiss
             ) {
                 dismissButtonText()

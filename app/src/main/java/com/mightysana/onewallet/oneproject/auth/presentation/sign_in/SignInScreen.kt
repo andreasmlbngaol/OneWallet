@@ -10,7 +10,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -38,8 +37,9 @@ import com.mightysana.onewallet.oneproject.auth.model.EmailVerification
 import com.mightysana.onewallet.oneproject.auth.model.SignIn
 import com.mightysana.onewallet.oneproject.auth.model.SignUp
 import com.mightysana.onewallet.oneproject.components.ErrorSupportingText
+import com.mightysana.onewallet.oneproject.components.OneButton
 import com.mightysana.onewallet.oneproject.components.OneIcon
-import com.mightysana.onewallet.oneproject.components.OneScreen
+import com.mightysana.onewallet.oneproject.components.LoaderScreen
 import com.mightysana.onewallet.oneproject.components.OneTextField
 import com.mightysana.onewallet.oneproject.model.OneIcons
 import com.mightysana.onewallet.oneproject.model.OneProject
@@ -58,7 +58,7 @@ fun SignInScreen(
     Scaffold(
         modifier = modifier
     ) { innerPadding ->
-        OneScreen(
+        LoaderScreen(
             state = viewModel.appState.collectAsState().value,
             modifier = Modifier.padding(innerPadding)
         ) {
@@ -133,7 +133,7 @@ fun SignInScreen(
                     )
 
                     // LoginButton
-                    Button(
+                    OneButton(
                         colors = ButtonDefaults.buttonColors().copy(
                             containerColor = MaterialTheme.colorScheme.secondary,
                             contentColor = MaterialTheme.colorScheme.onSecondary
